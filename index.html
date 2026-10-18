@@ -227,7 +227,7 @@ V.a_set=async function(){const s=await run(sb.from('settings').select('value').e
  $('view').innerHTML=`<div class="card"><h3>Document Checklist</h3><p style="font-size:13px;color:var(--mut);margin:6px 0">One item per line. Employees tick these per lead.</p><textarea id="s-c" rows="8" style="width:100%">${esc(s.value.join('\n'))}</textarea><p style="margin-top:8px"><button class="btn" onclick="saveSet()">Save</button></p></div>`};
 async function saveSet(){await run(sb.from('settings').upsert({key:'doc_checklist',value:$('s-c').value.split('\n').map(x=>x.trim()).filter(Boolean)}));toast('Saved')}
 
-/* ====== PAYMENT QR (UPI PHOTO) ====== */
+/* ====== PAYMENT QR (UPI) ====== */
 const enc=encodeURIComponent;
 const upiUri=a=>`upi://pay?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'SSEPD MBPY')}&am=${parseFloat(a)}&cu=INR&tn=${enc('MBPY service fee')}`;
 let PQ={};
