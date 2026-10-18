@@ -96,8 +96,7 @@ async function boot(){
   :[['dash','📊 My Dashboard'],['fu','⏰ My Follow-ups'],['calls','📞 My Call History']];
  $('nav').innerHTML=nav.map(([k,l])=>`<div class="ni" data-k="${k}" onclick="go('${k}')">${l}</div>`).join('');go('dash');
 }
-function go(k){cur=k;PG=1;document.querySelectorAll('.ni').forEach(e=>e.classList.toggle('on',e.dataset.k===k));$('side').classList.remove('open');$('ttl').textContent=document.querySelector(`.ni[data-k="${k}"]`).textContent.slice(3);$('hact').innerHTML='';
- $('view').innerHTML='<p style="color:var(--mut)">Loading…</p>';(V[(isA()?'a_':'e_')+k]||V[k])()}
+function go(k){cur=k;PG=1;document.querySelectorAll('.ni').forEach(e=>e.classList.toggle('on',e.dataset.k===k));$('side').classList.remove('open');$('ttl').textContent=document.querySelector(`.ni[data-k="${k}"]`).textContent.slice(3);$('hact').innerHTML='';$('view').innerHTML='<p style="color:var(--mut)">Loading…</p>';(V[(isA()?'a_':'e_')+k]||V[k])()}
 const refresh=()=>go(cur);
 
 /* ---------- shared data ---------- */
@@ -113,7 +112,7 @@ const V={};
 /* ====== ADMIN DASHBOARD ====== */
 let selEmp=null;
 V.a_dash=async function(){
- const f=$('d-from')?.value||null,t=$('d-to')?.value||null;
+ const f=$('d-from')?.value\vert{}\vert{}null,t=$('d-to')?.value||null;
  const s=await run(sb.rpc('admin_summary',{p_from:f,p_to:t}));const E=s.by_emp,sum=k=>E.reduce((a,e)=>a+e[k],0);
  $('view').innerHTML=`<div class="fs box" style="border-radius:8px"><label>From <input type="date" id="d-from" value="${f||''}"></label><label>To <input type="date" id="d-to" value="${t||''}"></label><button class="btn" onclick="V.a_dash()">Apply</button><button class="btn s" onclick="$('d-from').value=$('d-to').value='';V.a_dash()">Reset</button></div>
  <div class="kpis">${kpi('Total Beneficiaries',s.beneficiaries)}${kpi('Rejected Applications',s.rejected,'bad')}${kpi('Assigned Leads',s.assigned,'info')}${kpi('Unassigned Leads',s.unassigned,'warn')}${kpi('Employees',s.employees)}${kpi('Total Calls',sum('calls'))}${kpi('Connected Calls',sum('connected'),'ok')}${kpi('Leads Generated',sum('leads'))}${kpi('Documents Received',sum('docs'))}${kpi('Payments Received',sum('payments'),'ok')}${kpi('Completed Leads',sum('completed'),'ok')}</div>
@@ -168,12 +167,12 @@ async function openLead(id){
  openM('m1',`${b.applicant_name||''}${isA()?' ['+b.application_id+']':''}`,`
  <div class="sec">Workflow</div><div class="steps">${STAGES.map((s,i)=>`<div class="step ${i<ci||l.status==='completed'?'done':i===ci?'cur':''}">${SL[s]}<small>${fmt(l[TS[s]])}</small></div>`).join('')}</div>
  ${mine&&nxt?`<p style="margin-top:10px">${nxt==='completed'?`<button class="btn g" onclick="stage('${id}','completed')">✔ Mark Complete</button>`:`<button class="btn" onclick="stage('${id}','${nxt}')">Advance to: ${SL[nxt]}</button>`}</p>`:''}
- ${isA()?`<p style="margin-top:10px">Assigned to: <b>${esc(l.profiles?.full_name||'Unassigned')}</b> ${l.assigned_to?`<button class="btn d" onclick="transferUI('${id}')">🔁 TRANSFER LEAD</button>`:''}</p>`:''}
+ ${isA()?`<p style="margin-top:10px">Assigned to: <b>${esc(l.profiles?.full_name\vert{}\vert{}'Unassigned')}</b> ${l.assigned_to?`<button class="btn d" onclick="transferUI('${id}')">🔁 TRANSFER LEAD</button>`:''}</p>`:''}
  ${b.photo?`<img src="${esc(b.photo)}" style="width:90px;height:108px;object-fit:cover;border-radius:4px;float:right;margin-top:14px" onerror="this.remove()">`:''}${dgrp('Application',isA()?['apply_date','application_id','application_number','application_status','pension_type','rejection_reason']:['apply_date','application_status','pension_type','rejection_reason'],b)}${dgrp('Personal Details',['applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category'],b)}${dgrp('Address',['sub_division','address_type','district','block','gp','village','habitation','pin'],b)}${dgrp('Bank Details',['account_holder_name','account_number','ifsc_code','branch_name'],b)}
  ${mine?`<div class="sec">Record Call</div><div class="fg"><div><label>Outcome</label><select id="c-o">${opts(OUT)}</select></div><div><label>Call date & time</label><input type="datetime-local" id="c-at" value="${new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16)}"></div><div><label>Next follow-up date</label><input type="date" id="c-nd"></div><div><label>Next follow-up time</label><input type="time" id="c-nt"></div><div style="grid-column:1/-1"><label>Notes</label><textarea id="c-n" rows="2"></textarea></div></div><p style="margin-top:8px"><button class="btn" onclick="doCall('${id}')">Save Call</button></p>
  <div class="sec">Documents</div><div class="fg"><div><label>Status</label><select id="d-s">${opts(['Documents Not Received','Documents Partially Received','Documents Received','Documents Verified'],docs?.status)}</select></div></div><p style="margin:8px 0">${items.map((x,i)=>`<label style="margin-right:14px;font-size:13px"><input type="checkbox" class="dk" data-k="${esc(x)}" ${ck[x]?'checked':''}> ${esc(x)}</label>`).join('')}</p><button class="btn" onclick="saveDocs('${id}')">Save Documents</button>
  <div class="sec">Payment</div><div class="fg"><div><label>Status</label><select id="p-s">${opts(['Pending','Received','Failed','Refunded'],pay?.status)}</select></div><div><label>Amount</label><input type="number" id="p-a" value="${pay?.amount??(PAYCFG.default_amount||'')}"></div><div><label>Date</label><input type="date" id="p-d" value="${pay?.paid_on||''}"></div><div><label>Mode</label><select id="p-m">${opts(['Cash','UPI','Bank Transfer','Cheque','Other'],pay?.mode)}</select></div><div><label>Transaction Ref</label><input id="p-r" value="${esc(pay?.reference)}"></div><div><label>Notes</label><input id="p-n" value="${esc(pay?.notes)}"></div></div><p style="margin-top:8px"><button class="btn" onclick="savePay('${id}')">Save Payment</button> <button class="btn g" onclick="payQR('${id}')">📲 Send Payment QR</button></p>`
- :`<div class="sec">Documents & Payment</div><div class="gd"><div class="dc"><label>Documents</label><div>${esc(docs?.status||'—')}</div></div><div class="dc"><label>Payment</label><div>${esc(pay?.status||'—')} ${pay?.amount?'₹'+pay.amount:''} ${pay?.verified?bdg('Verified','ok'):''}</div></div></div>${isA()&&pay?`<p style="margin-top:8px"><button class="btn ${pay.verified?'s':'g'}" onclick="verifyPay('${id}',${!pay.verified})">${pay.verified?'Un-verify':'Verify'} Payment</button></p>`:''}`}
+ :`<div class="sec">Documents & Payment</div><div class="gd"><div class="dc"><label>Documents</label><div>${esc(docs?.status||'—')}</div></div><div class="dc"><label>Payment</label><div>${esc(pay?.status\vert{}\vert{}'—')}${pay?.amount?'₹'+pay.amount:''} ${pay?.verified?bdg('Verified','ok'):''}</div></div></div>${isA()&&pay?`<p style="margin-top:8px"><button class="btn ${pay.verified?'s':'g'}" onclick="verifyPay('${id}',${!pay.verified})">${pay.verified?'Un-verify':'Verify'} Payment</button></p>`:''}`}
  <div class="sec">Call History (read-only)</div>${table(['When','By','Outcome','Notes','Next follow-up'],calls.map(c=>[fmt(c.called_at),esc(c.profiles?.full_name),bdg(c.outcome),esc(c.notes),fmt(c.next_followup)]),'No calls yet.')}
  ${isA()?`<div class="sec">Transfer History</div>${table(['When','From','To','Reason'],trf.map(t=>[fmt(t.transferred_at),esc(t.pf?.full_name),esc(t.pt?.full_name),esc(t.reason)]),'Never transferred.')}`:''}`)}
 const after=id=>{openLead(id);if(cur!=='dash'||!isA())refresh()};
@@ -181,7 +180,7 @@ async function doCall(id){const nd=$('c-nd').value,nt=$('c-nt').value;if(nd&&!nt
  await run(sb.rpc('rpc_log_call',{p_lead:id,p_outcome:$('c-o').value,p_called_at:new Date($('c-at').value).toISOString(),p_notes:$('c-n').value||null,p_next:nd?new Date(nd+'T'+nt).toISOString():null}));toast('Call saved');after(id)}
 async function stage(id,s){if(s==='completed'&&!confirm('Mark this lead as COMPLETED?'))return;await run(sb.rpc('rpc_set_stage',{p_lead:id,p_stage:s}));toast('Stage updated');after(id)}
 async function saveDocs(id){const c={};document.querySelectorAll('.dk').forEach(x=>c[x.dataset.k]=x.checked);await run(sb.rpc('rpc_save_docs',{p_lead:id,p_status:$('d-s').value,p_checklist:c}));toast('Documents saved');after(id)}
-async function savePay(id){await run(sb.rpc('rpc_save_payment',{p_lead:id,p_status:$('p-s').value,p_amount:$('p-a').value||null,p_date:$('p-d').value||null,p_mode:$('p-m').value,p_ref:$('p-r').value||null,p_notes:$('p-n').value||null}));toast('Payment saved');after(id)}
+async function savePay(id){await run(sb.rpc('rpc_save_payment',{p_lead:id,p_status:$('p-s').value,p_amount:$('p-a').value||null,p_date:$('p-d').value\vert{}\vert{}null,p_mode:$('p-m').value,p_ref:$('p-r').value\vert{}\vert{}null,p_notes:$('p-n').value||null}));toast('Payment saved');after(id)}
 async function verifyPay(id,ok){await run(sb.rpc('rpc_verify_payment',{p_lead:id,p_ok:ok}));toast('Updated');openLead(id)}
 
 /* ====== EMPLOYEE DASHBOARD ====== */
@@ -191,8 +190,7 @@ V.e_dash=async function(){
  const fu=(await run(sb.from('follow_ups').select('id').eq('done',false).lte('due_at',new Date(Date.now()+864e5).toISOString()))).length;
  $('view').innerHTML=`<div class="kpis">${kpi('Total Assigned',MY.length)}${kpi('Call Pending',c('call_pending'),'warn')}${kpi('Call Connected',rank('call_connected'),'info')}${kpi('Lead Generated',rank('lead_generated'))}${kpi('Documents Received',rank('documents_received'))}${kpi('Payment Received',rank('payment_received'),'ok')}${kpi('Completed',c('completed'),'ok')}${kpi('Follow-up Required',fu,'bad')}</div>
  <div class="box"><div class="fs"><input type="text" id="m-q" placeholder="Search my leads…" oninput="PG=1;myF()"><select id="m-s" onchange="PG=1;myF()"><option value="">All Stages</option>${STAGES.map(s=>`<option value="${s}">${SL[s]}</option>`).join('')}</select></div><div id="m-t"></div></div>`;myF()};
-function myF(){const q=$('m-q').value.toLowerCase(),s=$('m-s').value;const F=MY.filter(l=>(!s||l.status===s)&&(!q||[l.beneficiaries.applicant_name,l.beneficiaries.mobile_no,l.beneficiaries.village].some(x=>(x||'').toLowerCase().includes(q))));
- $('m-t').innerHTML=table(['Apply Date','Applicant','Mobile','Village / GP','Reason','Stage',''],slice(F).map(l=>{const b=l.beneficiaries;return[fmtD(b.apply_date)||'—',esc(b.applicant_name),`<a href="tel:${esc(b.mobile_no)}">${esc(b.mobile_no)}</a>`,esc(b.village)+' / '+esc(b.gp),esc(b.rejection_reason),stBadge(l.status),`<button class="btn sm" onclick="openLead('${l.id}')">Open</button>`]}))+pager(F.length,'myF')}
+function myF(){const q=$('m-q').value.toLowerCase(),s=$('m-s').value;const F=MY.filter(l=>(!s\vert{}\vert{}l.status===s)&&(!q\vert{}\vert{}[l.beneficiaries.applicant_name,l.beneficiaries.mobile_no,l.beneficiaries.village].some(x=>(x\vert{}\vert{}'').toLowerCase().includes(q))));$('m-t').innerHTML=table(['Apply Date','Applicant','Mobile','Village / GP','Reason','Stage',''],slice(F).map(l=>{const b=l.beneficiaries;return[fmtD(b.apply_date)||'—',esc(b.applicant_name),`<a href="tel:${esc(b.mobile_no)}">${esc(b.mobile_no)}</a>`,esc(b.village)+' / '+esc(b.gp),esc(b.rejection_reason),stBadge(l.status),`<button class="btn sm" onclick="openLead('${l.id}')">Open</button>`]}))+pager(F.length,'myF')}
 
 /* ====== FOLLOW-UPS (RLS scopes to own for employees) ====== */
 V.fu=async function(){
@@ -229,29 +227,29 @@ V.a_set=async function(){const s=await run(sb.from('settings').select('value').e
  $('view').innerHTML=`<div class="card"><h3>Document Checklist</h3><p style="font-size:13px;color:var(--mut);margin:6px 0">One item per line. Employees tick these per lead.</p><textarea id="s-c" rows="8" style="width:100%">${esc(s.value.join('\n'))}</textarea><p style="margin-top:8px"><button class="btn" onclick="saveSet()">Save</button></p></div>`};
 async function saveSet(){await run(sb.from('settings').upsert({key:'doc_checklist',value:$('s-c').value.split('\n').map(x=>x.trim()).filter(Boolean)}));toast('Saved')}
 
-/* ====== PAYMENT QR (UPI) ====== */
+/* ====== PAYMENT QR (UPI PHOTO) ====== */
 const enc=encodeURIComponent;
 const upiUri=a=>`upi://pay?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'SSEPD MBPY')}&am=${parseFloat(a)}&cu=INR&tn=${enc('MBPY service fee')}`;
-const payLink=a=>{const u=new URL('pay.html',location.href);u.search=`?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'SSEPD MBPY')}&am=${parseFloat(a)}`;return u.href};
 let PQ={};
 async function payQR(id){
  if(!PAYCFG.upi_id)return toast('UPI ID not set yet. Admin: Settings → Payment (UPI) Settings.',1);
  const l=await run(leadsQ().eq('id',id).single());PQ={name:l.beneficiaries.applicant_name,mob:String(l.beneficiaries.mobile_no||'').replace(/\D/g,'').slice(-10)};
  openM('m2','Send Payment QR',`<div class="fg" style="grid-template-columns:1fr"><div><label>Amount (₹) — change if needed</label><input type="number" id="q-a" value="${esc($('p-a')?.value||PAYCFG.default_amount||'')}" oninput="qrDraw()"></div></div><div id="q-box" style="display:flex;justify-content:center;margin:14px 0"></div><p style="margin-top:10px"><button class="btn g" onclick="qrWA()">Send QR on WhatsApp</button> <button class="btn s" onclick="qrDl()">Download QR</button></p><p style="font-size:12px;color:var(--mut);margin-top:8px">Phone: choose WhatsApp and the applicant's chat. Computer: the QR gets copied and the chat opens — just press Ctrl+V and Send.</p><p style="font-size:12px;color:var(--mut);margin-top:10px">After the applicant pays, set Payment Status = Received in the lead, add the transaction reference, and save.</p>`);qrDraw()}
 function qrDraw(){const a=parseFloat($('q-a').value),b=$('q-box');b.innerHTML='';if(!(a>0))return;new QRCode(b,{text:upiUri(a),width:210,height:210})}
-function qrImage(a){return new Promise(res=>{const src=$('q-box').querySelector('canvas'),W=420,H=560,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
- x.fillStyle='#fff';x.fillRect(0,0,W,H);x.textAlign='center';x.fillStyle='#0b2545';x.font='bold 22px sans-serif';x.fillText('SSEPD MBPY Service Payment',W/2,40);
- x.fillStyle='#15803d';x.font='bold 44px sans-serif';x.fillText('₹ '+a,W/2,100);x.imageSmoothingEnabled=false;x.drawImage(src,60,120,300,300);
- x.fillStyle='#0f172a';x.font='bold 20px sans-serif';x.fillText('Pay to: '+(PAYCFG.payee_name||''),W/2,465);x.font='16px sans-serif';x.fillStyle='#475569';
- x.fillText('UPI ID: '+PAYCFG.upi_id,W/2,495);x.fillText('Scan with PhonePe / GPay / Paytm',W/2,525);c.toBlob(res,'image/png')})}
+function qrImage(a){return new Promise(res=>{const src=$('q-box').querySelector('canvas'),W=420,H=480,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+ x.fillStyle='#ffffff';x.fillRect(0,0,W,H);x.textAlign='center';
+ x.fillStyle='#15803d';x.font='bold 38px sans-serif';x.fillText('₹ '+a,W/2,55);
+ x.imageSmoothingEnabled=false;x.drawImage(src,70,80,280,280);
+ if(PQ.name){x.fillStyle='#0f172a';x.font='600 20px sans-serif';x.fillText(PQ.name,W/2,395)}
+ x.fillStyle='#64748b';x.font='14px sans-serif';x.fillText('Scan & Pay via any UPI App',W/2,430);c.toBlob(res,'image/png')})}
 const qrAmt=()=>{const a=parseFloat($('q-a').value);if(!(a>0)){toast('Enter a valid amount',1);return null}return a};
-async function qrWA(){const a=qrAmt();if(!a)return;const blob=await qrImage(a),file=new File([blob],'payment-qr.png',{type:'image/png'}),cap=`Namaste ${PQ.name}, MBPY service ka ₹${a} ka bhugtan is QR ko scan karke karein.`;
+async function qrWA(){const a=qrAmt();if(!a)return;const blob=await qrImage(a),file=new File([blob],'payment-qr.png',{type:'image/png'}),cap=`Namaste ${PQ.name}, kripya diye gaye QR code ko scan karke ₹${a} ka payment complete karein.`;
  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],text:cap});return}catch(e){if(e.name==='AbortError')return}}
  if(PQ.mob.length<10)return toast('Applicant mobile number is missing/invalid',1);
  let ok=false;try{await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);ok=true}catch(e){}
  if(!ok){const l=document.createElement('a');l.href=URL.createObjectURL(blob);l.download='payment-qr.png';l.click()}
  window.open(`https://wa.me/91${PQ.mob}?text=${enc(cap)}`,'_blank');
- toast(ok?'QR copied. In the WhatsApp chat press Ctrl+V and Send.':'QR downloaded. Attach it in the WhatsApp chat and Send.')}
+ toast(ok?'QR copied. WhatsApp chat me Ctrl+V karke send karein.':'QR download ho gaya. WhatsApp pe attach karke bhejein.')}
 async function qrDl(){const a=qrAmt();if(!a)return;const l=document.createElement('a');l.href=URL.createObjectURL(await qrImage(a));l.download='payment-qr.png';l.click()}
 const _setOld=V.a_set;
 V.a_set=async function(){await _setOld();const c=(await run(sb.from('settings').select('value').eq('key','payment_config').maybeSingle()))?.value||{};
