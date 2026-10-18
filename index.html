@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SSEPD MBPY CRM</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{--navy:#0b2545;--navy2:#133a68;--blue:#2563eb;--bg:#f0f4f8;--surf:#fff;--bd:#cbd5e1;--tx:#0f172a;--mut:#64748b;--ok:#15803d;--okbg:#dcfce7;--bad:#b91c1c;--badbg:#fee2e2;--warn:#c2410c;--warnbg:#ffedd5;--info:#0369a1;--infobg:#e0f2fe}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:var(--bg);color:var(--tx);height:100vh;display:flex;overflow:hidden}
+aside{width:250px;background:var(--navy);color:#fff;display:flex;flex-direction:column;flex-shrink:0;transition:.2s}
+.brand{padding:18px;border-bottom:1px solid rgba(255,255,255,.12)}.brand h2{font-size:16px}.brand span{font-size:11px;color:#94a3b8;text-transform:uppercase;display:block;margin-top:4px}
+nav{flex:1;overflow-y:auto;padding:10px 0}
+.ni{padding:12px 20px;color:#cbd5e1;font-size:14px;font-weight:500;cursor:pointer;border-left:4px solid transparent}
+.ni:hover,.ni.on{background:var(--navy2);color:#fff;border-left-color:#38bdf8}
+main{flex:1;display:flex;flex-direction:column;min-width:0;overflow-y:auto}
+header{background:var(--surf);padding:12px 20px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;gap:10px}
+header h1{font-size:18px;color:var(--navy)}#menu{display:none}
+#view{padding:20px}
+.btn{padding:8px 14px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid transparent;background:var(--navy);color:#fff}
+.btn:hover{background:var(--navy2)}.btn.s{background:#fff;border-color:var(--bd);color:var(--tx)}.btn.d{background:var(--bad)}.btn.g{background:var(--ok)}.btn.sm{padding:4px 10px;font-size:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--surf);padding:14px;border-radius:8px;border:1px solid var(--bd);border-top:4px solid var(--navy)}
+.kpi.ok{border-top-color:var(--ok)}.kpi.bad{border-top-color:var(--bad)}.kpi.warn{border-top-color:var(--warn)}.kpi.info{border-top-color:var(--info)}
+.kpi b{display:block;font-size:11px;color:var(--mut);text-transform:uppercase}.kpi i{display:block;font-style:normal;font-size:26px;font-weight:700;margin-top:4px}
+.box{background:var(--surf);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.fs{padding:12px;background:#f8fafc;border-bottom:1px solid var(--bd);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+input,select,textarea{padding:8px 10px;border:1px solid var(--bd);border-radius:6px;font-size:13px;background:#fff;max-width:100%}
+.fs input[type=text]{flex:1;min-width:180px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#f1f5f9;color:var(--navy);text-align:left;padding:9px 11px;white-space:nowrap;border-bottom:1px solid var(--bd)}
+td{padding:8px 11px;border-bottom:1px solid #edf2f7}tr:hover td{background:#f8fafc}
+.badge{padding:3px 8px;border-radius:12px;font-size:11px;font-weight:700;text-transform:uppercase;white-space:nowrap;background:var(--infobg);color:var(--info)}
+.badge.ok{background:var(--okbg);color:var(--ok)}.badge.bad{background:var(--badbg);color:var(--bad)}.badge.warn{background:var(--warnbg);color:var(--warn)}
+.pg{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.mb{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:1000}
+.mc{background:#fff;border-radius:8px;width:94%;max-width:920px;max-height:92vh;display:flex;flex-direction:column;overflow:hidden}
+.mh{padding:14px 18px;background:var(--navy);color:#fff;display:flex;justify-content:space-between;align-items:center}.mh button{background:none;border:0;color:#fff;font-size:18px;cursor:pointer}
+.mbd{padding:18px;overflow-y:auto;background:#f8fafc}
+.sec{font-size:13px;font-weight:700;color:var(--navy);border-bottom:2px solid var(--bd);padding-bottom:4px;margin:16px 0 10px;text-transform:uppercase}.sec:first-child{margin-top:0}
+.gd{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.dc{background:#fff;padding:8px 11px;border-radius:4px;border:1px solid var(--bd)}.dc label{display:block;font-size:11px;color:var(--mut);font-weight:600}.dc div{font-size:13px;font-weight:600;word-break:break-word}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}.fg label{font-size:12px;font-weight:600;color:var(--mut);display:block;margin-bottom:3px}.fg input,.fg select,.fg textarea{width:100%}
+.steps{display:flex;gap:6px;flex-wrap:wrap}.step{flex:1;min-width:120px;padding:8px;border-radius:6px;background:#e2e8f0;font-size:12px;text-align:center}.step.done{background:var(--okbg);color:var(--ok)}.step.cur{background:var(--blue);color:#fff}.step small{display:block;font-size:10px;opacity:.85}
+#login{margin:auto;background:#fff;padding:32px;border-radius:10px;width:92%;max-width:380px;box-shadow:0 10px 30px rgba(0,0,0,.15)}#login h2{color:var(--navy);margin-bottom:4px}#login input{width:100%;margin:6px 0}
+#toast{position:fixed;bottom:20px;right:20px;padding:12px 18px;border-radius:6px;color:#fff;background:var(--ok);display:none;z-index:2000;max-width:80vw}
+.card{background:#fff;border:1px solid var(--bd);border-radius:8px;padding:14px;margin-bottom:14px}
+@media(max-width:800px){aside{position:fixed;inset:0 auto 0 0;z-index:50;transform:translateX(-100%)}aside.open{transform:none}#menu{display:inline-block}#view{padding:12px}}
+</style></head><body>
+<div id="login"><h2>SSEPD ODISHA</h2><p style="color:var(--mut);font-size:13px;margin-bottom:12px">MBPY Beneficiary CRM — sign in</p>
+<input id="em" type="email" placeholder="Email / Username"><input id="pw" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')login()">
+<button class="btn" style="width:100%;margin-top:8px" onclick="login()">Sign In</button><p id="lerr" style="color:var(--bad);font-size:13px;margin-top:10px"></p></div>
+<aside id="side" style="display:none"><div class="brand"><h2>SSEPD ODISHA</h2><span id="who"></span></div><nav id="nav"></nav>
+<div style="padding:14px;border-top:1px solid rgba(255,255,255,.1)"><button class="btn s" style="width:100%" onclick="sb.auth.signOut().then(()=>location.reload())">Sign Out</button></div></aside>
+<main id="mainw" style="display:none"><header><div><button class="btn s" id="menu" onclick="$('side').classList.toggle('open')">☰</button> <h1 id="ttl" style="display:inline"></h1></div><div id="hact"></div></header><div id="view"></div></main>
+<div class="mb" id="m1"><div class="mc"><div class="mh"><h3 id="m1t"></h3><button onclick="closeM('m1')">✕</button></div><div class="mbd" id="m1b"></div></div></div>
+<div class="mb" id="m2" style="z-index:1100"><div class="mc" style="max-width:520px"><div class="mh"><h3 id="m2t"></h3><button onclick="closeM('m2')">✕</button></div><div class="mbd" id="m2b"></div></div></div>
+<div id="toast"></div>
+<script>
+/* ====== CONFIG: paste your Supabase project URL + ANON (public) key. NEVER put the service-role key here. ====== */
+const SUPABASE_URL='YOUR_SUPABASE_URL', SUPABASE_ANON_KEY='YOUR_SUPABASE_ANON_KEY';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=d=>d?new Date(d).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'—';
+const STAGES=['call_pending','call_connected','lead_generated','documents_received','payment_received','completed'];
+const SL={call_pending:'Call Pending',call_connected:'Call Connected',lead_generated:'Lead Generated',documents_received:'Documents Received',payment_received:'Payment Received',completed:'Completed'};
+const TS={call_pending:'created_at',call_connected:'connected_at',lead_generated:'lead_generated_at',documents_received:'documents_at',payment_received:'payment_at',completed:'completed_at'};
+const OUT=['Connected','Not Connected','Busy','Call Back','Wrong Number','Not Interested','Interested','Documents Pending','Payment Pending'];
+const FIELDS=['district','application_id','application_number','application_status','rejection_reason','pension_type','photo','applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category','sub_division','address_type','block','gp','village','habitation','pin','account_holder_name','account_number','ifsc_code','branch_name'];
+const SENS=['aadhaar_number','account_holder_name','account_number','ifsc_code','branch_name'];
+const BCOLS=FIELDS.filter(f=>!SENS.includes(f)&&f!=='photo').join(',');
+let me=null,cur='dash',PG=1,LIM=25;
+const isA=()=>me&&me.role==='admin';
+function toast(m,bad){const t=$('toast');t.textContent=m;t.style.background=bad?'var(--bad)':'var(--ok)';t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
+async function run(p){const{data,error}=await p;if(error){toast(error.message,1);throw error}return data}
+async function all(build){let o=[],i=0;for(;;){const d=await run(build().range(i,i+999));o=o.concat(d);if(d.length<1000)return o;i+=1000}}
+const openM=(id,t,h)=>{$(id+'t').textContent=t;$(id+'b').innerHTML=h;$(id).style.display='flex'};const closeM=id=>$(id).style.display='none';
+const bdg=(t,c='')=>`<span class="badge ${c}">${esc(t)}</span>`;
+const stBadge=s=>bdg(SL[s]||s,s==='completed'||s==='payment_received'?'ok':s==='call_pending'?'warn':'');
+const opts=(a,sel,all)=>(all?`<option value="">${all}</option>`:'')+a.map(x=>`<option value="${esc(x)}" ${x===sel?'selected':''}>${esc(x)}</option>`).join('');
+const uniq=(a,k)=>[...new Set(a.map(x=>x[k]).filter(Boolean))].sort();
+const dl=(name,text,type)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click()};
+function csv(rows,cols){return[cols.join(','),...rows.map(r=>cols.map(c=>`"${String(r[c]??'').replace(/"/g,'""')}"`).join(','))].join('\n')}
+
+/* ---------- auth ---------- */
+async function login(){$('lerr').textContent='';const{error}=await sb.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value});if(error)return $('lerr').textContent=error.message;boot()}
+async function boot(){
+ const{data:{session}}=await sb.auth.getSession();if(!session)return;
+ const{data:p}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
+ if(!p||!p.is_active){await sb.auth.signOut();$('lerr').textContent='Account inactive or not found. Contact admin.';return}
+ me=p;$('login').style.display='none';$('side').style.display='flex';$('mainw').style.display='flex';
+ $('who').textContent=`${p.full_name||p.email} · ${p.role}`;
+ const nav=isA()?[['dash','📊 Admin Dashboard'],['ben','👥 Beneficiary Master'],['leads','🎯 Lead Assignment'],['emp','🧑‍💼 Employees'],['fu','⏰ Follow-ups'],['calls','📞 Call History'],['pay','💰 Payments'],['trf','🔁 Transfer History'],['imp','📥 Import / Export'],['aud','🧾 Audit Log'],['set','⚙️ Settings']]
+  :[['dash','📊 My Dashboard'],['fu','⏰ My Follow-ups'],['calls','📞 My Call History']];
+ $('nav').innerHTML=nav.map(([k,l])=>`<div class="ni" data-k="${k}" onclick="go('${k}')">${l}</div>`).join('');go('dash');
+}
+function go(k){cur=k;PG=1;document.querySelectorAll('.ni').forEach(e=>e.classList.toggle('on',e.dataset.k===k));$('side').classList.remove('open');$('ttl').textContent=document.querySelector(`.ni[data-k="${k}"]`).textContent.slice(3);$('hact').innerHTML='';
+ $('view').innerHTML='<p style="color:var(--mut)">Loading…</p>';(V[(isA()?'a_':'e_')+k]||V[k])()}
+const refresh=()=>go(cur);
+
+/* ---------- shared data ---------- */
+const leadsQ=()=>sb.from('leads').select('*,beneficiaries(*),profiles(full_name,employee_code)').order('created_at').order('id');
+const kpi=(l,v,c='')=>`<div class="kpi ${c}"><b>${l}</b><i>${v}</i></div>`;
+function table(cols,rows,empty='No records.'){return`<div class="tw"><table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${cols.length}" style="text-align:center;color:var(--mut);padding:24px">${empty}</td></tr>`}</tbody></table></div>`}
+function pager(n,fn){const s=(PG-1)*LIM;return`<div class="pg"><span>Showing ${n?s+1:0}–${Math.min(s+LIM,n)} of ${n}</span><span><button class="btn s sm" onclick="PG>1&&(PG--,${fn}())">Prev</button> ${PG} <button class="btn s sm" onclick="PG*LIM<${n}&&(PG++,${fn}())">Next</button></span></div>`}
+const slice=a=>a.slice((PG-1)*LIM,PG*LIM);
+
+const V={};
+/* ====== ADMIN DASHBOARD ====== */
+let selEmp=null;
+V.a_dash=async function(){
+ const f=$('d-from')?.value||null,t=$('d-to')?.value||null;
+ const s=await run(sb.rpc('admin_summary',{p_from:f,p_to:t}));const E=s.by_emp,sum=k=>E.reduce((a,e)=>a+e[k],0);
+ $('view').innerHTML=`<div class="fs box" style="border-radius:8px"><label>From <input type="date" id="d-from" value="${f||''}"></label><label>To <input type="date" id="d-to" value="${t||''}"></label><button class="btn" onclick="V.a_dash()">Apply</button><button class="btn s" onclick="$('d-from').value=$('d-to').value='';V.a_dash()">Reset</button></div>
+ <div class="kpis">${kpi('Total Beneficiaries',s.beneficiaries)}${kpi('Rejected Applications',s.rejected,'bad')}${kpi('Assigned Leads',s.assigned,'info')}${kpi('Unassigned Leads',s.unassigned,'warn')}${kpi('Employees',s.employees)}${kpi('Total Calls',sum('calls'))}${kpi('Connected Calls',sum('connected'),'ok')}${kpi('Leads Generated',sum('leads'))}${kpi('Documents Received',sum('docs'))}${kpi('Payments Received',sum('payments'),'ok')}${kpi('Completed Leads',sum('completed'),'ok')}</div>
+ <div class="box"><div class="sec" style="margin:0;padding:12px">Employee Performance (click a name for details)</div>${table(['Employee','Assigned','Calls','Connected','Leads','Documents','Payments','Completed'],E.map(e=>[`<a href="#" onclick="empDetail('${e.id}');return false" style="color:var(--blue);font-weight:600">${esc(e.full_name)}</a> <small>${esc(e.employee_code||'')}</small>`,e.assigned,e.calls,e.connected,e.leads,e.docs,e.payments,e.completed]))}</div>`;
+};
+async function empDetail(id){const L=await all(()=>leadsQ().eq('assigned_to',id));const e=L[0]?.profiles;
+ openM('m1','Employee leads',table(['Application','Applicant','Status','Assigned'],L.map(l=>[esc(l.beneficiaries.application_id),esc(l.beneficiaries.applicant_name),stBadge(l.status),fmt(l.assigned_at)]),'No leads assigned.'))}
+
+/* ====== BENEFICIARY MASTER ====== */
+let BEN=[],BF=[];
+V.a_ben=async function(){
+ BEN=await all(()=>sb.from('beneficiaries').select(BCOLS+',id').order('application_id'));
+ const sel=(id,k,l)=>`<select id="${id}" onchange="PG=1;benF()">${opts(uniq(BEN,k),'',l)}</select>`;
+ $('view').innerHTML=`<div class="box"><div class="fs"><input type="text" id="b-q" placeholder="Search ID, name, mobile, village…" oninput="PG=1;benF()">${sel('b-d','district','All Districts')}${sel('b-b','block','All Blocks')}${sel('b-g','gp','All GPs')}${sel('b-v','village','All Villages')}${sel('b-s','application_status','All Statuses')}${sel('b-r','rejection_reason','All Reasons')}${sel('b-p','pension_type','All Pension Types')}<button class="btn s" onclick="dl('filtered_beneficiaries.csv',csv(BF,FIELDS.filter(f=>!SENS.includes(f)&&f!=='photo')),'text/csv')">Export Filtered CSV</button></div><div id="b-t"></div></div>`;benF()};
+function benF(){const g=i=>$(i).value,q=g('b-q').toLowerCase();
+ BF=BEN.filter(r=>(!g('b-d')||r.district===g('b-d'))&&(!g('b-b')||r.block===g('b-b'))&&(!g('b-g')||r.gp===g('b-g'))&&(!g('b-v')||r.village===g('b-v'))&&(!g('b-s')||r.application_status===g('b-s'))&&(!g('b-r')||r.rejection_reason===g('b-r'))&&(!g('b-p')||r.pension_type===g('b-p'))&&(!q||[r.application_id,r.application_number,r.applicant_name,r.father_spouse_name,r.mobile_no,r.village,r.gp].some(x=>(x||'').toLowerCase().includes(q))));
+ $('b-t').innerHTML=table(['Application ID','Applicant','Father/Spouse','District / Block','Pension','Age/Sex','Status','Mobile',''],slice(BF).map(r=>[`<b>${esc(r.application_id)}</b>`,esc(r.applicant_name),esc(r.father_spouse_name),esc(r.district)+'<br><small>'+esc(r.block)+'</small>',esc(r.pension_type),esc(r.age)+' / '+esc(r.gender),bdg(r.application_status||'Pending',/reject/i.test(r.application_status)?'bad':/approv/i.test(r.application_status)?'ok':'warn'),esc(r.mobile_no),`<button class="btn s sm" onclick="benView('${r.id}')">View</button>`]))+pager(BF.length,'benF')}
+async function benView(id){const r=await run(sb.from('beneficiaries').select('*,beneficiary_sensitive(*)').eq('id',id).single());const x={...r,...(r.beneficiary_sensitive||{})};
+ const grp=(t,ks)=>`<div class="sec">${t}</div><div class="gd">${ks.map(k=>`<div class="dc"><label>${k.replace(/_/g,' ')}</label><div>${esc(x[k])||'—'}</div></div>`).join('')}</div>`;
+ openM('m1',`${x.applicant_name||''} [${x.application_id}]`,(x.photo?`<img src="${esc(x.photo)}" style="width:90px;height:108px;object-fit:cover;border-radius:4px;float:right">`:'')+grp('Application',['district','application_id','application_number','application_status','pension_type','rejection_reason'])+grp('Personal',['applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category'])+grp('Address',['sub_division','address_type','block','gp','village','habitation','pin'])+grp('Bank',['account_holder_name','account_number','ifsc_code','branch_name'])+`<p style="margin-top:12px"><button class="btn s" onclick="navigator.clipboard.writeText(${esc(JSON.stringify(JSON.stringify(x)))}).then(()=>toast('Copied'))">Copy Full Details</button></p>`)}
+
+/* ====== LEAD ASSIGNMENT / TRANSFER (admin) ====== */
+let LD=[],LF=[],EMPS=[];
+V.a_leads=async function(){
+ [LD,EMPS]=await Promise.all([all(leadsQ),run(sb.from('profiles').select('id,full_name,employee_code,is_active').eq('role','employee').order('full_name'))]);
+ const act=EMPS.filter(e=>e.is_active);const B=LD.map(l=>l.beneficiaries);
+ $('view').innerHTML=`<div class="kpis">${kpi('Rejected Leads',LD.length,'bad')}${kpi('Unassigned',LD.filter(l=>!l.assigned_to).length,'warn')}${kpi('Pending (not completed)',LD.filter(l=>l.assigned_to&&l.status!=='completed').length,'info')}${kpi('Completed',LD.filter(l=>l.status==='completed').length,'ok')}</div>
+ <div class="box"><div class="fs"><input type="text" id="l-q" placeholder="Search beneficiary / ID / employee…" oninput="PG=1;leadF()"><select id="l-e" onchange="PG=1;leadF()"><option value="">All Employees</option><option value="none">Unassigned</option>${EMPS.map(e=>`<option value="${e.id}">${esc(e.full_name)}</option>`).join('')}</select>
+ <select id="l-s" onchange="PG=1;leadF()"><option value="">All Stages</option>${STAGES.map(s=>`<option value="${s}">${SL[s]}</option>`).join('')}</select><select id="l-d" onchange="PG=1;leadF()">${opts(uniq(B,'district'),'','All Districts')}</select><select id="l-b" onchange="PG=1;leadF()">${opts(uniq(B,'block'),'','All Blocks')}</select></div>
+ <div class="fs" style="background:#eff6ff"><b style="font-size:13px">Assign selected →</b><select id="as-e">${act.map(e=>`<option value="${e.id}">${esc(e.full_name)} (${esc(e.employee_code||'')})</option>`).join('')}</select><button class="btn g" onclick="assignSel()">Assign Selected</button><button class="btn s" onclick="document.querySelectorAll('.lk').forEach(c=>c.checked=true)">Select page</button><button class="btn s" onclick="selAllFiltered()">Select all filtered unassigned</button></div><div id="l-t"></div></div>`;leadF()};
+let SELALL=null;
+function leadF(){const g=i=>$(i).value,q=g('l-q').toLowerCase();SELALL=null;
+ LF=LD.filter(l=>{const b=l.beneficiaries;return(!g('l-e')||(g('l-e')==='none'?!l.assigned_to:l.assigned_to===g('l-e')))&&(!g('l-s')||l.status===g('l-s'))&&(!g('l-d')||b.district===g('l-d'))&&(!g('l-b')||b.block===g('l-b'))&&(!q||[b.application_id,b.applicant_name,b.mobile_no,b.village,l.profiles?.full_name].some(x=>(x||'').toLowerCase().includes(q)))});
+ $('l-t').innerHTML=table(['','Application ID','Applicant','District / Block / GP','Rejection Reason','Stage','Assigned To',''],slice(LF).map(l=>{const b=l.beneficiaries;return[l.assigned_to?'':`<input type="checkbox" class="lk" value="${l.id}">`,`<b>${esc(b.application_id)}</b>`,esc(b.applicant_name),esc(b.district)+' / '+esc(b.block)+' / '+esc(b.gp),esc(b.rejection_reason),stBadge(l.status),l.profiles?esc(l.profiles.full_name):bdg('Unassigned','warn'),`<button class="btn s sm" onclick="openLead('${l.id}')">Open</button>`]}))+pager(LF.length,'leadF')}
+function selAllFiltered(){SELALL=LF.filter(l=>!l.assigned_to).map(l=>l.id);document.querySelectorAll('.lk').forEach(c=>c.checked=true);toast(SELALL.length+' unassigned leads selected (all pages)')}
+async function assignSel(){const ids=SELALL||[...document.querySelectorAll('.lk:checked')].map(c=>c.value);if(!ids.length)return toast('Select leads first',1);
+ if(!confirm(`Assign ${ids.length} lead(s)?`))return;let n=0;for(let i=0;i<ids.length;i+=200)n+=await run(sb.rpc('rpc_assign',{p_leads:ids.slice(i,i+200),p_emp:$('as-e').value}));toast(n+' lead(s) assigned');refresh()}
+async function transferUI(id){const l=await run(leadsQ().eq('id',id).single());const E=(await run(sb.from('profiles').select('id,full_name,employee_code').eq('role','employee').eq('is_active',true))).filter(e=>e.id!==l.assigned_to);
+ openM('m2','Transfer Lead',`<div class="fg" style="grid-template-columns:1fr"><div><label>Application</label><b>${esc(l.beneficiaries.application_id)} — ${esc(l.beneficiaries.applicant_name)}</b></div><div><label>Current Employee</label><b>${esc(l.profiles?.full_name)}</b></div><div><label>New Employee</label><select id="t-e">${E.map(e=>`<option value="${e.id}">${esc(e.full_name)} (${esc(e.employee_code||'')})</option>`).join('')}</select></div><div><label>Transfer Reason (optional)</label><textarea id="t-r" rows="2"></textarea></div></div><p style="margin-top:14px"><button class="btn d" onclick="doTransfer('${id}',${l.status==='completed'})">Confirm Transfer</button> <button class="btn s" onclick="closeM('m2')">Cancel</button></p>`)}
+async function doTransfer(id,done){let ov=false;if(done){if(!confirm('This lead is COMPLETED. Transfer anyway (admin override)?'))return;ov=true}
+ await run(sb.rpc('rpc_transfer',{p_lead:id,p_new:$('t-e').value,p_reason:$('t-r').value||null,p_override:ov}));closeM('m2');toast('Lead transferred');openLead(id);refresh()}
+
+/* ====== LEAD DETAIL (admin + employee) ====== */
+async function openLead(id){
+ const l=await run(leadsQ().eq('id',id).single());
+ const[calls,docs,pay,trf,cl]=await Promise.all([run(sb.from('call_history').select('*,profiles(full_name)').eq('lead_id',id).order('called_at',{ascending:false})),run(sb.from('document_status').select('*').eq('lead_id',id).maybeSingle()),run(sb.from('payment_records').select('*').eq('lead_id',id).maybeSingle()),
+  isA()?run(sb.from('transfer_history').select('*,pf:profiles!transfer_history_from_employee_fkey(full_name),pt:profiles!transfer_history_to_employee_fkey(full_name)').eq('lead_id',id).order('transferred_at',{ascending:false})):[],run(sb.from('settings').select('value').eq('key','doc_checklist').maybeSingle())]);
+ const b=l.beneficiaries,ci=STAGES.indexOf(l.status),mine=!isA()&&l.assigned_to===me.id,items=cl?.value||[],ck=docs?.checklist||{};
+ const nxt=STAGES[ci+1];
+ const det=['applicant_name','father_spouse_name','mobile_no','age','gender','pension_type','application_status','rejection_reason','district','block','gp','village','habitation','pin'];
+ openM('m1',`${b.applicant_name||''} [${b.application_id}]`,`
+ <div class="sec">Workflow</div><div class="steps">${STAGES.map((s,i)=>`<div class="step ${i<ci||l.status==='completed'?'done':i===ci?'cur':''}">${SL[s]}<small>${fmt(l[TS[s]])}</small></div>`).join('')}</div>
+ ${mine&&nxt?`<p style="margin-top:10px">${nxt==='completed'?`<button class="btn g" onclick="stage('${id}','completed')">✔ Mark Complete</button>`:`<button class="btn" onclick="stage('${id}','${nxt}')">Advance to: ${SL[nxt]}</button>`}</p>`:''}
+ ${isA()?`<p style="margin-top:10px">Assigned to: <b>${esc(l.profiles?.full_name||'Unassigned')}</b> ${l.assigned_to?`<button class="btn d" onclick="transferUI('${id}')">🔁 TRANSFER LEAD</button>`:''}</p>`:''}
+ <div class="sec">Applicant</div><div class="gd">${det.map(k=>`<div class="dc"><label>${k.replace(/_/g,' ')}</label><div>${esc(b[k])||'—'}</div></div>`).join('')}</div>
+ ${mine?`<div class="sec">Record Call</div><div class="fg"><div><label>Outcome</label><select id="c-o">${opts(OUT)}</select></div><div><label>Call date & time</label><input type="datetime-local" id="c-at" value="${new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16)}"></div><div><label>Next follow-up date</label><input type="date" id="c-nd"></div><div><label>Next follow-up time</label><input type="time" id="c-nt"></div><div style="grid-column:1/-1"><label>Notes</label><textarea id="c-n" rows="2"></textarea></div></div><p style="margin-top:8px"><button class="btn" onclick="doCall('${id}')">Save Call</button></p>
+ <div class="sec">Documents</div><div class="fg"><div><label>Status</label><select id="d-s">${opts(['Documents Not Received','Documents Partially Received','Documents Received','Documents Verified'],docs?.status)}</select></div></div><p style="margin:8px 0">${items.map((x,i)=>`<label style="margin-right:14px;font-size:13px"><input type="checkbox" class="dk" data-k="${esc(x)}" ${ck[x]?'checked':''}> ${esc(x)}</label>`).join('')}</p><button class="btn" onclick="saveDocs('${id}')">Save Documents</button>
+ <div class="sec">Payment</div><div class="fg"><div><label>Status</label><select id="p-s">${opts(['Pending','Received','Failed','Refunded'],pay?.status)}</select></div><div><label>Amount</label><input type="number" id="p-a" value="${pay?.amount??''}"></div><div><label>Date</label><input type="date" id="p-d" value="${pay?.paid_on||''}"></div><div><label>Mode</label><select id="p-m">${opts(['Cash','UPI','Bank Transfer','Cheque','Other'],pay?.mode)}</select></div><div><label>Transaction Ref</label><input id="p-r" value="${esc(pay?.reference)}"></div><div><label>Notes</label><input id="p-n" value="${esc(pay?.notes)}"></div></div><p style="margin-top:8px"><button class="btn" onclick="savePay('${id}')">Save Payment</button></p>`
+ :`<div class="sec">Documents & Payment</div><div class="gd"><div class="dc"><label>Documents</label><div>${esc(docs?.status||'—')}</div></div><div class="dc"><label>Payment</label><div>${esc(pay?.status||'—')} ${pay?.amount?'₹'+pay.amount:''} ${pay?.verified?bdg('Verified','ok'):''}</div></div></div>${isA()&&pay?`<p style="margin-top:8px"><button class="btn ${pay.verified?'s':'g'}" onclick="verifyPay('${id}',${!pay.verified})">${pay.verified?'Un-verify':'Verify'} Payment</button></p>`:''}`}
+ <div class="sec">Call History (read-only)</div>${table(['When','By','Outcome','Notes','Next follow-up'],calls.map(c=>[fmt(c.called_at),esc(c.profiles?.full_name),bdg(c.outcome),esc(c.notes),fmt(c.next_followup)]),'No calls yet.')}
+ ${isA()?`<div class="sec">Transfer History</div>${table(['When','From','To','Reason'],trf.map(t=>[fmt(t.transferred_at),esc(t.pf?.full_name),esc(t.pt?.full_name),esc(t.reason)]),'Never transferred.')}`:''}`)}
+const after=id=>{openLead(id);if(cur!=='dash'||!isA())refresh()};
+async function doCall(id){const nd=$('c-nd').value,nt=$('c-nt').value;if(nd&&!nt||!nd&&nt)return toast('Enter both follow-up date and time',1);
+ await run(sb.rpc('rpc_log_call',{p_lead:id,p_outcome:$('c-o').value,p_called_at:new Date($('c-at').value).toISOString(),p_notes:$('c-n').value||null,p_next:nd?new Date(nd+'T'+nt).toISOString():null}));toast('Call saved');after(id)}
+async function stage(id,s){if(s==='completed'&&!confirm('Mark this lead as COMPLETED?'))return;await run(sb.rpc('rpc_set_stage',{p_lead:id,p_stage:s}));toast('Stage updated');after(id)}
+async function saveDocs(id){const c={};document.querySelectorAll('.dk').forEach(x=>c[x.dataset.k]=x.checked);await run(sb.rpc('rpc_save_docs',{p_lead:id,p_status:$('d-s').value,p_checklist:c}));toast('Documents saved');after(id)}
+async function savePay(id){await run(sb.rpc('rpc_save_payment',{p_lead:id,p_status:$('p-s').value,p_amount:$('p-a').value||null,p_date:$('p-d').value||null,p_mode:$('p-m').value,p_ref:$('p-r').value||null,p_notes:$('p-n').value||null}));toast('Payment saved');after(id)}
+async function verifyPay(id,ok){await run(sb.rpc('rpc_verify_payment',{p_lead:id,p_ok:ok}));toast('Updated');openLead(id)}
+
+/* ====== EMPLOYEE DASHBOARD ====== */
+let MY=[];
+V.e_dash=async function(){
+ MY=await all(leadsQ);const c=s=>MY.filter(l=>l.status===s).length,rank=s=>MY.filter(l=>STAGES.indexOf(l.status)>=STAGES.indexOf(s)).length;
+ const fu=(await run(sb.from('follow_ups').select('id').eq('done',false).lte('due_at',new Date(Date.now()+864e5).toISOString()))).length;
+ $('view').innerHTML=`<div class="kpis">${kpi('Total Assigned',MY.length)}${kpi('Call Pending',c('call_pending'),'warn')}${kpi('Call Connected',rank('call_connected'),'info')}${kpi('Lead Generated',rank('lead_generated'))}${kpi('Documents Received',rank('documents_received'))}${kpi('Payment Received',rank('payment_received'),'ok')}${kpi('Completed',c('completed'),'ok')}${kpi('Follow-up Required',fu,'bad')}</div>
+ <div class="box"><div class="fs"><input type="text" id="m-q" placeholder="Search my leads…" oninput="PG=1;myF()"><select id="m-s" onchange="PG=1;myF()"><option value="">All Stages</option>${STAGES.map(s=>`<option value="${s}">${SL[s]}</option>`).join('')}</select></div><div id="m-t"></div></div>`;myF()};
+function myF(){const q=$('m-q').value.toLowerCase(),s=$('m-s').value;const F=MY.filter(l=>(!s||l.status===s)&&(!q||[l.beneficiaries.applicant_name,l.beneficiaries.application_id,l.beneficiaries.mobile_no,l.beneficiaries.village].some(x=>(x||'').toLowerCase().includes(q))));
+ $('m-t').innerHTML=table(['Application ID','Applicant','Mobile','Village / GP','Reason','Stage',''],slice(F).map(l=>{const b=l.beneficiaries;return[`<b>${esc(b.application_id)}</b>`,esc(b.applicant_name),`<a href="tel:${esc(b.mobile_no)}">${esc(b.mobile_no)}</a>`,esc(b.village)+' / '+esc(b.gp),esc(b.rejection_reason),stBadge(l.status),`<button class="btn sm" onclick="openLead('${l.id}')">Open</button>`]}))+pager(F.length,'myF')}
+
+/* ====== FOLLOW-UPS (RLS scopes to own for employees) ====== */
+V.fu=async function(){
+ const F=await run(sb.from('follow_ups').select('*,leads(id,beneficiaries(application_id,applicant_name,mobile_no)),profiles(full_name)').eq('done',false).order('due_at'));
+ const now=new Date(),s=new Date(now);s.setHours(0,0,0,0);const e=new Date(s.getTime()+864e5);
+ const sec=(t,a,c)=>`<div class="box"><div class="sec" style="margin:0;padding:12px;color:var(--${c})">${t} (${a.length})</div>${table(['Due','Applicant','Mobile','Note',...(isA()?['Employee']:[]),''],a.map(f=>{const b=f.leads.beneficiaries;return[fmt(f.due_at),`${esc(b.applicant_name)} <small>${esc(b.application_id)}</small>`,esc(b.mobile_no),esc(f.note),...(isA()?[esc(f.profiles?.full_name)]:[]),`<button class="btn sm" onclick="openLead('${f.leads.id}')">Open</button>`]}),'None.')}</div>`;
+ $('view').innerHTML=sec('Overdue',F.filter(f=>new Date(f.due_at)<s),'bad')+sec("Today's",F.filter(f=>new Date(f.due_at)>=s&&new Date(f.due_at)<e),'warn')+sec('Upcoming',F.filter(f=>new Date(f.due_at)>=e),'info')};
+
+/* ====== CALL HISTORY ====== */
+V.calls=async function(){const C=await all(()=>sb.from('call_history').select('*,profiles(full_name),leads(beneficiaries(application_id,applicant_name))').order('called_at',{ascending:false}).order('id'));
+ $('view').innerHTML=`<div class="box">${table(['When','Employee','Application','Applicant','Outcome','Notes'],C.slice(0,500).map(c=>[fmt(c.called_at),esc(c.profiles?.full_name),esc(c.leads.beneficiaries.application_id),esc(c.leads.beneficiaries.applicant_name),bdg(c.outcome),esc(c.notes)]))}<div class="pg">Showing latest ${Math.min(500,C.length)} of ${C.length}</div></div>`};
+
+/* ====== EMPLOYEES (admin) ====== */
+V.a_emp=async function(){const s=await run(sb.rpc('admin_summary',{p_from:null,p_to:null}));
+ $('hact').innerHTML=`<button class="btn" onclick="newEmp()">+ New Employee</button>`;
+ const P=await run(sb.from('profiles').select('*').eq('role','employee').order('full_name'));
+ $('view').innerHTML=`<div class="box">${table(['Name','Emp ID','Mobile','Email','Status','Assigned','Completed','Actions'],P.map(p=>{const e=s.by_emp.find(x=>x.id===p.id)||{};return[esc(p.full_name),esc(p.employee_code),esc(p.mobile),esc(p.email),bdg(p.is_active?'Active':'Inactive',p.is_active?'ok':'bad'),e.assigned,e.completed,`<button class="btn sm ${p.is_active?'d':'g'}" onclick="toggleEmp('${p.id}',${!p.is_active})">${p.is_active?'Deactivate':'Activate'}</button> <button class="btn s sm" onclick="empDetail('${p.id}')">Leads</button>`]}))}</div>`};
+function newEmp(){openM('m2','Create Employee Account',`<div class="fg" style="grid-template-columns:1fr"><div><label>Employee Name</label><input id="n-n"></div><div><label>Employee ID</label><input id="n-c"></div><div><label>Mobile</label><input id="n-m"></div><div><label>Email / Username (email format)</label><input id="n-e" type="email"></div><div><label>Password (min 8)</label><input id="n-p" type="password"></div></div><p style="margin-top:12px"><button class="btn" onclick="createEmp()">Create</button></p>`)}
+async function createEmp(){const{data,error}=await sb.functions.invoke('create-employee',{body:{full_name:$('n-n').value,employee_code:$('n-c').value,mobile:$('n-m').value,email:$('n-e').value,password:$('n-p').value}});
+ if(error||data?.error)return toast(data?.error||error.message,1);closeM('m2');toast('Employee created');refresh()}
+async function toggleEmp(id,v){if(!confirm(v?'Activate this account?':'Deactivate? They will lose access immediately.'))return;await run(sb.from('profiles').update({is_active:v}).eq('id',id));refresh()}
+
+/* ====== PAYMENTS (admin) ====== */
+V.a_pay=async function(){const P=await all(()=>sb.from('payment_records').select('*,leads(id,profiles(full_name),beneficiaries(application_id,applicant_name))').order('updated_at',{ascending:false}).order('id'));
+ const by={};P.filter(p=>p.status==='Received').forEach(p=>{const n=p.leads.profiles?.full_name||'—';by[n]=(by[n]||0)+Number(p.amount||0)});
+ $('view').innerHTML=`<div class="kpis">${Object.entries(by).map(([n,a])=>kpi(n+' (received)','₹'+a.toLocaleString('en-IN'),'ok')).join('')||''}</div><div class="box">${table(['Application','Applicant','Employee','Status','Amount','Date','Mode','Ref','Verified',''],P.map(p=>[esc(p.leads.beneficiaries.application_id),esc(p.leads.beneficiaries.applicant_name),esc(p.leads.profiles?.full_name),bdg(p.status,p.status==='Received'?'ok':p.status==='Failed'?'bad':'warn'),p.amount?'₹'+p.amount:'—',esc(p.paid_on),esc(p.mode),esc(p.reference),p.verified?bdg('Verified','ok'):bdg('No','warn'),`<button class="btn sm s" onclick="verifyPay('${p.leads.id}',${!p.verified})">${p.verified?'Un-verify':'Verify'}</button>`]))}</div>`};
+V.a_trf=async function(){const T=await all(()=>sb.from('transfer_history').select('*,pf:profiles!transfer_history_from_employee_fkey(full_name),pt:profiles!transfer_history_to_employee_fkey(full_name),pb:profiles!transfer_history_transferred_by_fkey(full_name)').order('transferred_at',{ascending:false}).order('id'));
+ $('view').innerHTML=`<div class="box">${table(['Application ID','Previous Employee','New Employee','Date & Time','Reason','Transferred By'],T.map(t=>[esc(t.application_id),esc(t.pf?.full_name),esc(t.pt?.full_name),fmt(t.transferred_at),esc(t.reason),esc(t.pb?.full_name)]),'No transfers yet.')}</div>`};
+V.a_aud=async function(){const A=await run(sb.from('audit_logs').select('*').order('at',{ascending:false}).limit(500));const P=Object.fromEntries((await run(sb.from('profiles').select('id,full_name'))).map(p=>[p.id,p.full_name]));
+ $('view').innerHTML=`<div class="box">${table(['When','Actor','Action','Entity','Details'],A.map(a=>[fmt(a.at),esc(P[a.actor]||a.actor),bdg(a.action),esc(a.entity),`<small>${esc(JSON.stringify(a.details))}</small>`]))}</div>`};
+
+/* ====== SETTINGS (document checklist) ====== */
+V.a_set=async function(){const s=await run(sb.from('settings').select('value').eq('key','doc_checklist').single());
+ $('view').innerHTML=`<div class="card"><h3>Document Checklist</h3><p style="font-size:13px;color:var(--mut);margin:6px 0">One item per line. Employees tick these per lead.</p><textarea id="s-c" rows="8" style="width:100%">${esc(s.value.join('\n'))}</textarea><p style="margin-top:8px"><button class="btn" onclick="saveSet()">Save</button></p></div>`};
+async function saveSet(){await run(sb.from('settings').upsert({key:'doc_checklist',value:$('s-c').value.split('\n').map(x=>x.trim()).filter(Boolean)}));toast('Saved')}
+
+/* ====== IMPORT / EXPORT / BACKUP (existing features, now writing to Supabase) ====== */
+const cleanKey=k=>String(k||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const RULES={district:['district','dist','districtname'],application_id:['applicationid','appid','id','applicantid'],application_number:['applicationnumber','applicationno','appno','ackno'],application_status:['applicationstatus','status','appstatus','currentstatus'],rejection_reason:['rejectionreason','rejectreason','remarks','reason'],pension_type:['pensiontype','pension','scheme','schemename'],photo:['photo','applicantphoto','image','picture','photourl','pic'],applicant_name:['applicantname','name','beneficiaryname','nameofapplicant'],father_spouse_name:['fatherspousename','fatherhusbandname','fatherorhusbandname','fatherorspousename','fathername','husbandname','spousename','guardianname','guardian','relationname','relativename','father','husband','spouse'],dob:['dob','dateofbirth','birthdate'],age:['age','years'],gender:['gender','sex'],aadhaar_number:['aadhaarnumber','aadhaar','aadhar','aadharno','uid'],mobile_no:['mobileno','mobile','phone','contactno','contact','cellno'],social_category:['socialcategory','caste','category'],sub_division:['subdivision','subdiv'],address_type:['addresstype'],block:['block','blockname','ulb','blockulb'],gp:['gp','grampanchayat','panchayat'],village:['village','villagename'],habitation:['habitation','ward'],pin:['pin','pincode','postalcode'],account_holder_name:['accountholdername','accountholder','holdername'],account_number:['accountnumber','accountno','bankaccno','accno'],ifsc_code:['ifsccode','ifsc'],branch_name:['branchname','branch']};
+function mapRow(raw){const out={};for(const[c,m]of Object.entries(RULES)){out[c]='';for(const k of Object.keys(raw)){if(m.includes(cleanKey(k))){out[c]=raw[k]==null?'':String(raw[k]).trim();break}}}
+ if(!out.father_spouse_name)for(const k of Object.keys(raw)){if(/father|husband|spouse|guardian/i.test(k)){out.father_spouse_name=String(raw[k]??'').trim();break}}return out}
+V.a_imp=function(){$('view').innerHTML=`<div style="max-width:760px;margin:auto"><div class="card"><h3>Import Excel / CSV</h3><p style="font-size:13px;color:var(--mut);margin:6px 0 10px">Duplicates (same Application ID or Application Number) are skipped automatically. Rejected applications become leads automatically.</p><input type="file" id="f-x" accept=".xlsx,.xls,.csv,.tsv" onchange="importFile(event)"><p id="i-m" style="margin-top:10px;font-weight:600;font-size:13px"></p></div>
+ <div class="card"><h3>Export</h3><p style="margin:8px 0"><button class="btn" onclick="exportAll()">Export All Beneficiaries (CSV)</button></p></div>
+ <div class="card"><h3>JSON Backup & Restore</h3><p style="margin:8px 0"><button class="btn s" onclick="exportJSON()">Download JSON Backup</button> <button class="btn s" onclick="$('f-j').click()">Restore JSON</button><input type="file" id="f-j" accept=".json" style="display:none" onchange="importJSON(event)"></p><p style="font-size:12px;color:var(--mut)">Restore only adds missing records (duplicates skipped); it never overwrites or deletes.</p></div></div>`};
+async function pushRows(rows){const m=$('i-m');let ins=0,dup=0;const R=rows.map(mapRow).filter(r=>r.application_id||r.application_number).map(r=>(r.application_id||(r.application_id=r.application_number),r));const skip=rows.length-R.length;
+ for(let i=0;i<R.length;i+=200){m.textContent=`Importing ${Math.min(i+200,R.length)} / ${R.length}…`;const r=await run(sb.rpc('rpc_import_beneficiaries',{p_rows:R.slice(i,i+200)}));ins+=r.inserted;dup+=r.duplicates_skipped}
+ m.innerHTML=`<span style="color:var(--ok)">Done: ${ins} new, ${dup} duplicates skipped, ${skip} rows without ID ignored.</span>`}
+async function importFile(e){const f=e.target.files[0];if(!f)return;$('i-m').textContent='Reading…';const wb=XLSX.read(await f.arrayBuffer(),{type:'array',raw:false});await pushRows(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{raw:false,defval:''}))}
+async function fetchFull(){return(await all(()=>sb.from('beneficiaries').select('*,beneficiary_sensitive(*)').order('application_id'))).map(r=>({...r,...(r.beneficiary_sensitive||{})}))}
+async function exportAll(){dl('mbpy_all_beneficiaries.csv',csv(await fetchFull(),FIELDS),'text/csv')}
+async function exportJSON(){dl(`MBPY_BACKUP_${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(await fetchFull(),null,1),'application/json')}
+function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{try{const a=JSON.parse(ev.target.result);if(!Array.isArray(a))throw 0;await pushRows(a)}catch(x){toast('Invalid backup JSON',1)}};r.readAsText(f)}
+
+boot();
+</script></body></html>
