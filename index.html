@@ -3,6 +3,7 @@
 <title>SSEPD MBPY CRM</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <style>
 :root{--navy:#0b2545;--navy2:#133a68;--blue:#2563eb;--bg:#f0f4f8;--surf:#fff;--bd:#cbd5e1;--tx:#0f172a;--mut:#64748b;--ok:#15803d;--okbg:#dcfce7;--bad:#b91c1c;--badbg:#fee2e2;--warn:#c2410c;--warnbg:#ffedd5;--info:#0369a1;--infobg:#e0f2fe}
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
@@ -68,7 +69,7 @@ const TS={call_pending:'created_at',call_connected:'connected_at',lead_generated
 const OUT=['Connected','Not Connected','Busy','Call Back','Wrong Number','Not Interested','Interested','Documents Pending','Payment Pending'];
 const FIELDS=['district','application_id','application_number','application_status','rejection_reason','pension_type','photo','applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category','sub_division','address_type','block','gp','village','habitation','pin','account_holder_name','account_number','ifsc_code','branch_name'];
 const SENS=['aadhaar_number','account_holder_name','account_number','ifsc_code','branch_name'];
-const BCOLS=FIELDS.filter(f=>!SENS.includes(f)&&f!=='photo').join(',');
+const BCOLS=FIELDS.filter(f=>!SENS.includes(f)&&f!=='photo').join(',')+',apply_date';
 let me=null,cur='dash',PG=1,LIM=25;
 const isA=()=>me&&me.role==='admin';
 function toast(m,bad){const t=$('toast');t.textContent=m;t.style.background=bad?'var(--bad)':'var(--ok)';t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
@@ -99,12 +100,14 @@ function go(k){cur=k;PG=1;document.querySelectorAll('.ni').forEach(e=>e.classLis
 const refresh=()=>go(cur);
 
 /* ---------- shared data ---------- */
-const leadsQ=()=>sb.from('leads').select('*,beneficiaries(*),profiles(full_name,employee_code)').order('created_at').order('id');
+const leadsQ=()=>sb.from('leads').select(`*,beneficiaries(${BCOLS}),profiles(full_name,employee_code)`).order('created_at').order('id');
 const kpi=(l,v,c='')=>`<div class="kpi ${c}"><b>${l}</b><i>${v}</i></div>`;
 function table(cols,rows,empty='No records.'){return`<div class="tw"><table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${cols.length}" style="text-align:center;color:var(--mut);padding:24px">${empty}</td></tr>`}</tbody></table></div>`}
 function pager(n,fn){const s=(PG-1)*LIM;return`<div class="pg"><span>Showing ${n?s+1:0}–${Math.min(s+LIM,n)} of ${n}</span><span><button class="btn s sm" onclick="PG>1&&(PG--,${fn}())">Prev</button> ${PG} <button class="btn s sm" onclick="PG*LIM<${n}&&(PG++,${fn}())">Next</button></span></div>`}
 const slice=a=>a.slice((PG-1)*LIM,PG*LIM);
 
+const fmtD=d=>d?new Date(d+'T00:00').toLocaleDateString('en-GB'):'';
+const dgrp=(t,ks,x)=>`<div class="sec">${t}</div><div class="gd">${ks.map(k=>`<div class="dc"><label>${k==='apply_date'?'apply date':k.replace(/_/g,' ')}</label><div>${esc(k==='apply_date'?fmtD(x[k]):x[k])||'—'}</div></div>`).join('')}</div>`;
 const V={};
 /* ====== ADMIN DASHBOARD ====== */
 let selEmp=null;
@@ -155,16 +158,17 @@ async function doTransfer(id,done){let ov=false;if(done){if(!confirm('This lead 
 /* ====== LEAD DETAIL (admin + employee) ====== */
 async function openLead(id){
  const l=await run(leadsQ().eq('id',id).single());
+ const full=await run(sb.from('beneficiaries').select('photo,beneficiary_sensitive(*)').eq('id',l.beneficiary_id).single());
  const[calls,docs,pay,trf,cl]=await Promise.all([run(sb.from('call_history').select('*,profiles(full_name)').eq('lead_id',id).order('called_at',{ascending:false})),run(sb.from('document_status').select('*').eq('lead_id',id).maybeSingle()),run(sb.from('payment_records').select('*').eq('lead_id',id).maybeSingle()),
   isA()?run(sb.from('transfer_history').select('*,pf:profiles!transfer_history_from_employee_fkey(full_name),pt:profiles!transfer_history_to_employee_fkey(full_name)').eq('lead_id',id).order('transferred_at',{ascending:false})):[],run(sb.from('settings').select('value').eq('key','doc_checklist').maybeSingle())]);
- const b=l.beneficiaries,ci=STAGES.indexOf(l.status),mine=!isA()&&l.assigned_to===me.id,items=cl?.value||[],ck=docs?.checklist||{};
+ const b={...l.beneficiaries,...(full.beneficiary_sensitive||{}),photo:full.photo},ci=STAGES.indexOf(l.status),mine=!isA()&&l.assigned_to===me.id,items=cl?.value||[],ck=docs?.checklist||{};
  const nxt=STAGES[ci+1];
  const det=['applicant_name','father_spouse_name','mobile_no','age','gender','pension_type','application_status','rejection_reason','district','block','gp','village','habitation','pin'];
- openM('m1',`${b.applicant_name||''} [${b.application_id}]`,`
+ openM('m1',`${b.applicant_name||''}${isA()?' ['+b.application_id+']':''}`,`
  <div class="sec">Workflow</div><div class="steps">${STAGES.map((s,i)=>`<div class="step ${i<ci||l.status==='completed'?'done':i===ci?'cur':''}">${SL[s]}<small>${fmt(l[TS[s]])}</small></div>`).join('')}</div>
  ${mine&&nxt?`<p style="margin-top:10px">${nxt==='completed'?`<button class="btn g" onclick="stage('${id}','completed')">✔ Mark Complete</button>`:`<button class="btn" onclick="stage('${id}','${nxt}')">Advance to: ${SL[nxt]}</button>`}</p>`:''}
  ${isA()?`<p style="margin-top:10px">Assigned to: <b>${esc(l.profiles?.full_name||'Unassigned')}</b> ${l.assigned_to?`<button class="btn d" onclick="transferUI('${id}')">🔁 TRANSFER LEAD</button>`:''}</p>`:''}
- <div class="sec">Applicant</div><div class="gd">${det.map(k=>`<div class="dc"><label>${k.replace(/_/g,' ')}</label><div>${esc(b[k])||'—'}</div></div>`).join('')}</div>
+ ${b.photo?`<img src="${esc(b.photo)}" style="width:90px;height:108px;object-fit:cover;border-radius:4px;float:right;margin-top:14px" onerror="this.remove()">`:''}${dgrp('Application',isA()?['apply_date','application_id','application_number','application_status','pension_type','rejection_reason']:['apply_date','application_status','pension_type','rejection_reason'],b)}${dgrp('Personal Details',['applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category'],b)}${dgrp('Address',['sub_division','address_type','district','block','gp','village','habitation','pin'],b)}${dgrp('Bank Details',['account_holder_name','account_number','ifsc_code','branch_name'],b)}
  ${mine?`<div class="sec">Record Call</div><div class="fg"><div><label>Outcome</label><select id="c-o">${opts(OUT)}</select></div><div><label>Call date & time</label><input type="datetime-local" id="c-at" value="${new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16)}"></div><div><label>Next follow-up date</label><input type="date" id="c-nd"></div><div><label>Next follow-up time</label><input type="time" id="c-nt"></div><div style="grid-column:1/-1"><label>Notes</label><textarea id="c-n" rows="2"></textarea></div></div><p style="margin-top:8px"><button class="btn" onclick="doCall('${id}')">Save Call</button></p>
  <div class="sec">Documents</div><div class="fg"><div><label>Status</label><select id="d-s">${opts(['Documents Not Received','Documents Partially Received','Documents Received','Documents Verified'],docs?.status)}</select></div></div><p style="margin:8px 0">${items.map((x,i)=>`<label style="margin-right:14px;font-size:13px"><input type="checkbox" class="dk" data-k="${esc(x)}" ${ck[x]?'checked':''}> ${esc(x)}</label>`).join('')}</p><button class="btn" onclick="saveDocs('${id}')">Save Documents</button>
  <div class="sec">Payment</div><div class="fg"><div><label>Status</label><select id="p-s">${opts(['Pending','Received','Failed','Refunded'],pay?.status)}</select></div><div><label>Amount</label><input type="number" id="p-a" value="${pay?.amount??''}"></div><div><label>Date</label><input type="date" id="p-d" value="${pay?.paid_on||''}"></div><div><label>Mode</label><select id="p-m">${opts(['Cash','UPI','Bank Transfer','Cheque','Other'],pay?.mode)}</select></div><div><label>Transaction Ref</label><input id="p-r" value="${esc(pay?.reference)}"></div><div><label>Notes</label><input id="p-n" value="${esc(pay?.notes)}"></div></div><p style="margin-top:8px"><button class="btn" onclick="savePay('${id}')">Save Payment</button></p>`
@@ -186,19 +190,19 @@ V.e_dash=async function(){
  const fu=(await run(sb.from('follow_ups').select('id').eq('done',false).lte('due_at',new Date(Date.now()+864e5).toISOString()))).length;
  $('view').innerHTML=`<div class="kpis">${kpi('Total Assigned',MY.length)}${kpi('Call Pending',c('call_pending'),'warn')}${kpi('Call Connected',rank('call_connected'),'info')}${kpi('Lead Generated',rank('lead_generated'))}${kpi('Documents Received',rank('documents_received'))}${kpi('Payment Received',rank('payment_received'),'ok')}${kpi('Completed',c('completed'),'ok')}${kpi('Follow-up Required',fu,'bad')}</div>
  <div class="box"><div class="fs"><input type="text" id="m-q" placeholder="Search my leads…" oninput="PG=1;myF()"><select id="m-s" onchange="PG=1;myF()"><option value="">All Stages</option>${STAGES.map(s=>`<option value="${s}">${SL[s]}</option>`).join('')}</select></div><div id="m-t"></div></div>`;myF()};
-function myF(){const q=$('m-q').value.toLowerCase(),s=$('m-s').value;const F=MY.filter(l=>(!s||l.status===s)&&(!q||[l.beneficiaries.applicant_name,l.beneficiaries.application_id,l.beneficiaries.mobile_no,l.beneficiaries.village].some(x=>(x||'').toLowerCase().includes(q))));
- $('m-t').innerHTML=table(['Application ID','Applicant','Mobile','Village / GP','Reason','Stage',''],slice(F).map(l=>{const b=l.beneficiaries;return[`<b>${esc(b.application_id)}</b>`,esc(b.applicant_name),`<a href="tel:${esc(b.mobile_no)}">${esc(b.mobile_no)}</a>`,esc(b.village)+' / '+esc(b.gp),esc(b.rejection_reason),stBadge(l.status),`<button class="btn sm" onclick="openLead('${l.id}')">Open</button>`]}))+pager(F.length,'myF')}
+function myF(){const q=$('m-q').value.toLowerCase(),s=$('m-s').value;const F=MY.filter(l=>(!s||l.status===s)&&(!q||[l.beneficiaries.applicant_name,l.beneficiaries.mobile_no,l.beneficiaries.village].some(x=>(x||'').toLowerCase().includes(q))));
+ $('m-t').innerHTML=table(['Apply Date','Applicant','Mobile','Village / GP','Reason','Stage',''],slice(F).map(l=>{const b=l.beneficiaries;return[fmtD(b.apply_date)||'—',esc(b.applicant_name),`<a href="tel:${esc(b.mobile_no)}">${esc(b.mobile_no)}</a>`,esc(b.village)+' / '+esc(b.gp),esc(b.rejection_reason),stBadge(l.status),`<button class="btn sm" onclick="openLead('${l.id}')">Open</button>`]}))+pager(F.length,'myF')}
 
 /* ====== FOLLOW-UPS (RLS scopes to own for employees) ====== */
 V.fu=async function(){
  const F=await run(sb.from('follow_ups').select('*,leads(id,beneficiaries(application_id,applicant_name,mobile_no)),profiles(full_name)').eq('done',false).order('due_at'));
  const now=new Date(),s=new Date(now);s.setHours(0,0,0,0);const e=new Date(s.getTime()+864e5);
- const sec=(t,a,c)=>`<div class="box"><div class="sec" style="margin:0;padding:12px;color:var(--${c})">${t} (${a.length})</div>${table(['Due','Applicant','Mobile','Note',...(isA()?['Employee']:[]),''],a.map(f=>{const b=f.leads.beneficiaries;return[fmt(f.due_at),`${esc(b.applicant_name)} <small>${esc(b.application_id)}</small>`,esc(b.mobile_no),esc(f.note),...(isA()?[esc(f.profiles?.full_name)]:[]),`<button class="btn sm" onclick="openLead('${f.leads.id}')">Open</button>`]}),'None.')}</div>`;
+ const sec=(t,a,c)=>`<div class="box"><div class="sec" style="margin:0;padding:12px;color:var(--${c})">${t} (${a.length})</div>${table(['Due','Applicant','Mobile','Note',...(isA()?['Employee']:[]),''],a.map(f=>{const b=f.leads.beneficiaries;return[fmt(f.due_at),`${esc(b.applicant_name)} <small>${isA()?esc(b.application_id):''}</small>`,esc(b.mobile_no),esc(f.note),...(isA()?[esc(f.profiles?.full_name)]:[]),`<button class="btn sm" onclick="openLead('${f.leads.id}')">Open</button>`]}),'None.')}</div>`;
  $('view').innerHTML=sec('Overdue',F.filter(f=>new Date(f.due_at)<s),'bad')+sec("Today's",F.filter(f=>new Date(f.due_at)>=s&&new Date(f.due_at)<e),'warn')+sec('Upcoming',F.filter(f=>new Date(f.due_at)>=e),'info')};
 
 /* ====== CALL HISTORY ====== */
 V.calls=async function(){const C=await all(()=>sb.from('call_history').select('*,profiles(full_name),leads(beneficiaries(application_id,applicant_name))').order('called_at',{ascending:false}).order('id'));
- $('view').innerHTML=`<div class="box">${table(['When','Employee','Application','Applicant','Outcome','Notes'],C.slice(0,500).map(c=>[fmt(c.called_at),esc(c.profiles?.full_name),esc(c.leads.beneficiaries.application_id),esc(c.leads.beneficiaries.applicant_name),bdg(c.outcome),esc(c.notes)]))}<div class="pg">Showing latest ${Math.min(500,C.length)} of ${C.length}</div></div>`};
+ $('view').innerHTML=`<div class="box">${table(['When','Employee',isA()?'Application':'','Applicant','Outcome','Notes'],C.slice(0,500).map(c=>[fmt(c.called_at),esc(c.profiles?.full_name),(isA()?esc(c.leads.beneficiaries.application_id):''),esc(c.leads.beneficiaries.applicant_name),bdg(c.outcome),esc(c.notes)]))}<div class="pg">Showing latest ${Math.min(500,C.length)} of ${C.length}</div></div>`};
 
 /* ====== EMPLOYEES (admin) ====== */
 V.a_emp=async function(){const s=await run(sb.rpc('admin_summary',{p_from:null,p_to:null}));
@@ -227,15 +231,34 @@ async function saveSet(){await run(sb.from('settings').upsert({key:'doc_checklis
 /* ====== IMPORT / EXPORT / BACKUP (existing features, now writing to Supabase) ====== */
 const cleanKey=k=>String(k||'').toLowerCase().replace(/[^a-z0-9]/g,'');
 const RULES={district:['district','dist','districtname'],application_id:['applicationid','appid','id','applicantid'],application_number:['applicationnumber','applicationno','appno','ackno'],application_status:['applicationstatus','status','appstatus','currentstatus'],rejection_reason:['rejectionreason','rejectreason','remarks','reason'],pension_type:['pensiontype','pension','scheme','schemename'],photo:['photo','applicantphoto','image','picture','photourl','pic'],applicant_name:['applicantname','name','beneficiaryname','nameofapplicant'],father_spouse_name:['fatherspousename','fatherhusbandname','fatherorhusbandname','fatherorspousename','fathername','husbandname','spousename','guardianname','guardian','relationname','relativename','father','husband','spouse'],dob:['dob','dateofbirth','birthdate'],age:['age','years'],gender:['gender','sex'],aadhaar_number:['aadhaarnumber','aadhaar','aadhar','aadharno','uid'],mobile_no:['mobileno','mobile','phone','contactno','contact','cellno'],social_category:['socialcategory','caste','category'],sub_division:['subdivision','subdiv'],address_type:['addresstype'],block:['block','blockname','ulb','blockulb'],gp:['gp','grampanchayat','panchayat'],village:['village','villagename'],habitation:['habitation','ward'],pin:['pin','pincode','postalcode'],account_holder_name:['accountholdername','accountholder','holdername'],account_number:['accountnumber','accountno','bankaccno','accno'],ifsc_code:['ifsccode','ifsc'],branch_name:['branchname','branch']};
-function mapRow(raw){const out={};for(const[c,m]of Object.entries(RULES)){out[c]='';for(const k of Object.keys(raw)){if(m.includes(cleanKey(k))){out[c]=raw[k]==null?'':String(raw[k]).trim();break}}}
- if(!out.father_spouse_name)for(const k of Object.keys(raw)){if(/father|husband|spouse|guardian/i.test(k)){out.father_spouse_name=String(raw[k]??'').trim();break}}return out}
-V.a_imp=function(){$('view').innerHTML=`<div style="max-width:760px;margin:auto"><div class="card"><h3>Import Excel / CSV</h3><p style="font-size:13px;color:var(--mut);margin:6px 0 10px">Duplicates (same Application ID or Application Number) are skipped automatically. Rejected applications become leads automatically.</p><input type="file" id="f-x" accept=".xlsx,.xls,.csv,.tsv" onchange="importFile(event)"><p id="i-m" style="margin-top:10px;font-weight:600;font-size:13px"></p></div>
+function cleanPhoto(v){v=String(v||'').trim();if(!v)return'';const m=v.match(/src\s*=\s*["']([^"']+)["']/i);if(m)v=m[1];
+ if(!/^(https?:|data:)/i.test(v)&&(/^\.?\//.test(v)||/download|photo/i.test(v)))v='https://ssepd.odisha.gov.in'+(v.startsWith('./')?v.slice(1):v.startsWith('/')?v:'/'+v);return v}
+async function extractImages(buf){const map={},ord=[];try{const z=await JSZip.loadAsync(buf);const media=[];z.forEach((q,f)=>{if(q.startsWith('xl/media/')&&!f.dir)media.push(q)});
+ media.sort((a,b)=>parseInt(a.match(/\d+/)?.[0]||0)-parseInt(b.match(/\d+/)?.[0]||0));const mime=q=>q.toLowerCase().endsWith('png')?'image/png':'image/jpeg';
+ for(const q of media)ord.push(`data:${mime(q)};base64,`+await z.file(q).async('base64'));
+ const rf=z.file('xl/drawings/_rels/drawing1.xml.rels'),df=z.file('xl/drawings/drawing1.xml');
+ if(rf&&df){const P=new DOMParser(),rd=P.parseFromString(await rf.async('text'),'application/xml'),dd=P.parseFromString(await df.async('text'),'application/xml'),t={};
+  for(const r of rd.getElementsByTagName('Relationship')){let g=r.getAttribute('Target');g=g.startsWith('../')?'xl/'+g.slice(3):g.startsWith('xl/')?g:'xl/drawings/'+g;t[r.getAttribute('Id')]=g}
+  for(const a of[...dd.getElementsByTagName('xdr:twoCellAnchor'),...dd.getElementsByTagName('xdr:oneCellAnchor')]){const fr=a.getElementsByTagName('xdr:from')[0],bl=a.getElementsByTagName('a:blip')[0];if(!fr||!bl)continue;
+   const rw=parseInt(fr.getElementsByTagName('xdr:row')[0].textContent,10),tp=t[bl.getAttribute('r:embed')];if(tp&&z.file(tp))map[rw>0?rw-1:0]=`data:${mime(tp)};base64,`+await z.file(tp).async('base64')}}}catch(e){console.warn(e)}
+ return{map,ord}}
+function tableRows(html){const t=new DOMParser().parseFromString(html,'text/html').querySelector('table');if(!t)return null;const rs=[...t.querySelectorAll('tr')];if(rs.length<2)return null;
+ const h=[...rs[0].querySelectorAll('th,td')].map(c=>c.textContent.trim());
+ return rs.slice(1).map(r=>{const cs=[...r.querySelectorAll('td')];if(!cs.length)return null;const o={};h.forEach((k,i)=>{const c=cs[i];if(!c)return;const im=c.querySelector('img');o[k]=im?im.getAttribute('src'):c.textContent.trim()});return o}).filter(Boolean)}
+function mapRow(raw,idx,img){const out={};for(const[c,m]of Object.entries(RULES)){out[c]='';for(const k of Object.keys(raw)){if(m.includes(cleanKey(k))){out[c]=raw[k]==null?'':String(raw[k]).trim();break}}}
+ if(!out.father_spouse_name)for(const k of Object.keys(raw)){if(/father|husband|spouse|guardian/i.test(k)){out.father_spouse_name=String(raw[k]??'').trim();break}}out.photo=img?.map?.[idx]||img?.ord?.[idx]||cleanPhoto(out.photo);return out}
+V.a_imp=function(){$('view').innerHTML=`<div style="max-width:760px;margin:auto"><div class="card"><h3>Import Excel / CSV</h3><p style="font-size:13px;color:var(--mut);margin:6px 0 10px">Duplicates (same Application ID or Application Number) are skipped automatically. Rejected applications become leads automatically.</p><input type="file" id="f-x" accept=".xlsx,.xls,.csv,.tsv,.html,.htm" onchange="importFile(event)"><h4 style="margin:14px 0 6px;font-size:14px">Or paste a table copied from the portal (photos included):</h4><div id="paste" contenteditable="true" style="min-height:90px;max-height:200px;overflow:auto;border:2px solid var(--bd);border-radius:6px;padding:10px;background:#fff;font-size:13px"></div><p style="margin-top:8px"><button class="btn" onclick="pasteImport()">Import Pasted Table</button></p><p id="i-m" style="margin-top:10px;font-weight:600;font-size:13px"></p></div>
  <div class="card"><h3>Export</h3><p style="margin:8px 0"><button class="btn" onclick="exportAll()">Export All Beneficiaries (CSV)</button></p></div>
  <div class="card"><h3>JSON Backup & Restore</h3><p style="margin:8px 0"><button class="btn s" onclick="exportJSON()">Download JSON Backup</button> <button class="btn s" onclick="$('f-j').click()">Restore JSON</button><input type="file" id="f-j" accept=".json" style="display:none" onchange="importJSON(event)"></p><p style="font-size:12px;color:var(--mut)">Restore only adds missing records (duplicates skipped); it never overwrites or deletes.</p></div></div>`};
-async function pushRows(rows){const m=$('i-m');let ins=0,dup=0;const R=rows.map(mapRow).filter(r=>r.application_id||r.application_number).map(r=>(r.application_id||(r.application_id=r.application_number),r));const skip=rows.length-R.length;
- for(let i=0;i<R.length;i+=200){m.textContent=`Importing ${Math.min(i+200,R.length)} / ${R.length}…`;const r=await run(sb.rpc('rpc_import_beneficiaries',{p_rows:R.slice(i,i+200)}));ins+=r.inserted;dup+=r.duplicates_skipped}
- m.innerHTML=`<span style="color:var(--ok)">Done: ${ins} new, ${dup} duplicates skipped, ${skip} rows without ID ignored.</span>`}
-async function importFile(e){const f=e.target.files[0];if(!f)return;$('i-m').textContent='Reading…';const wb=XLSX.read(await f.arrayBuffer(),{type:'array',raw:false});await pushRows(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{raw:false,defval:''}))}
+async function pushRows(rows,img){const m=$('i-m');let ins=0,dup=0;const R=rows.map((r,i)=>mapRow(r,i,img)).filter(r=>r.application_id||r.application_number).map(r=>(r.application_id||(r.application_id=r.application_number),r));const skip=rows.length-R.length;
+ const B=R.some(r=>(r.photo||'').startsWith('data:'))?20:200;
+ for(let i=0;i<R.length;i+=B){m.textContent=`Importing ${Math.min(i+B,R.length)} / ${R.length}…`;const c=R.slice(i,i+B);const r=await run(sb.rpc('rpc_import_beneficiaries',{p_rows:c}));ins+=r.inserted;dup+=r.duplicates_skipped;await run(sb.rpc('rpc_fill_missing',{p_rows:c}))}
+ m.innerHTML=`<span style="color:var(--ok)">Done: ${ins} new records, ${dup} already existed (their blank fields/photos were filled), ${skip} rows without ID ignored. Photos found: ${R.filter(r=>r.photo).length}.</span>`}
+async function importFile(e){const f=e.target.files[0];if(!f)return;$('i-m').textContent='Reading…';const ext=f.name.split('.').pop().toLowerCase();
+ if(ext==='html'||ext==='htm'){const r=tableRows(await f.text());return r?pushRows(r,null):toast('No table found in file',1)}
+ const buf=await f.arrayBuffer();const img=ext==='xlsx'?await extractImages(buf):null;const wb=XLSX.read(buf,{type:'array',raw:false});
+ await pushRows(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{raw:false,defval:''}),img)}
+async function pasteImport(){const r=tableRows($('paste').innerHTML);if(!r)return toast('No table found. Copy the table from the portal and paste it in the box.',1);await pushRows(r,null);$('paste').innerHTML=''}
 async function fetchFull(){return(await all(()=>sb.from('beneficiaries').select('*,beneficiary_sensitive(*)').order('application_id'))).map(r=>({...r,...(r.beneficiary_sensitive||{})}))}
 async function exportAll(){dl('mbpy_all_beneficiaries.csv',csv(await fetchFull(),FIELDS),'text/csv')}
 async function exportJSON(){dl(`MBPY_BACKUP_${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(await fetchFull(),null,1),'application/json')}
