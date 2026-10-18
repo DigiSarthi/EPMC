@@ -101,7 +101,7 @@ function go(k){cur=k;PG=1;document.querySelectorAll('.ni').forEach(e=>e.classLis
 const refresh=()=>go(cur);
 
 /* ---------- shared data ---------- */
-const leadsQ=()=>sb.from('leads').select(`*,beneficiaries(${BCOLS}),profiles(full_name,employee_code)`).order('created_at').order('id');
+const leadsQ=()=>sb.from('leads').select(`*,beneficiaries!leads_beneficiary_id_fkey(${BCOLS}),profiles(full_name,employee_code)`).order('created_at').order('id');
 const kpi=(l,v,c='')=>`<div class="kpi ${c}"><b>${l}</b><i>${v}</i></div>`;
 function table(cols,rows,empty='No records.'){return`<div class="tw"><table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${cols.length}" style="text-align:center;color:var(--mut);padding:24px">${empty}</td></tr>`}</tbody></table></div>`}
 function pager(n,fn){const s=(PG-1)*LIM;return`<div class="pg"><span>Showing ${n?s+1:0}–${Math.min(s+LIM,n)} of ${n}</span><span><button class="btn s sm" onclick="PG>1&&(PG--,${fn}())">Prev</button> ${PG} <button class="btn s sm" onclick="PG*LIM<${n}&&(PG++,${fn}())">Next</button></span></div>`}
@@ -205,13 +205,13 @@ function myF(){const q=$('m-q').value.toLowerCase(),s=$('m-s').value;const F=(s=
 
 /* ====== FOLLOW-UPS (RLS scopes to own for employees) ====== */
 V.fu=async function(){
- const F=await run(sb.from('follow_ups').select('*,leads(id,beneficiaries(application_id,applicant_name,mobile_no)),profiles(full_name)').eq('done',false).order('due_at'));
+ const F=await run(sb.from('follow_ups').select('*,leads(id,beneficiaries!leads_beneficiary_id_fkey(application_id,applicant_name,mobile_no)),profiles(full_name)').eq('done',false).order('due_at'));
  const now=new Date(),s=new Date(now);s.setHours(0,0,0,0);const e=new Date(s.getTime()+864e5);
  const sec=(t,a,c)=>`<div class="box"><div class="sec" style="margin:0;padding:12px;color:var(--${c})">${t} (${a.length})</div>${table(['Due','Applicant','Mobile','Note',...(isA()?['Employee']:[]),''],a.map(f=>{const b=f.leads.beneficiaries;return[fmt(f.due_at),`${esc(b.applicant_name)} <small>${isA()?esc(b.application_id):''}</small>`,esc(b.mobile_no),esc(f.note),...(isA()?[esc(f.profiles?.full_name)]:[]),`<button class="btn sm" onclick="openLead('${f.leads.id}')">Open</button>`]}),'None.')}</div>`;
  $('view').innerHTML=sec('Overdue',F.filter(f=>new Date(f.due_at)<s),'bad')+sec("Today's",F.filter(f=>new Date(f.due_at)>=s&&new Date(f.due_at)<e),'warn')+sec('Upcoming',F.filter(f=>new Date(f.due_at)>=e),'info')};
 
 /* ====== CALL HISTORY ====== */
-V.calls=async function(){const C=await all(()=>sb.from('call_history').select('*,profiles(full_name),leads(beneficiaries(application_id,applicant_name))').order('called_at',{ascending:false}).order('id'));
+V.calls=async function(){const C=await all(()=>sb.from('call_history').select('*,profiles(full_name),leads(beneficiaries!leads_beneficiary_id_fkey(application_id,applicant_name))').order('called_at',{ascending:false}).order('id'));
  $('view').innerHTML=`<div class="box">${table(['When','Employee',isA()?'Application':'','Applicant','Outcome','Notes'],C.slice(0,500).map(c=>[fmt(c.called_at),esc(c.profiles?.full_name),(isA()?esc(c.leads.beneficiaries.application_id):''),esc(c.leads.beneficiaries.applicant_name),bdg(c.outcome),esc(c.notes)]))}<div class="pg">Showing latest ${Math.min(500,C.length)} of ${C.length}</div></div>`};
 
 /* ====== EMPLOYEES (admin) ====== */
@@ -225,7 +225,7 @@ async function createEmp(){const{data,error}=await sb.functions.invoke('create-e
 async function toggleEmp(id,v){if(!confirm(v?'Activate this account?':'Deactivate? They will lose access immediately.'))return;await run(sb.from('profiles').update({is_active:v}).eq('id',id));refresh()}
 
 /* ====== PAYMENTS (admin) ====== */
-V.a_pay=async function(){const P=await all(()=>sb.from('payment_records').select('*,leads(id,profiles(full_name),beneficiaries(application_id,applicant_name))').order('updated_at',{ascending:false}).order('id'));
+V.a_pay=async function(){const P=await all(()=>sb.from('payment_records').select('*,leads(id,profiles(full_name),beneficiaries!leads_beneficiary_id_fkey(application_id,applicant_name))').order('updated_at',{ascending:false}).order('id'));
  const by={};P.filter(p=>p.status==='Received').forEach(p=>{const n=p.leads.profiles?.full_name||'—';by[n]=(by[n]||0)+Number(p.amount||0)});
  $('view').innerHTML=`<div class="kpis">${Object.entries(by).map(([n,a])=>kpi(n+' (received)','₹'+a.toLocaleString('en-IN'),'ok')).join('')||''}</div><div class="box">${table(['Application','Applicant','Employee','Status','Amount','Date','Mode','Ref','Verified',''],P.map(p=>[esc(p.leads.beneficiaries.application_id),esc(p.leads.beneficiaries.applicant_name),esc(p.leads.profiles?.full_name),bdg(p.status,p.status==='Received'?'ok':p.status==='Failed'?'bad':'warn'),p.amount?'₹'+p.amount:'—',esc(p.paid_on),esc(p.mode),esc(p.reference),p.verified?bdg('Verified','ok'):bdg('No','warn'),`<button class="btn sm s" onclick="verifyPay('${p.leads.id}',${!p.verified})">${p.verified?'Un-verify':'Verify'}</button>`]))}</div>`};
 V.a_trf=async function(){const T=await all(()=>sb.from('transfer_history').select('*,pf:profiles!transfer_history_from_employee_fkey(full_name),pt:profiles!transfer_history_to_employee_fkey(full_name),pb:profiles!transfer_history_transferred_by_fkey(full_name)').order('transferred_at',{ascending:false}).order('id'));
