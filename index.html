@@ -57,7 +57,7 @@ td{padding:8px 11px;border-bottom:1px solid #edf2f7}tr:hover td{background:#f8fa
 <div id="toast"></div>
 <script>
 /* ====== CONFIG: paste your Supabase project URL + ANON (public) key. NEVER put the service-role key here. ====== */
-const SUPABASE_URL='YOUR_SUPABASE_URL', SUPABASE_ANON_KEY='YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL='https://mhxjeqjhsljcwqgbjdkp.supabase.co', SUPABASE_ANON_KEY='sb_publishable_0eYXblqghfQ9mCvi7Kd6lA_1UofbQJE';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
