@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Payment</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif;margin:0}
+body{background:#f0f4f8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.c{background:#fff;border-radius:12px;padding:24px;max-width:380px;width:100%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+h2{color:#0b2545;font-size:18px}p{color:#64748b;font-size:13px;margin-top:6px}
+.amt{font-size:34px;font-weight:700;color:#15803d;margin:14px 0 2px}.to{font-size:15px;font-weight:600}
+.btn{display:block;background:#15803d;color:#fff;text-decoration:none;padding:14px;border-radius:8px;font-weight:700;margin:16px 0 10px}
+#qr{display:flex;justify-content:center;margin:12px 0}.err{color:#b91c1c;font-weight:600}
+</style></head><body><div class="c"><h2>SSEPD MBPY Service Payment</h2><div id="out"></div></div>
+<script>
+const q=new URLSearchParams(location.search),pa=q.get('pa')||'',pn=q.get('pn')||'',am=q.get('am')||'',tn=q.get('tn')||'MBPY service fee';
+const out=document.getElementById('out');
+if(!/^[\w.\-]{2,}@[\w.\-]{2,}$/.test(pa)||!(parseFloat(am)>0)){out.innerHTML='<p class="err">Invalid payment link. Please ask for a new link.</p>'}
+else{
+ const uri='upi://pay?pa='+encodeURIComponent(pa)+'&pn='+encodeURIComponent(pn)+'&am='+encodeURIComponent(parseFloat(am))+'&cu=INR&tn='+encodeURIComponent(tn);
+ const a=document.createElement('div');a.className='amt';a.textContent='₹ '+parseFloat(am);
+ const t=document.createElement('div');t.className='to';t.textContent='Pay to: '+pn;
+ const u=document.createElement('p');u.textContent='UPI ID: '+pa;
+ const b=document.createElement('a');b.className='btn';b.href=uri;b.textContent='Pay with UPI app (PhonePe / GPay / Paytm)';
+ const qr=document.createElement('div');qr.id='qr';
+ const n=document.createElement('p');n.textContent='On another phone? Scan this QR with any UPI app. Please confirm the name above before paying, and send the payment screenshot to your executive.';
+ out.append(a,t,u,b,qr,n);new QRCode(qr,{text:uri,width:200,height:200});
+}
+</script></body></html>

@@ -4,6 +4,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{--navy:#0b2545;--navy2:#133a68;--blue:#2563eb;--bg:#f0f4f8;--surf:#fff;--bd:#cbd5e1;--tx:#0f172a;--mut:#64748b;--ok:#15803d;--okbg:#dcfce7;--bad:#b91c1c;--badbg:#fee2e2;--warn:#c2410c;--warnbg:#ffedd5;--info:#0369a1;--infobg:#e0f2fe}
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
@@ -70,7 +71,7 @@ const OUT=['Connected','Not Connected','Busy','Call Back','Wrong Number','Not In
 const FIELDS=['district','application_id','application_number','application_status','rejection_reason','pension_type','photo','applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category','sub_division','address_type','block','gp','village','habitation','pin','account_holder_name','account_number','ifsc_code','branch_name'];
 const SENS=['aadhaar_number','account_holder_name','account_number','ifsc_code','branch_name'];
 const BCOLS=FIELDS.filter(f=>!SENS.includes(f)&&f!=='photo').join(',')+',apply_date';
-let me=null,cur='dash',PG=1,LIM=25;
+let me=null,cur='dash',PG=1,LIM=25,PAYCFG={};
 const isA=()=>me&&me.role==='admin';
 function toast(m,bad){const t=$('toast');t.textContent=m;t.style.background=bad?'var(--bad)':'var(--ok)';t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
 async function run(p){const{data,error}=await p;if(error){toast(error.message,1);throw error}return data}
@@ -89,7 +90,7 @@ async function boot(){
  const{data:{session}}=await sb.auth.getSession();if(!session)return;
  const{data:p}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
  if(!p||!p.is_active){await sb.auth.signOut();$('lerr').textContent='Account inactive or not found. Contact admin.';return}
- me=p;$('login').style.display='none';$('side').style.display='flex';$('mainw').style.display='flex';
+ me=p;PAYCFG=(await sb.from('settings').select('value').eq('key','payment_config').maybeSingle()).data?.value||{};$('login').style.display='none';$('side').style.display='flex';$('mainw').style.display='flex';
  $('who').textContent=`${p.full_name||p.email} · ${p.role}`;
  const nav=isA()?[['dash','📊 Admin Dashboard'],['ben','👥 Beneficiary Master'],['leads','🎯 Lead Assignment'],['emp','🧑‍💼 Employees'],['fu','⏰ Follow-ups'],['calls','📞 Call History'],['pay','💰 Payments'],['trf','🔁 Transfer History'],['imp','📥 Import / Export'],['aud','🧾 Audit Log'],['set','⚙️ Settings']]
   :[['dash','📊 My Dashboard'],['fu','⏰ My Follow-ups'],['calls','📞 My Call History']];
@@ -171,7 +172,7 @@ async function openLead(id){
  ${b.photo?`<img src="${esc(b.photo)}" style="width:90px;height:108px;object-fit:cover;border-radius:4px;float:right;margin-top:14px" onerror="this.remove()">`:''}${dgrp('Application',isA()?['apply_date','application_id','application_number','application_status','pension_type','rejection_reason']:['apply_date','application_status','pension_type','rejection_reason'],b)}${dgrp('Personal Details',['applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category'],b)}${dgrp('Address',['sub_division','address_type','district','block','gp','village','habitation','pin'],b)}${dgrp('Bank Details',['account_holder_name','account_number','ifsc_code','branch_name'],b)}
  ${mine?`<div class="sec">Record Call</div><div class="fg"><div><label>Outcome</label><select id="c-o">${opts(OUT)}</select></div><div><label>Call date & time</label><input type="datetime-local" id="c-at" value="${new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16)}"></div><div><label>Next follow-up date</label><input type="date" id="c-nd"></div><div><label>Next follow-up time</label><input type="time" id="c-nt"></div><div style="grid-column:1/-1"><label>Notes</label><textarea id="c-n" rows="2"></textarea></div></div><p style="margin-top:8px"><button class="btn" onclick="doCall('${id}')">Save Call</button></p>
  <div class="sec">Documents</div><div class="fg"><div><label>Status</label><select id="d-s">${opts(['Documents Not Received','Documents Partially Received','Documents Received','Documents Verified'],docs?.status)}</select></div></div><p style="margin:8px 0">${items.map((x,i)=>`<label style="margin-right:14px;font-size:13px"><input type="checkbox" class="dk" data-k="${esc(x)}" ${ck[x]?'checked':''}> ${esc(x)}</label>`).join('')}</p><button class="btn" onclick="saveDocs('${id}')">Save Documents</button>
- <div class="sec">Payment</div><div class="fg"><div><label>Status</label><select id="p-s">${opts(['Pending','Received','Failed','Refunded'],pay?.status)}</select></div><div><label>Amount</label><input type="number" id="p-a" value="${pay?.amount??''}"></div><div><label>Date</label><input type="date" id="p-d" value="${pay?.paid_on||''}"></div><div><label>Mode</label><select id="p-m">${opts(['Cash','UPI','Bank Transfer','Cheque','Other'],pay?.mode)}</select></div><div><label>Transaction Ref</label><input id="p-r" value="${esc(pay?.reference)}"></div><div><label>Notes</label><input id="p-n" value="${esc(pay?.notes)}"></div></div><p style="margin-top:8px"><button class="btn" onclick="savePay('${id}')">Save Payment</button></p>`
+ <div class="sec">Payment</div><div class="fg"><div><label>Status</label><select id="p-s">${opts(['Pending','Received','Failed','Refunded'],pay?.status)}</select></div><div><label>Amount</label><input type="number" id="p-a" value="${pay?.amount??(PAYCFG.default_amount||'')}"></div><div><label>Date</label><input type="date" id="p-d" value="${pay?.paid_on||''}"></div><div><label>Mode</label><select id="p-m">${opts(['Cash','UPI','Bank Transfer','Cheque','Other'],pay?.mode)}</select></div><div><label>Transaction Ref</label><input id="p-r" value="${esc(pay?.reference)}"></div><div><label>Notes</label><input id="p-n" value="${esc(pay?.notes)}"></div></div><p style="margin-top:8px"><button class="btn" onclick="savePay('${id}')">Save Payment</button> <button class="btn g" onclick="payQR('${id}')">📲 Send Payment QR</button></p>`
  :`<div class="sec">Documents & Payment</div><div class="gd"><div class="dc"><label>Documents</label><div>${esc(docs?.status||'—')}</div></div><div class="dc"><label>Payment</label><div>${esc(pay?.status||'—')} ${pay?.amount?'₹'+pay.amount:''} ${pay?.verified?bdg('Verified','ok'):''}</div></div></div>${isA()&&pay?`<p style="margin-top:8px"><button class="btn ${pay.verified?'s':'g'}" onclick="verifyPay('${id}',${!pay.verified})">${pay.verified?'Un-verify':'Verify'} Payment</button></p>`:''}`}
  <div class="sec">Call History (read-only)</div>${table(['When','By','Outcome','Notes','Next follow-up'],calls.map(c=>[fmt(c.called_at),esc(c.profiles?.full_name),bdg(c.outcome),esc(c.notes),fmt(c.next_followup)]),'No calls yet.')}
  ${isA()?`<div class="sec">Transfer History</div>${table(['When','From','To','Reason'],trf.map(t=>[fmt(t.transferred_at),esc(t.pf?.full_name),esc(t.pt?.full_name),esc(t.reason)]),'Never transferred.')}`:''}`)}
@@ -227,6 +228,28 @@ V.a_aud=async function(){const A=await run(sb.from('audit_logs').select('*').ord
 V.a_set=async function(){const s=await run(sb.from('settings').select('value').eq('key','doc_checklist').single());
  $('view').innerHTML=`<div class="card"><h3>Document Checklist</h3><p style="font-size:13px;color:var(--mut);margin:6px 0">One item per line. Employees tick these per lead.</p><textarea id="s-c" rows="8" style="width:100%">${esc(s.value.join('\n'))}</textarea><p style="margin-top:8px"><button class="btn" onclick="saveSet()">Save</button></p></div>`};
 async function saveSet(){await run(sb.from('settings').upsert({key:'doc_checklist',value:$('s-c').value.split('\n').map(x=>x.trim()).filter(Boolean)}));toast('Saved')}
+
+/* ====== PAYMENT QR (UPI) ====== */
+const enc=encodeURIComponent;
+const upiUri=a=>`upi://pay?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'SSEPD MBPY')}&am=${parseFloat(a)}&cu=INR&tn=${enc('MBPY service fee')}`;
+const payLink=a=>{const u=new URL('pay.html',location.href);u.search=`?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'SSEPD MBPY')}&am=${parseFloat(a)}`;return u.href};
+let PQ={};
+async function payQR(id){
+ if(!PAYCFG.upi_id)return toast('UPI ID not set yet. Admin: Settings → Payment (UPI) Settings.',1);
+ const l=await run(leadsQ().eq('id',id).single());PQ={name:l.beneficiaries.applicant_name,mob:String(l.beneficiaries.mobile_no||'').replace(/\D/g,'').slice(-10)};
+ openM('m2','Send Payment QR',`<div class="fg" style="grid-template-columns:1fr"><div><label>Amount (₹) — change if needed</label><input type="number" id="q-a" value="${esc($('p-a')?.value||PAYCFG.default_amount||'')}" oninput="qrDraw()"></div></div><div id="q-box" style="display:flex;justify-content:center;margin:14px 0"></div><p id="q-l" style="font-size:12px;word-break:break-all;color:var(--mut)"></p><p style="margin-top:10px"><button class="btn g" onclick="qrWA()">Send on WhatsApp</button> <button class="btn s" onclick="qrCopy()">Copy link</button> <button class="btn s" onclick="qrDl()">Download QR</button></p><p style="font-size:12px;color:var(--mut);margin-top:10px">After the applicant pays, set Payment Status = Received in the lead, add the transaction reference, and save.</p>`);qrDraw()}
+function qrDraw(){const a=parseFloat($('q-a').value),b=$('q-box');b.innerHTML='';$('q-l').textContent='';if(!(a>0))return;new QRCode(b,{text:upiUri(a),width:210,height:210});$('q-l').textContent=payLink(a)}
+const qrAmt=()=>{const a=parseFloat($('q-a').value);if(!(a>0)){toast('Enter a valid amount',1);return null}return a};
+function qrWA(){const a=qrAmt();if(!a)return;if(PQ.mob.length<10)return toast('Applicant mobile number is missing/invalid',1);
+ window.open(`https://wa.me/91${PQ.mob}?text=${enc(`Namaste ${PQ.name}, MBPY service ka ₹${a} ka bhugtan karne ke liye is link ko kholein aur UPI app se pay karein: ${payLink(a)}`)}`,'_blank')}
+function qrCopy(){const a=qrAmt();if(a)navigator.clipboard.writeText(payLink(a)).then(()=>toast('Link copied'))}
+function qrDl(){const c=$('q-box').querySelector('canvas');if(!c)return toast('Enter an amount first',1);const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='payment-qr.png';a.click()}
+const _setOld=V.a_set;
+V.a_set=async function(){await _setOld();const c=(await run(sb.from('settings').select('value').eq('key','payment_config').maybeSingle()))?.value||{};
+ $('view').insertAdjacentHTML('beforeend',`<div class="card"><h3>Payment (UPI) Settings</h3><p style="font-size:13px;color:var(--mut);margin:6px 0 10px">Use the organisation's own UPI ID only. Employees send QR/links made from this.</p><div class="fg"><div><label>UPI ID (e.g. name@sbi)</label><input id="u-id" value="${esc(c.upi_id)}"></div><div><label>Payee name (shown to applicant)</label><input id="u-n" value="${esc(c.payee_name)}"></div><div><label>Default amount (₹)</label><input id="u-a" type="number" value="${esc(c.default_amount)}"></div></div><p style="margin-top:10px"><button class="btn" onclick="savePayCfg()">Save Payment Settings</button></p></div>`)};
+async function savePayCfg(){const v={upi_id:$('u-id').value.trim(),payee_name:$('u-n').value.trim(),default_amount:$('u-a').value.trim()};
+ if(!/^[\w.\-]{2,}@[\w.\-]{2,}$/.test(v.upi_id))return toast('Enter a valid UPI ID like name@bank',1);if(!v.payee_name)return toast('Enter payee name',1);
+ await run(sb.from('settings').upsert({key:'payment_config',value:v}));PAYCFG=v;toast('Payment settings saved')}
 
 /* ====== IMPORT / EXPORT / BACKUP (existing features, now writing to Supabase) ====== */
 const cleanKey=k=>String(k||'').toLowerCase().replace(/[^a-z0-9]/g,'');
