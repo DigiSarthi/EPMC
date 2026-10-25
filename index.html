@@ -140,15 +140,16 @@ async function benView(id){const r=await run(sb.from('beneficiaries').select('*,
 
 /* ====== LEAD ASSIGNMENT / TRANSFER (admin) ====== */
 let LD=[],LF=[],EMPS=[];
-V.a_dup=async function(){$('hact').innerHTML='<button class="btn s" onclick="recheck()">🔄 Re-check</button>';
+V.a_dup=async function(){$('hact').innerHTML='<button class="btn s" onclick="recheck()">🔄 Re-check</button> <button class="btn s" onclick="dupCSV()">⬇ Export CSV</button>';
  const D=await run(sb.rpc('rpc_duplicates'));
  $('view').innerHTML=`<div class="kpis">${kpi('Old records (superseded)',D.length,'warn')}${kpi('People re-applied',new Set(D.map(d=>d.new_id)).size,'info')}${kpi('Old leads auto-closed',D.filter(d=>d.lead_closed_reason==='reapplied_auto').length,'bad')}</div>
  <div class="card" style="font-size:13px;color:var(--mut)">Same person (name + father/spouse + mobile) found in more than one batch. The <b>newest application</b> is the live record everywhere else; older ones are kept here for reference only.</div>
  <div class="box"><div class="fs"><input type="text" id="dp-q" placeholder="Search name / mobile / application ID…" oninput="PG=1;dupF()"></div><div id="dp-t"></div></div>`;
  window._D=D;dupF()};
+function dupCSV(){dl('reapplied_people.csv',csv(window._D||[],['applicant_name','mobile_no','old_application_id','old_apply_date','old_status','new_application_id','new_apply_date','new_status','lead_closed_reason']),'text/csv')}
 function dupF(){const q=($('dp-q')?.value||'').toLowerCase();const F=(window._D||[]).filter(d=>!q||[d.applicant_name,d.mobile_no,d.old_application_id,d.new_application_id].join(' ').toLowerCase().includes(q));
  const bs=s=>`<span class="badge ${/reject/i.test(s||'')?'bad':'ok'}">${esc(s||'—')}</span>`;
- $('dp-t').innerHTML=table(['Applicant','Mobile','OLD application','OLD status','→ NEW (current) application','NEW status','Old lead'],F.slice((PG-1)*LIM,PG*LIM).map(d=>[esc(d.applicant_name),esc(d.mobile_no),esc(d.old_application_id)+'<br><small>'+(fmtD(d.old_apply_date)||'—')+'</small>',bs(d.old_status),'<b>'+esc(d.new_application_id)+'</b><br><small>'+(fmtD(d.new_apply_date)||'—')+'</small>',bs(d.new_status),d.lead_closed_reason?`<span class="badge warn">${esc(CR[d.lead_closed_reason]||d.lead_closed_reason)}</span>`:(d.lead_id?'open':'—')]),'No duplicate people found.')+pager(F.length,'dupF')}
+ $('dp-t').innerHTML=table(['Applicant','Mobile','OLD application','OLD status','→ NEW (current) application','NEW status','Old lead',''],F.slice((PG-1)*LIM,PG*LIM).map(d=>[esc(d.applicant_name),esc(d.mobile_no),esc(d.old_application_id)+'<br><small>'+(fmtD(d.old_apply_date)||'—')+'</small>',bs(d.old_status),'<b>'+esc(d.new_application_id)+'</b><br><small>'+(fmtD(d.new_apply_date)||'—')+'</small>',bs(d.new_status),d.lead_closed_reason?`<span class="badge warn">${esc(CR[d.lead_closed_reason]||d.lead_closed_reason)}</span>`:(d.lead_id?'open':'—'),d.lead_id?`<button class="btn sm" onclick="openLead('${d.lead_id}')">Details</button>`:'']),'No duplicate people found.')+pager(F.length,'dupF')}
 V.a_leads=async function(){$('hact').innerHTML='<button class="btn s" onclick="recheck()">🔄 Re-check Re-applied</button>';
  [LD,EMPS]=await Promise.all([all(leadsQ),run(sb.from('profiles').select('id,full_name,employee_code,is_active').eq('role','employee').order('full_name'))]);
  const act=EMPS.filter(e=>e.is_active);const B=LD.map(l=>l.beneficiaries);
