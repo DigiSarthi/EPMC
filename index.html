@@ -126,14 +126,30 @@ async function empDetail(id){const L=await all(()=>leadsQ().eq('assigned_to',id)
  openM('m1','Employee leads',table(['Application','Applicant','Status','Assigned'],L.map(l=>[esc(l.beneficiaries.application_id),esc(l.beneficiaries.applicant_name),lBadge(l),fmt(l.assigned_at)]),'No leads assigned.'))}
 
 /* ====== BENEFICIARY MASTER ====== */
-let BEN=[],BF=[];
+let BCNT=0,BOPT=null,BT=null,BSEQ=0;
+const BFLT=[['b-d','district'],['b-b','block'],['b-g','gp'],['b-v','village'],['b-s','application_status'],['b-r','rejection_reason'],['b-p','pension_type']];
+function benQ(sel,cnt){const g=i=>$(i)?.value||'';let q=sb.from('beneficiaries').select(sel,cnt?{count:'exact'}:undefined);
+ BFLT.forEach(([id,k])=>{if(g(id))q=q.eq(k,g(id))});
+ const t=g('b-q').trim().replace(/[,()%*\\]/g,' ').trim();
+ if(t)q=q.or(['application_id','application_number','applicant_name','father_spouse_name','mobile_no','village','gp'].map(c=>`${c}.ilike.%${t}%`).join(','));
+ return q.order('application_id')}
+async function benOptions(){
+ try{const r=await sb.rpc('rpc_ben_filters');if(!r.error&&r.data)return r.data}catch(e){}
+ // fallback if patch5.sql was not run: read only the 7 filter columns, all pages in parallel
+ const cols=BFLT.map(x=>x[1]).join(',');const c=await sb.from('beneficiaries').select('id',{count:'exact',head:true});const n=c.count||0;
+ const pages=await Promise.all(Array.from({length:Math.ceil(n/1000)},(_,k)=>sb.from('beneficiaries').select(cols).order('id').range(k*1000,k*1000+999)));
+ const rows=pages.flatMap(p=>p.data||[]);const o={};BFLT.forEach(([,k])=>o[k]=uniq(rows,k));return o}
 V.a_ben=async function(){
- BEN=await all(()=>sb.from('beneficiaries').select(BCOLS+',id').order('application_id'));
- const sel=(id,k,l)=>`<select id="${id}" onchange="PG=1;benF()">${opts(uniq(BEN,k),'',l)}</select>`;
- $('view').innerHTML=`<div class="box"><div class="fs"><input type="text" id="b-q" placeholder="Search ID, name, mobile, village…" oninput="PG=1;benF()">${sel('b-d','district','All Districts')}${sel('b-b','block','All Blocks')}${sel('b-g','gp','All GPs')}${sel('b-v','village','All Villages')}${sel('b-s','application_status','All Statuses')}${sel('b-r','rejection_reason','All Reasons')}${sel('b-p','pension_type','All Pension Types')}<button class="btn s" onclick="dl('filtered_beneficiaries.csv',csv(BF,FIELDS.filter(f=>!SENS.includes(f)&&f!=='photo')),'text/csv')">Export Filtered CSV</button></div><div id="b-t"></div></div>`;benF()};
-function benF(){const g=i=>$(i).value,q=g('b-q').toLowerCase();
- BF=BEN.filter(r=>(!g('b-d')||r.district===g('b-d'))&&(!g('b-b')||r.block===g('b-b'))&&(!g('b-g')||r.gp===g('b-g'))&&(!g('b-v')||r.village===g('b-v'))&&(!g('b-s')||r.application_status===g('b-s'))&&(!g('b-r')||r.rejection_reason===g('b-r'))&&(!g('b-p')||r.pension_type===g('b-p'))&&(!q||[r.application_id,r.application_number,r.applicant_name,r.father_spouse_name,r.mobile_no,r.village,r.gp].some(x=>(x||'').toLowerCase().includes(q))));
- $('b-t').innerHTML=table(['Application ID','Applicant','Father/Spouse','District / Block','Pension','Age/Sex','Status','Mobile',''],slice(BF).map(r=>[`<b>${esc(r.application_id)}</b>`,esc(r.applicant_name),esc(r.father_spouse_name),esc(r.district)+'<br><small>'+esc(r.block)+'</small>',esc(r.pension_type),esc(r.age)+' / '+esc(r.gender),bdg(r.application_status||'Pending',/reject/i.test(r.application_status)?'bad':/approv/i.test(r.application_status)?'ok':'warn'),esc(r.mobile_no),`<button class="btn s sm" onclick="benView('${r.id}')">View</button>`]))+pager(BF.length,'benF')}
+ if(!BOPT)BOPT=await benOptions();
+ const sel=(id,k,l)=>`<select id="${id}" onchange="PG=1;benF()">${opts(BOPT[k]||[],'',l)}</select>`;
+ $('view').innerHTML=`<div class="box"><div class="fs"><input type="text" id="b-q" placeholder="Search ID, name, mobile, village…" oninput="PG=1;clearTimeout(BT);BT=setTimeout(benF,350)">${sel('b-d','district','All Districts')}${sel('b-b','block','All Blocks')}${sel('b-g','gp','All GPs')}${sel('b-v','village','All Villages')}${sel('b-s','application_status','All Statuses')}${sel('b-r','rejection_reason','All Reasons')}${sel('b-p','pension_type','All Pension Types')}<button class="btn s" onclick="benCSV()">Export Filtered CSV</button></div><div id="b-t"></div></div>`;benF()};
+async function benCSV(){toast('Preparing export…');const R=await all(()=>benQ(BCOLS+',id',false));dl('filtered_beneficiaries.csv',csv(R,FIELDS.filter(f=>!SENS.includes(f)&&f!=='photo')),'text/csv')}
+async function benF(){const t=$('b-t');if(!t)return;const my=++BSEQ;t.style.opacity=.5;
+ let res;try{res=await benQ(BCOLS+',id',true).range((PG-1)*LIM,PG*LIM-1)}catch(e){res={error:e}}
+ if(my!==BSEQ)return;t.style.opacity=1;const {data,count,error}=res;
+ if(error){t.innerHTML=`<div class="card" style="color:var(--bad)">Could not load: ${esc(error.message||String(error))}</div>`;return}
+ BCNT=count||0;
+ t.innerHTML=table(['Application ID','Applicant','Father/Spouse','District / Block','Pension','Age/Sex','Status','Mobile',''],data.map(r=>[`<b>${esc(r.application_id)}</b>`,esc(r.applicant_name),esc(r.father_spouse_name),esc(r.district)+'<br><small>'+esc(r.block)+'</small>',esc(r.pension_type),esc(r.age)+' / '+esc(r.gender),bdg(r.application_status||'Pending',/reject/i.test(r.application_status)?'bad':/approv/i.test(r.application_status)?'ok':'warn'),esc(r.mobile_no),`<button class="btn s sm" onclick="benView('${r.id}')">View</button>`]))+pager(BCNT,'benF')}
 async function benView(id){const r=await run(sb.from('beneficiaries').select('*,beneficiary_sensitive(*)').eq('id',id).single());const x={...r,...(r.beneficiary_sensitive||{})};
  const grp=(t,ks)=>`<div class="sec">${t}</div><div class="gd">${ks.map(k=>`<div class="dc"><label>${k.replace(/_/g,' ')}</label><div>${esc(x[k])||'—'}</div></div>`).join('')}</div>`;
  openM('m1',`${x.applicant_name||''} [${x.application_id}]`,(x.photo?`<img src="${esc(x.photo)}" style="width:90px;height:108px;object-fit:cover;border-radius:4px;float:right">`:'')+grp('Application',['district','application_id','application_number','application_status','pension_type','rejection_reason'])+grp('Personal',['applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category'])+grp('Address',['sub_division','address_type','block','gp','village','habitation','pin'])+grp('Bank',['account_holder_name','account_number','ifsc_code','branch_name'])+`<p style="margin-top:12px"><button class="btn s" onclick="navigator.clipboard.writeText(${esc(JSON.stringify(JSON.stringify(x)))}).then(()=>toast('Copied'))">Copy Full Details</button></p>`)}
