@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>EPMS Odisha — Eastern Pension Mitra Services</title>
+<link rel="icon" type="image/png" href="/favicon-64.png"><title>EPMS Odisha — Eastern Pension Mitra Services</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -45,6 +45,7 @@ td{padding:8px 11px;border-bottom:1px solid #edf2f7}tr:hover td{background:#f8fa
 .steps{display:flex;gap:6px;flex-wrap:wrap}.step{flex:1;min-width:120px;padding:8px;border-radius:6px;background:#e2e8f0;font-size:12px;text-align:center}.step.done{background:var(--okbg);color:var(--ok)}.step.cur{background:var(--blue);color:#fff}.step small{display:block;font-size:10px;opacity:.85}
 #login{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;background:radial-gradient(circle at 15% 10%,#1d4f91 0,transparent 45%),radial-gradient(circle at 90% 90%,#0e7490 0,transparent 40%),linear-gradient(135deg,#0b2545,#133a68)}
 .lg{background:#fff;border-radius:16px;width:100%;max-width:400px;padding:34px 30px 24px;box-shadow:0 20px 50px rgba(0,0,0,.35);text-align:center}
+.lg-img{width:100%;max-width:300px;height:auto;display:block;margin:0 auto 6px}
 .lg-logo{width:64px;height:64px;border-radius:18px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;letter-spacing:1px;background:linear-gradient(135deg,#2563eb,#0ea5e9);box-shadow:0 8px 20px rgba(37,99,235,.4)}
 .lg h2{color:var(--navy);font-size:24px;letter-spacing:.5px}.lg .sub{color:var(--mut);font-size:13px;margin:4px 0 22px}
 .lg label{display:block;text-align:left;font-size:12px;font-weight:600;color:var(--mut);margin:12px 0 4px}
@@ -58,9 +59,8 @@ td{padding:8px 11px;border-bottom:1px solid #edf2f7}tr:hover td{background:#f8fa
 @media(max-width:800px){aside{position:fixed;inset:0 auto 0 0;z-index:50;transform:translateX(-100%)}aside.open{transform:none}#menu{display:inline-block}#view{padding:12px}}
 </style></head><body>
 <div id="login"><div class="lg">
-<div class="lg-logo">EP</div>
-<h2>EPMS ODISHA</h2>
-<p class="sub"><b>Eastern Pension Mitra Services</b><br>Beneficiary CRM — Staff Sign In</p>
+<img class="lg-img" src="/logo.png" alt="EPMS Odisha — Eastern Pension Mitra Services" width="900" height="291">
+<p class="sub">Beneficiary CRM — Staff Sign In</p>
 <label for="em">Email / Username</label><input id="em" type="email" placeholder="you@example.com" autocomplete="username">
 <label for="pw">Password</label><div class="pwr"><input id="pw" type="password" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"><button type="button" onclick="const p=$('pw');p.type=p.type==='password'?'text':'password';this.textContent=p.type==='password'?'SHOW':'HIDE'">SHOW</button></div>
 <button class="btn go" onclick="login()">Sign In</button>
@@ -68,7 +68,7 @@ td{padding:8px 11px;border-bottom:1px solid #edf2f7}tr:hover td{background:#f8fa
 <div class="note">EPMS Odisha is a <b>private service provider</b>. This is not a government website.</div>
 <div class="ft">© EPMS Odisha · Authorised staff only · <a href="/" style="color:#64748b">← Back to website</a></div>
 </div></div>
-<aside id="side" style="display:none"><div class="brand"><h2>EPMS ODISHA</h2><span id="who"></span></div><nav id="nav"></nav>
+<aside id="side" style="display:none"><div class="brand"><div style="background:#fff;border-radius:10px;padding:6px 10px;display:inline-block;margin-bottom:6px"><img src="/logo.png" alt="EPMS Odisha" style="height:34px;width:auto;display:block"></div><span id="who"></span></div><nav id="nav"></nav>
 <div style="padding:14px;border-top:1px solid rgba(255,255,255,.1)"><button class="btn s" style="width:100%" onclick="sb.auth.signOut().then(()=>location.reload())">Sign Out</button></div></aside>
 <main id="mainw" style="display:none"><header><div><button class="btn s" id="menu" onclick="$('side').classList.toggle('open')">☰</button> <h1 id="ttl" style="display:inline"></h1></div><div id="hact"></div></header><div id="view"></div></main>
 <div class="mb" id="m1"><div class="mc"><div class="mh"><h3 id="m1t"></h3><button onclick="closeM('m1')">✕</button></div><div class="mbd" id="m1b"></div></div></div>
