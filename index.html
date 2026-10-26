@@ -3,92 +3,123 @@
 <title>EPMS Odisha — Eastern Pension Mitra Services</title>
 <link rel="icon" type="image/png" href="/favicon-64.png"><link rel="apple-touch-icon" href="/favicon.png">
 <meta property="og:image" content="https://epmsodisha.in/logo.png"><meta property="og:title" content="EPMS Odisha — Eastern Pension Mitra Services">
-<meta name="description" content="EPMS Odisha is a private service provider that helps pension applicants with application status, rejection reasons, document correction and re-application support.">
+<meta name="description" content="EPMS Odisha helps pension applicants in Odisha understand their application status, rejection reasons and required documents, and guides them to re-apply — with personal follow-up.">
 <style>
-:root{--navy:#0b2545;--navy2:#133a68;--blue:#2563eb;--sky:#0ea5e9;--bg:#f8fafc;--tx:#0f172a;--mut:#64748b;--bd:#e2e8f0;--ok:#15803d}
+:root{--navy:#0b2545;--navy2:#133a68;--blue:#2563eb;--sky:#0ea5e9;--orange:#f97316;--green:#16a34a;--bg:#f8fafc;--tx:#0f172a;--mut:#64748b;--bd:#e2e8f0}
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
-html{scroll-behavior:smooth}body{background:var(--bg);color:var(--tx);line-height:1.6}
-a{color:inherit;text-decoration:none}.wrap{max-width:1080px;margin:auto;padding:0 20px}
-header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--navy);letter-spacing:.3px}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--tx);line-height:1.65}
+a{color:inherit;text-decoration:none}.wrap{max-width:1100px;margin:auto;padding:0 20px}
+header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
 .logo img{height:46px;width:auto;display:block}
-.links{display:flex;align-items:center;gap:22px;font-size:14px;font-weight:600;color:var(--mut)}.links a:hover{color:var(--blue)}
-.btn{display:inline-block;padding:11px 22px;border-radius:10px;font-weight:700;font-size:14px;border:0;cursor:pointer}
-.btn.p{background:var(--blue);color:#fff}.btn.p:hover{background:#1d4ed8}.btn.o{border:1.5px solid #fff;color:#fff}.btn.o:hover{background:rgba(255,255,255,.12)}
-.links .btn.p{color:#fff;padding:9px 18px}
+.links{display:flex;align-items:center;gap:24px;font-size:14px;font-weight:600;color:var(--mut)}.links a:hover{color:var(--blue)}
+.btn{display:inline-block;padding:12px 24px;border-radius:10px;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:.15s}
+.btn.p{background:var(--blue);color:#fff}.btn.p:hover{background:#1d4ed8}.btn.w{background:#fff;color:var(--navy)}.btn.w:hover{background:#e0f2fe}
+.btn.o{border:1.5px solid rgba(255,255,255,.7);color:#fff}.btn.o:hover{background:rgba(255,255,255,.12)}.links .btn{color:#fff;padding:9px 18px}
 #mb{display:none;background:none;border:0;font-size:26px;color:var(--navy);cursor:pointer}
-.hero{background:radial-gradient(circle at 15% 10%,#1d4f91 0,transparent 45%),radial-gradient(circle at 90% 90%,#0e7490 0,transparent 40%),linear-gradient(135deg,#0b2545,#133a68);color:#fff;padding:84px 0 92px}
-.hl{display:inline-block;background:#fff;border-radius:16px;padding:10px 18px;margin-bottom:26px;box-shadow:0 10px 30px rgba(0,0,0,.25)}.hl img{height:64px;width:auto;display:block}
-.hero h1{font-size:clamp(30px,5vw,50px);line-height:1.15;max-width:700px}.hero h1 span{color:#7dd3fc}
-.hero p{margin:18px 0 28px;max-width:600px;font-size:17px;color:#cbd5e1}.hero .row{display:flex;gap:12px;flex-wrap:wrap}
-section{padding:68px 0}.t{font-size:clamp(24px,3.4vw,32px);color:var(--navy);margin-bottom:8px}.s{color:var(--mut);max-width:620px;margin-bottom:34px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
-.card{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:24px;transition:.18s}.card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(15,23,42,.08)}
-.ic{width:46px;height:46px;border-radius:12px;background:#e0f2fe;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
+.hero{position:relative;overflow:hidden;color:#fff;padding:80px 0 96px;background:radial-gradient(circle at 12% 8%,#1d4f91 0,transparent 45%),radial-gradient(circle at 92% 92%,#0e7490 0,transparent 42%),linear-gradient(135deg,#0b2545,#133a68)}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+.tag{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;color:#bae6fd;margin-bottom:18px}
+.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.12}.hero h1 span{color:#7dd3fc}
+.hero p{margin:18px 0 28px;max-width:560px;font-size:17px;color:#cbd5e1}.hero .row{display:flex;gap:12px;flex-wrap:wrap}
+.hl{background:#fff;border-radius:22px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}.hl img{width:100%;height:auto;display:block}
+section{padding:72px 0}.t{font-size:clamp(25px,3.4vw,34px);color:var(--navy);margin-bottom:8px}.t em{font-style:normal;color:var(--blue)}.s{color:var(--mut);max-width:640px;margin-bottom:36px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.card{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:26px;transition:.2s}.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(15,23,42,.09)}
+.ic{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px;background:#e0f2fe}
+.card:nth-child(3n+2) .ic{background:#ffedd5}.card:nth-child(3n) .ic{background:#dcfce7}
 .card h3{font-size:17px;color:var(--navy);margin-bottom:6px}.card p{font-size:14px;color:var(--mut)}
 .alt{background:#fff;border-block:1px solid var(--bd)}
-.step{display:flex;gap:14px}.num{flex:none;width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
-.step h3{font-size:16px;color:var(--navy)}.step p{font-size:14px;color:var(--mut)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;counter-reset:s}
+.step{position:relative;padding-top:6px}.num{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--sky));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 6px 14px rgba(37,99,235,.35)}
+.step h3{font-size:16px;color:var(--navy);margin-bottom:4px}.step p{font-size:14px;color:var(--mut)}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.who div{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--bd);border-radius:14px;padding:16px 18px;font-size:14.5px}.who b{color:var(--green);font-size:18px;line-height:1.3}
+details{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:16px 20px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:700;color:var(--navy);list-style:none;display:flex;justify-content:space-between;gap:12px}summary::after{content:'+';color:var(--blue);font-size:20px;line-height:1}details[open] summary::after{content:'–'}
+details p{margin-top:10px;color:var(--mut);font-size:14.5px}
 .notice{background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:20px 24px;color:#78350f;font-size:14px}
-.cta{background:linear-gradient(135deg,#0b2545,#133a68);color:#fff;border-radius:18px;padding:40px 28px;text-align:center}
-.cta h2{font-size:26px;margin-bottom:8px}.cta p{color:#cbd5e1;margin-bottom:22px}.cta .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.ct{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.ct .card{padding:18px}.ct b{display:block;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-footer{background:var(--navy);color:#94a3b8;padding:30px 0;font-size:13px;text-align:center}footer a{color:#cbd5e1}
-@media(max-width:760px){.logo img{height:38px}.hl img{height:50px}#mb{display:block}.links{display:none;position:absolute;top:64px;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;gap:0;padding:8px 20px 16px;border-bottom:1px solid var(--bd)}.links.on{display:flex}.links a{padding:12px 0;border-bottom:1px solid var(--bd)}.links .btn{text-align:center;margin-top:10px;border:0}.hero{padding:56px 0 64px}section{padding:48px 0}}
+.cta{background:linear-gradient(135deg,#0b2545,#133a68);color:#fff;border-radius:20px;padding:44px 28px;text-align:center}
+.cta h2{font-size:27px;margin-bottom:8px}.cta p{color:#cbd5e1;margin-bottom:22px}.cta .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.ct{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}.ct .card{padding:20px}.ct b{display:block;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.ct a{color:var(--blue);font-weight:600}
+footer{background:var(--navy);color:#94a3b8;padding:32px 0;font-size:13px;text-align:center;line-height:1.9}footer a{color:#cbd5e1}
+@media(max-width:820px){.hero .wrap{grid-template-columns:1fr}.hl{order:-1;max-width:380px}}
+@media(max-width:760px){#mb{display:block}.logo img{height:38px}.links{display:none;position:absolute;top:68px;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;gap:0;padding:8px 20px 16px;border-bottom:1px solid var(--bd)}.links.on{display:flex}.links a{padding:12px 0;border-bottom:1px solid var(--bd)}.links .btn{text-align:center;margin-top:10px;border:0}.hero{padding:48px 0 60px}section{padding:50px 0}}
 </style></head><body>
 
 <header><div class="wrap nav">
  <a class="logo" href="#home" aria-label="EPMS Odisha — Home"><img src="/logo.png" alt="EPMS Odisha — Eastern Pension Mitra Services" width="900" height="291"></a>
  <button id="mb" aria-label="Menu" onclick="document.getElementById('lk').classList.toggle('on')">☰</button>
  <nav class="links" id="lk" onclick="this.classList.remove('on')">
-  <a href="#services">Services</a><a href="#how">How it works</a><a href="#contact">Contact</a><a href="/career">Career</a>
+  <a href="#services">Our Work</a><a href="#how">How we work</a><a href="#faq">FAQ</a><a href="#contact">Contact</a><a href="/career">Career</a>
   <a class="btn p" href="/app">Staff Login</a>
  </nav>
 </div></header>
 
 <main id="home">
 <div class="hero"><div class="wrap">
- <div class="hl"><img src="/logo.png" alt="EPMS Odisha" width="900" height="291"></div>
- <h1>Pension application help, <span>made simple.</span></h1>
- <p><b>Eastern Pension Mitra Services</b> helps applicants understand their application status, find out why an application was rejected, correct documents and re-apply — with a real person to follow up with you.</p>
- <div class="row"><a class="btn p" href="#services">Our services</a><a class="btn o" href="#contact">Contact us</a></div>
+ <div>
+  <span class="tag">Pension application support · Odisha</span>
+  <h1>Rejected pension application? <span>We help you set it right.</span></h1>
+  <p><b>Eastern Pension Mitra Services</b> stands with pension applicants in Odisha. We explain your application status, find out why it was rejected, guide you on the right documents and help you apply again — and we keep following up with you till the end.</p>
+  <div class="row"><a class="btn w" href="#services">See our work</a><a class="btn o" href="#contact">Talk to us</a></div>
+ </div>
+ <div class="hl"><img src="/logo.png" alt="EPMS Odisha — Eastern Pension Mitra Services" width="900" height="291"></div>
 </div></div>
 
 <section id="services"><div class="wrap">
- <h2 class="t">What we do</h2><p class="s">Support for applicants of the Madhu Babu Pension Yojana (MBPY) and similar pension schemes, from first check to final follow-up.</p>
+ <h2 class="t">Our <em>work</em></h2><p class="s">We support applicants of the Madhu Babu Pension Yojana (MBPY) and similar pension schemes — from the first check to the final follow-up.</p>
  <div class="grid">
-  <div class="card"><div class="ic">🔍</div><h3>Application status check</h3><p>We check where your application stands and explain what the status means in simple language.</p></div>
-  <div class="card"><div class="ic">❓</div><h3>Rejection reason guidance</h3><p>If your application was rejected, we help you understand the reason shown against it.</p></div>
-  <div class="card"><div class="ic">📄</div><h3>Document help</h3><p>We tell you which documents are needed and what to correct, using a clear checklist.</p></div>
-  <div class="card"><div class="ic">🔁</div><h3>Re-application support</h3><p>We guide you step by step so you can apply again with the right details and documents.</p></div>
-  <div class="card"><div class="ic">📞</div><h3>Personal follow-up</h3><p>An executive calls you, keeps track of your case and reminds you about the next step.</p></div>
-  <div class="card"><div class="ic">💳</div><h3>Simple, clear payment</h3><p>Service fee is paid by UPI to the name shown on the payment page. You always see who you are paying.</p></div>
+  <div class="card"><div class="ic">🔍</div><h3>Application status check</h3><p>We look up where your application stands and explain what the status means, in simple language you understand.</p></div>
+  <div class="card"><div class="ic">❓</div><h3>Rejection reason guidance</h3><p>If your application was rejected, we help you understand the reason shown against it and what has to be fixed.</p></div>
+  <div class="card"><div class="ic">📄</div><h3>Document guidance</h3><p>We tell you exactly which documents are needed and which ones to correct, with a clear checklist.</p></div>
+  <div class="card"><div class="ic">🔁</div><h3>Re-application support</h3><p>We guide you step by step so that you can apply again with the right details and the right documents.</p></div>
+  <div class="card"><div class="ic">📞</div><h3>Personal follow-up</h3><p>One of our executives calls you, keeps track of your case and reminds you about every next step.</p></div>
+  <div class="card"><div class="ic">🤝</div><h3>Help in your language</h3><p>We talk to you in the language you are comfortable with, so nothing is confusing or left unclear.</p></div>
  </div>
 </div></section>
 
-<section id="how" class="alt"><div class="wrap">
- <h2 class="t">How it works</h2><p class="s">Four simple steps.</p>
- <div class="grid">
-  <div class="step"><div class="num">1</div><div><h3>We contact you</h3><p>Our executive calls you about your application.</p></div></div>
-  <div class="step"><div class="num">2</div><div><h3>We explain</h3><p>You get to know the status and what needs correction.</p></div></div>
-  <div class="step"><div class="num">3</div><div><h3>Documents &amp; re-apply</h3><p>We guide you in collecting documents and applying again.</p></div></div>
-  <div class="step"><div class="num">4</div><div><h3>Follow-up</h3><p>We keep following up until your case is completed.</p></div></div>
+<section class="alt"><div class="wrap">
+ <h2 class="t">Who <em>we help</em></h2><p class="s">If any of these sounds like you, get in touch.</p>
+ <div class="who">
+  <div><b>✓</b><span>Your pension application was <b style="color:inherit">rejected</b> and you don’t know why.</span></div>
+  <div><b>✓</b><span>You applied long ago and are <b style="color:inherit">still waiting</b> for an update.</span></div>
+  <div><b>✓</b><span>You are not sure which <b style="color:inherit">documents</b> are needed or what is wrong in them.</span></div>
+  <div><b>✓</b><span>You want to <b style="color:inherit">apply again</b> but need someone to guide you properly.</span></div>
  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+ <h2 class="t">How we <em>work</em></h2><p class="s">Four simple steps, and you are never left alone in between.</p>
+ <div class="steps">
+  <div class="step"><div class="num">1</div><h3>We contact you</h3><p>Our executive calls you and asks about your application.</p></div>
+  <div class="step"><div class="num">2</div><h3>We explain</h3><p>You learn the status, the reason for rejection and what needs to be corrected.</p></div>
+  <div class="step"><div class="num">3</div><h3>Documents &amp; re-apply</h3><p>We guide you in collecting the right documents and applying again.</p></div>
+  <div class="step"><div class="num">4</div><h3>We follow up</h3><p>We stay in touch and keep following up until your case is completed.</p></div>
+ </div>
+</div></section>
+
+<section class="alt" id="faq"><div class="wrap" style="max-width:820px">
+ <h2 class="t">Common <em>questions</em></h2><p class="s">Short answers to what people ask us most.</p>
+ <details><summary>Is EPMS Odisha a government office?</summary><p>No. EPMS Odisha is a private service provider. We are not a government office and are not connected with any government department.</p></details>
+ <details><summary>Will my application be approved if I take your help?</summary><p>Approval is decided only by the concerned government authority. We cannot promise or guarantee approval. What we do is help you understand your case and apply correctly.</p></details>
+ <details><summary>Which schemes do you help with?</summary><p>Mainly the Madhu Babu Pension Yojana (MBPY) and similar pension schemes in Odisha. Contact us and we will tell you if we can help with your case.</p></details>
+ <details><summary>How will you contact me?</summary><p>Our executive will call you on the mobile number given in your application. You can also write to us on our email.</p></details>
+ <details><summary>I want to work with you. What should I do?</summary><p>Please visit our <a href="/career" style="color:var(--blue);font-weight:600">Career page</a> and apply there.</p></details>
 </div></section>
 
 <section><div class="wrap">
- <div class="notice"><b>Please note:</b> EPMS Odisha is a <b>private service provider</b>. We are <b>not</b> a government office or website, and we are not connected with any government department. Approval of an application is decided only by the concerned government authority — we cannot guarantee approval. Always confirm the payee name shown on the payment page before paying.</div>
+ <div class="notice"><b>Please note:</b> EPMS Odisha is a <b>private service provider</b>. We are <b>not</b> a government office or website, and we are not connected with any government department. Approval of an application is decided only by the concerned government authority, and we cannot guarantee approval.</div>
 </div></section>
 
 <section class="alt" id="contact"><div class="wrap">
- <h2 class="t">Contact us</h2><p class="s">Talk to us about your application.</p>
+ <h2 class="t">Contact <em>us</em></h2><p class="s">Write to us about your application and we will get back to you.</p>
  <div class="ct" id="ctbox"></div>
- <div style="margin-top:34px" class="cta"><h2>Looking for a job with us?</h2><p>We are always happy to meet people who want to help others.</p><div class="row"><a class="btn p" href="/career">View careers</a><a class="btn o" href="/app">Staff login</a></div></div>
+ <div style="margin-top:38px" class="cta"><h2>Want to join our team?</h2><p>We are always happy to meet people who want to help others.</p><div class="row"><a class="btn p" href="/career">View careers</a><a class="btn o" href="/app">Staff login</a></div></div>
 </div></section>
 </main>
 
-<footer><div class="wrap">© <span id="yr"></span> EPMS Odisha — Eastern Pension Mitra Services · A private service provider, not a government website.<br><a href="/career">Career</a> · <a href="/app">Staff Login</a></div></footer>
+<footer><div class="wrap">© <span id="yr"></span> EPMS Odisha — Eastern Pension Mitra Services<br>A private service provider. Not a government website.<br><a href="/career">Career</a> · <a href="/app">Staff Login</a></div></footer>
 
 <script>
 /* ===== EDIT YOUR CONTACT DETAILS HERE. Leave a value empty ('') and that box will not be shown. ===== */
@@ -105,7 +136,7 @@ if(/^\d{10}$/.test(WHATSAPP))items.push(['💬 WhatsApp',`<a href="https://wa.me
 if(EMAIL)items.push(['✉️ Email',`<a href="mailto:${esc(EMAIL)}">${esc(EMAIL)}</a>`]);
 if(ADDRESS)items.push(['📍 Address',esc(ADDRESS)]);
 if(HOURS)items.push(['🕒 Hours',esc(HOURS)]);
-document.getElementById('ctbox').innerHTML=items.length?items.map(([k,v])=>`<div class="card"><b>${k}</b>${v}</div>`).join(''):'<div class="card"><b>Contact details</b>Coming soon.</div>';
+document.getElementById('ctbox').innerHTML=items.map(([k,v])=>`<div class="card"><b>${k}</b>${v}</div>`).join('');
 document.getElementById('yr').textContent=new Date().getFullYear();
 </script>
 </body></html>
