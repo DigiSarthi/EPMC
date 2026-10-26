@@ -1,142 +1,365 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>EPMS Odisha — Eastern Pension Mitra Services</title>
-<link rel="icon" type="image/png" href="/favicon-64.png"><link rel="apple-touch-icon" href="/favicon.png">
-<meta property="og:image" content="https://epmsodisha.in/logo.png"><meta property="og:title" content="EPMS Odisha — Eastern Pension Mitra Services">
-<meta name="description" content="EPMS Odisha helps pension applicants in Odisha understand their application status, rejection reasons and required documents, and guides them to re-apply — with personal follow-up.">
+<link rel="icon" type="image/png" href="/favicon-64.png"><title>EPMS Odisha — Eastern Pension Mitra Services</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-:root{--navy:#0b2545;--navy2:#133a68;--blue:#2563eb;--sky:#0ea5e9;--orange:#f97316;--green:#16a34a;--bg:#f8fafc;--tx:#0f172a;--mut:#64748b;--bd:#e2e8f0}
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
-html{scroll-behavior:smooth}body{background:var(--bg);color:var(--tx);line-height:1.65}
-a{color:inherit;text-decoration:none}.wrap{max-width:1100px;margin:auto;padding:0 20px}
-header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
-.logo img{height:46px;width:auto;display:block}
-.links{display:flex;align-items:center;gap:24px;font-size:14px;font-weight:600;color:var(--mut)}.links a:hover{color:var(--blue)}
-.btn{display:inline-block;padding:12px 24px;border-radius:10px;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:.15s}
-.btn.p{background:var(--blue);color:#fff}.btn.p:hover{background:#1d4ed8}.btn.w{background:#fff;color:var(--navy)}.btn.w:hover{background:#e0f2fe}
-.btn.o{border:1.5px solid rgba(255,255,255,.7);color:#fff}.btn.o:hover{background:rgba(255,255,255,.12)}.links .btn{color:#fff;padding:9px 18px}
-#mb{display:none;background:none;border:0;font-size:26px;color:var(--navy);cursor:pointer}
-.hero{position:relative;overflow:hidden;color:#fff;padding:80px 0 96px;background:radial-gradient(circle at 12% 8%,#1d4f91 0,transparent 45%),radial-gradient(circle at 92% 92%,#0e7490 0,transparent 42%),linear-gradient(135deg,#0b2545,#133a68)}
-.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
-.tag{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;color:#bae6fd;margin-bottom:18px}
-.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.12}.hero h1 span{color:#7dd3fc}
-.hero p{margin:18px 0 28px;max-width:560px;font-size:17px;color:#cbd5e1}.hero .row{display:flex;gap:12px;flex-wrap:wrap}
-.hl{background:#fff;border-radius:22px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}.hl img{width:100%;height:auto;display:block}
-section{padding:72px 0}.t{font-size:clamp(25px,3.4vw,34px);color:var(--navy);margin-bottom:8px}.t em{font-style:normal;color:var(--blue)}.s{color:var(--mut);max-width:640px;margin-bottom:36px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
-.card{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:26px;transition:.2s}.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(15,23,42,.09)}
-.ic{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px;background:#e0f2fe}
-.card:nth-child(3n+2) .ic{background:#ffedd5}.card:nth-child(3n) .ic{background:#dcfce7}
-.card h3{font-size:17px;color:var(--navy);margin-bottom:6px}.card p{font-size:14px;color:var(--mut)}
-.alt{background:#fff;border-block:1px solid var(--bd)}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;counter-reset:s}
-.step{position:relative;padding-top:6px}.num{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--sky));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 6px 14px rgba(37,99,235,.35)}
-.step h3{font-size:16px;color:var(--navy);margin-bottom:4px}.step p{font-size:14px;color:var(--mut)}
-.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-.who div{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--bd);border-radius:14px;padding:16px 18px;font-size:14.5px}.who b{color:var(--green);font-size:18px;line-height:1.3}
-details{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:16px 20px;margin-bottom:10px}
-summary{cursor:pointer;font-weight:700;color:var(--navy);list-style:none;display:flex;justify-content:space-between;gap:12px}summary::after{content:'+';color:var(--blue);font-size:20px;line-height:1}details[open] summary::after{content:'–'}
-details p{margin-top:10px;color:var(--mut);font-size:14.5px}
-.notice{background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:20px 24px;color:#78350f;font-size:14px}
-.cta{background:linear-gradient(135deg,#0b2545,#133a68);color:#fff;border-radius:20px;padding:44px 28px;text-align:center}
-.cta h2{font-size:27px;margin-bottom:8px}.cta p{color:#cbd5e1;margin-bottom:22px}.cta .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.ct{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}.ct .card{padding:20px}.ct b{display:block;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.ct a{color:var(--blue);font-weight:600}
-footer{background:var(--navy);color:#94a3b8;padding:32px 0;font-size:13px;text-align:center;line-height:1.9}footer a{color:#cbd5e1}
-@media(max-width:820px){.hero .wrap{grid-template-columns:1fr}.hl{order:-1;max-width:380px}}
-@media(max-width:760px){#mb{display:block}.logo img{height:38px}.links{display:none;position:absolute;top:68px;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;gap:0;padding:8px 20px 16px;border-bottom:1px solid var(--bd)}.links.on{display:flex}.links a{padding:12px 0;border-bottom:1px solid var(--bd)}.links .btn{text-align:center;margin-top:10px;border:0}.hero{padding:48px 0 60px}section{padding:50px 0}}
+:root{--navy:#0b2545;--navy2:#133a68;--blue:#2563eb;--bg:#f0f4f8;--surf:#fff;--bd:#cbd5e1;--tx:#0f172a;--mut:#64748b;--ok:#15803d;--okbg:#dcfce7;--bad:#b91c1c;--badbg:#fee2e2;--warn:#c2410c;--warnbg:#ffedd5;--info:#0369a1;--infobg:#e0f2fe}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:var(--bg);color:var(--tx);height:100vh;display:flex;overflow:hidden}
+aside{width:250px;background:var(--navy);color:#fff;display:flex;flex-direction:column;flex-shrink:0;transition:.2s}
+.brand{padding:18px;border-bottom:1px solid rgba(255,255,255,.12)}.brand h2{font-size:16px}.brand span{font-size:11px;color:#94a3b8;text-transform:uppercase;display:block;margin-top:4px}
+nav{flex:1;overflow-y:auto;padding:10px 0}
+.ni{padding:12px 20px;color:#cbd5e1;font-size:14px;font-weight:500;cursor:pointer;border-left:4px solid transparent}
+.ni:hover,.ni.on{background:var(--navy2);color:#fff;border-left-color:#38bdf8}
+main{flex:1;display:flex;flex-direction:column;min-width:0;overflow-y:auto}
+header{background:var(--surf);padding:12px 20px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;gap:10px}
+header h1{font-size:18px;color:var(--navy)}#menu{display:none}
+#view{padding:20px}
+.btn{padding:8px 14px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid transparent;background:var(--navy);color:#fff}
+.btn:hover{background:var(--navy2)}.btn.s{background:#fff;border-color:var(--bd);color:var(--tx)}.btn.d{background:var(--bad)}.btn.g{background:var(--ok)}.btn.sm{padding:4px 10px;font-size:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--surf);padding:14px;border-radius:8px;border:1px solid var(--bd);border-top:4px solid var(--navy)}
+.kpi.ok{border-top-color:var(--ok)}.kpi.bad{border-top-color:var(--bad)}.kpi.warn{border-top-color:var(--warn)}.kpi.info{border-top-color:var(--info)}
+.kpi b{display:block;font-size:11px;color:var(--mut);text-transform:uppercase}.kpi i{display:block;font-style:normal;font-size:26px;font-weight:700;margin-top:4px}
+.box{background:var(--surf);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.fs{padding:12px;background:#f8fafc;border-bottom:1px solid var(--bd);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+input,select,textarea{padding:8px 10px;border:1px solid var(--bd);border-radius:6px;font-size:13px;background:#fff;max-width:100%}
+.fs input[type=text]{flex:1;min-width:180px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#f1f5f9;color:var(--navy);text-align:left;padding:9px 11px;white-space:nowrap;border-bottom:1px solid var(--bd)}
+td{padding:8px 11px;border-bottom:1px solid #edf2f7}tr:hover td{background:#f8fafc}
+.badge{padding:3px 8px;border-radius:12px;font-size:11px;font-weight:700;text-transform:uppercase;white-space:nowrap;background:var(--infobg);color:var(--info)}
+.badge.ok{background:var(--okbg);color:var(--ok)}.badge.bad{background:var(--badbg);color:var(--bad)}.badge.warn{background:var(--warnbg);color:var(--warn)}
+.pg{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.mb{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:1000}
+.mc{background:#fff;border-radius:8px;width:94%;max-width:920px;max-height:92vh;display:flex;flex-direction:column;overflow:hidden}
+.mh{padding:14px 18px;background:var(--navy);color:#fff;display:flex;justify-content:space-between;align-items:center}.mh button{background:none;border:0;color:#fff;font-size:18px;cursor:pointer}
+.mbd{padding:18px;overflow-y:auto;background:#f8fafc}
+.sec{font-size:13px;font-weight:700;color:var(--navy);border-bottom:2px solid var(--bd);padding-bottom:4px;margin:16px 0 10px;text-transform:uppercase}.sec:first-child{margin-top:0}
+.gd{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.dc{background:#fff;padding:8px 11px;border-radius:4px;border:1px solid var(--bd)}.dc label{display:block;font-size:11px;color:var(--mut);font-weight:600}.dc div{font-size:13px;font-weight:600;word-break:break-word}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}.fg label{font-size:12px;font-weight:600;color:var(--mut);display:block;margin-bottom:3px}.fg input,.fg select,.fg textarea{width:100%}
+.steps{display:flex;gap:6px;flex-wrap:wrap}.step{flex:1;min-width:120px;padding:8px;border-radius:6px;background:#e2e8f0;font-size:12px;text-align:center}.step.done{background:var(--okbg);color:var(--ok)}.step.cur{background:var(--blue);color:#fff}.step small{display:block;font-size:10px;opacity:.85}
+#login{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;background:radial-gradient(circle at 15% 10%,#1d4f91 0,transparent 45%),radial-gradient(circle at 90% 90%,#0e7490 0,transparent 40%),linear-gradient(135deg,#0b2545,#133a68)}
+.lg{background:#fff;border-radius:16px;width:100%;max-width:400px;padding:34px 30px 24px;box-shadow:0 20px 50px rgba(0,0,0,.35);text-align:center}
+.lg-img{width:100%;max-width:300px;height:auto;display:block;margin:0 auto 6px}
+.lg-logo{width:64px;height:64px;border-radius:18px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;letter-spacing:1px;background:linear-gradient(135deg,#2563eb,#0ea5e9);box-shadow:0 8px 20px rgba(37,99,235,.4)}
+.lg h2{color:var(--navy);font-size:24px;letter-spacing:.5px}.lg .sub{color:var(--mut);font-size:13px;margin:4px 0 22px}
+.lg label{display:block;text-align:left;font-size:12px;font-weight:600;color:var(--mut);margin:12px 0 4px}
+.lg input{width:100%;padding:12px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:15px;outline:none;transition:.15s}.lg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.pwr{position:relative}.pwr input{padding-right:64px}.pwr button{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--blue);font-size:12px;font-weight:700;cursor:pointer;padding:6px}
+.lg .go{width:100%;margin-top:20px;padding:13px;font-size:15px;border-radius:10px;font-weight:700;letter-spacing:.3px}
+.lg .note{margin-top:20px;padding:10px 12px;background:#f1f5f9;border-radius:8px;font-size:11.5px;color:var(--mut);line-height:1.5}
+.lg .ft{margin-top:12px;font-size:11px;color:#94a3b8}
+#toast{position:fixed;bottom:20px;right:20px;padding:12px 18px;border-radius:6px;color:#fff;background:var(--ok);display:none;z-index:2000;max-width:80vw}
+.card{background:#fff;border:1px solid var(--bd);border-radius:8px;padding:14px;margin-bottom:14px}
+@media(max-width:800px){aside{position:fixed;inset:0 auto 0 0;z-index:50;transform:translateX(-100%)}aside.open{transform:none}#menu{display:inline-block}#view{padding:12px}}
 </style></head><body>
-
-<header><div class="wrap nav">
- <a class="logo" href="#home" aria-label="EPMS Odisha — Home"><img src="/logo.png" alt="EPMS Odisha — Eastern Pension Mitra Services" width="900" height="291"></a>
- <button id="mb" aria-label="Menu" onclick="document.getElementById('lk').classList.toggle('on')">☰</button>
- <nav class="links" id="lk" onclick="this.classList.remove('on')">
-  <a href="#services">Our Work</a><a href="#how">How we work</a><a href="#faq">FAQ</a><a href="#contact">Contact</a><a href="/career">Career</a>
-  <a class="btn p" href="/app">Staff Login</a>
- </nav>
-</div></header>
-
-<main id="home">
-<div class="hero"><div class="wrap">
- <div>
-  <span class="tag">Pension application support · Odisha</span>
-  <h1>Rejected pension application? <span>We help you set it right.</span></h1>
-  <p><b>Eastern Pension Mitra Services</b> stands with pension applicants in Odisha. We explain your application status, find out why it was rejected, guide you on the right documents and help you apply again — and we keep following up with you till the end.</p>
-  <div class="row"><a class="btn w" href="#services">See our work</a><a class="btn o" href="#contact">Talk to us</a></div>
- </div>
- <div class="hl"><img src="/logo.png" alt="EPMS Odisha — Eastern Pension Mitra Services" width="900" height="291"></div>
+<div id="login"><div class="lg">
+<img class="lg-img" src="/logo.png" alt="EPMS Odisha — Eastern Pension Mitra Services" width="900" height="291">
+<p class="sub">Beneficiary CRM — Staff Sign In</p>
+<label for="em">Email / Username</label><input id="em" type="email" placeholder="you@example.com" autocomplete="username">
+<label for="pw">Password</label><div class="pwr"><input id="pw" type="password" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"><button type="button" onclick="const p=$('pw');p.type=p.type==='password'?'text':'password';this.textContent=p.type==='password'?'SHOW':'HIDE'">SHOW</button></div>
+<button class="btn go" onclick="login()">Sign In</button>
+<p id="lerr" style="color:var(--bad);font-size:13px;margin-top:12px;min-height:16px"></p>
+<div class="note">EPMS Odisha is a <b>private service provider</b>. This is not a government website.</div>
+<div class="ft">© EPMS Odisha · Authorised staff only · <a href="/" style="color:#64748b">← Back to website</a></div>
 </div></div>
-
-<section id="services"><div class="wrap">
- <h2 class="t">Our <em>work</em></h2><p class="s">We support applicants of the Madhu Babu Pension Yojana (MBPY) and similar pension schemes — from the first check to the final follow-up.</p>
- <div class="grid">
-  <div class="card"><div class="ic">🔍</div><h3>Application status check</h3><p>We look up where your application stands and explain what the status means, in simple language you understand.</p></div>
-  <div class="card"><div class="ic">❓</div><h3>Rejection reason guidance</h3><p>If your application was rejected, we help you understand the reason shown against it and what has to be fixed.</p></div>
-  <div class="card"><div class="ic">📄</div><h3>Document guidance</h3><p>We tell you exactly which documents are needed and which ones to correct, with a clear checklist.</p></div>
-  <div class="card"><div class="ic">🔁</div><h3>Re-application support</h3><p>We guide you step by step so that you can apply again with the right details and the right documents.</p></div>
-  <div class="card"><div class="ic">📞</div><h3>Personal follow-up</h3><p>One of our executives calls you, keeps track of your case and reminds you about every next step.</p></div>
-  <div class="card"><div class="ic">🤝</div><h3>Help in your language</h3><p>We talk to you in the language you are comfortable with, so nothing is confusing or left unclear.</p></div>
- </div>
-</div></section>
-
-<section class="alt"><div class="wrap">
- <h2 class="t">Who <em>we help</em></h2><p class="s">If any of these sounds like you, get in touch.</p>
- <div class="who">
-  <div><b>✓</b><span>Your pension application was <b style="color:inherit">rejected</b> and you don’t know why.</span></div>
-  <div><b>✓</b><span>You applied long ago and are <b style="color:inherit">still waiting</b> for an update.</span></div>
-  <div><b>✓</b><span>You are not sure which <b style="color:inherit">documents</b> are needed or what is wrong in them.</span></div>
-  <div><b>✓</b><span>You want to <b style="color:inherit">apply again</b> but need someone to guide you properly.</span></div>
- </div>
-</div></section>
-
-<section id="how"><div class="wrap">
- <h2 class="t">How we <em>work</em></h2><p class="s">Four simple steps, and you are never left alone in between.</p>
- <div class="steps">
-  <div class="step"><div class="num">1</div><h3>We contact you</h3><p>Our executive calls you and asks about your application.</p></div>
-  <div class="step"><div class="num">2</div><h3>We explain</h3><p>You learn the status, the reason for rejection and what needs to be corrected.</p></div>
-  <div class="step"><div class="num">3</div><h3>Documents &amp; re-apply</h3><p>We guide you in collecting the right documents and applying again.</p></div>
-  <div class="step"><div class="num">4</div><h3>We follow up</h3><p>We stay in touch and keep following up until your case is completed.</p></div>
- </div>
-</div></section>
-
-<section class="alt" id="faq"><div class="wrap" style="max-width:820px">
- <h2 class="t">Common <em>questions</em></h2><p class="s">Short answers to what people ask us most.</p>
- <details><summary>Is EPMS Odisha a government office?</summary><p>No. EPMS Odisha is a private service provider. We are not a government office and are not connected with any government department.</p></details>
- <details><summary>Will my application be approved if I take your help?</summary><p>Approval is decided only by the concerned government authority. We cannot promise or guarantee approval. What we do is help you understand your case and apply correctly.</p></details>
- <details><summary>Which schemes do you help with?</summary><p>Mainly the Madhu Babu Pension Yojana (MBPY) and similar pension schemes in Odisha. Contact us and we will tell you if we can help with your case.</p></details>
- <details><summary>How will you contact me?</summary><p>Our executive will call you on the mobile number given in your application. You can also write to us on our email.</p></details>
- <details><summary>I want to work with you. What should I do?</summary><p>Please visit our <a href="/career" style="color:var(--blue);font-weight:600">Career page</a> and apply there.</p></details>
-</div></section>
-
-<section><div class="wrap">
- <div class="notice"><b>Please note:</b> EPMS Odisha is a <b>private service provider</b>. We are <b>not</b> a government office or website, and we are not connected with any government department. Approval of an application is decided only by the concerned government authority, and we cannot guarantee approval.</div>
-</div></section>
-
-<section class="alt" id="contact"><div class="wrap">
- <h2 class="t">Contact <em>us</em></h2><p class="s">Write to us about your application and we will get back to you.</p>
- <div class="ct" id="ctbox"></div>
- <div style="margin-top:38px" class="cta"><h2>Want to join our team?</h2><p>We are always happy to meet people who want to help others.</p><div class="row"><a class="btn p" href="/career">View careers</a><a class="btn o" href="/app">Staff login</a></div></div>
-</div></section>
-</main>
-
-<footer><div class="wrap">© <span id="yr"></span> EPMS Odisha — Eastern Pension Mitra Services<br>A private service provider. Not a government website.<br><a href="/career">Career</a> · <a href="/app">Staff Login</a></div></footer>
-
+<aside id="side" style="display:none"><div class="brand"><div style="background:#fff;border-radius:10px;padding:6px 10px;display:inline-block;margin-bottom:6px"><img src="/logo.png" alt="EPMS Odisha" style="height:34px;width:auto;display:block"></div><span id="who"></span></div><nav id="nav"></nav>
+<div style="padding:14px;border-top:1px solid rgba(255,255,255,.1)"><button class="btn s" style="width:100%" onclick="sb.auth.signOut().then(()=>location.reload())">Sign Out</button></div></aside>
+<main id="mainw" style="display:none"><header><div><button class="btn s" id="menu" onclick="$('side').classList.toggle('open')">☰</button> <h1 id="ttl" style="display:inline"></h1></div><div id="hact"></div></header><div id="view"></div></main>
+<div class="mb" id="m1"><div class="mc"><div class="mh"><h3 id="m1t"></h3><button onclick="closeM('m1')">✕</button></div><div class="mbd" id="m1b"></div></div></div>
+<div class="mb" id="m2" style="z-index:1100"><div class="mc" style="max-width:520px"><div class="mh"><h3 id="m2t"></h3><button onclick="closeM('m2')">✕</button></div><div class="mbd" id="m2b"></div></div></div>
+<div id="toast"></div>
 <script>
-/* ===== EDIT YOUR CONTACT DETAILS HERE. Leave a value empty ('') and that box will not be shown. ===== */
-const PHONE   = '';   // e.g. '9876543210'  (10 digits, no +91)
-const WHATSAPP= '';   // e.g. '9876543210'
-const EMAIL   = 'info@epmsodisha.in';
-const ADDRESS = '';   // e.g. 'Plot No., Street, Bhubaneswar, Odisha'
-const HOURS   = '';   // e.g. 'Mon–Sat, 10 AM – 6 PM'
-/* ================================================================================================== */
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const items=[];
-if(/^\d{10}$/.test(PHONE))items.push(['📞 Phone',`<a href="tel:+91${PHONE}">+91 ${PHONE}</a>`]);
-if(/^\d{10}$/.test(WHATSAPP))items.push(['💬 WhatsApp',`<a href="https://wa.me/91${WHATSAPP}" target="_blank" rel="noopener">Chat on WhatsApp</a>`]);
-if(EMAIL)items.push(['✉️ Email',`<a href="mailto:${esc(EMAIL)}">${esc(EMAIL)}</a>`]);
-if(ADDRESS)items.push(['📍 Address',esc(ADDRESS)]);
-if(HOURS)items.push(['🕒 Hours',esc(HOURS)]);
-document.getElementById('ctbox').innerHTML=items.map(([k,v])=>`<div class="card"><b>${k}</b>${v}</div>`).join('');
-document.getElementById('yr').textContent=new Date().getFullYear();
-</script>
-</body></html>
+/* ====== CONFIG: paste your Supabase project URL + ANON (public) key. NEVER put the service-role key here. ====== */
+const SUPABASE_URL='https://mhxjeqjhsljcwqgbjdkp.supabase.co', SUPABASE_ANON_KEY='sb_publishable_0eYXblqghfQ9mCvi7Kd6lA_1UofbQJE';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=d=>d?new Date(d).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'—';
+const STAGES=['call_pending','call_connected','lead_generated','documents_received','payment_received','completed'];
+const SL={call_pending:'Call Pending',call_connected:'Call Connected',lead_generated:'Lead Generated',documents_received:'Documents Received',payment_received:'Payment Received',completed:'Completed'};
+const TS={call_pending:'created_at',call_connected:'connected_at',lead_generated:'lead_generated_at',documents_received:'documents_at',payment_received:'payment_at',completed:'completed_at'};
+const OUT=['Connected','Not Connected','Busy','Call Back','Wrong Number','Not Interested','Interested','Documents Pending','Payment Pending'];
+const FIELDS=['district','application_id','application_number','application_status','rejection_reason','pension_type','photo','applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category','sub_division','address_type','block','gp','village','habitation','pin','account_holder_name','account_number','ifsc_code','branch_name'];
+const SENS=['aadhaar_number','account_holder_name','account_number','ifsc_code','branch_name'];
+const BCOLS=FIELDS.filter(f=>!SENS.includes(f)&&f!=='photo').join(',')+',apply_date';
+let me=null,cur='dash',PG=1,LIM=25,PAYCFG={};
+const isA=()=>me&&me.role==='admin';
+function toast(m,bad){const t=$('toast');t.textContent=m;t.style.background=bad?'var(--bad)':'var(--ok)';t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
+async function run(p){const{data,error}=await p;if(error){toast(error.message,1);throw error}return data}
+async function all(build){let o=[],i=0;for(;;){const d=await run(build().range(i,i+999));o=o.concat(d);if(d.length<1000)return o;i+=1000}}
+const openM=(id,t,h)=>{$(id+'t').textContent=t;$(id+'b').innerHTML=h;$(id).style.display='flex'};const closeM=id=>$(id).style.display='none';
+const bdg=(t,c='')=>`<span class="badge ${c}">${esc(t)}</span>`;
+const stBadge=s=>bdg(SL[s]||s,s==='completed'||s==='payment_received'?'ok':s==='call_pending'?'warn':'');
+const opts=(a,sel,all)=>(all?`<option value="">${all}</option>`:'')+a.map(x=>`<option value="${esc(x)}" ${x===sel?'selected':''}>${esc(x)}</option>`).join('');
+const uniq=(a,k)=>[...new Set(a.map(x=>x[k]).filter(Boolean))].sort();
+const dl=(name,text,type)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click()};
+function csv(rows,cols){return[cols.join(','),...rows.map(r=>cols.map(c=>`"${String(r[c]??'').replace(/"/g,'""')}"`).join(','))].join('\n')}
+
+/* ---------- auth ---------- */
+async function login(){$('lerr').textContent='';const{error}=await sb.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value});if(error)return $('lerr').textContent=error.message;boot()}
+async function boot(){
+ const{data:{session}}=await sb.auth.getSession();if(!session)return;
+ const{data:p}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
+ if(!p||!p.is_active){await sb.auth.signOut();$('lerr').textContent='Account inactive or not found. Contact admin.';return}
+ me=p;PAYCFG=(await sb.from('settings').select('value').eq('key','payment_config').maybeSingle()).data?.value||{};$('login').style.display='none';$('side').style.display='flex';$('mainw').style.display='flex';
+ $('who').textContent=`${p.full_name||p.email} · ${p.role}`;
+ const nav=isA()?[['dash','📊 Admin Dashboard'],['ben','👥 Beneficiary Master'],['leads','🎯 Lead Assignment'],['dup','♻️ Duplicates'],['emp','🧑‍💼 Employees'],['fu','⏰ Follow-ups'],['calls','📞 Call History'],['pay','💰 Payments'],['trf','🔁 Transfer History'],['imp','📥 Import / Export'],['aud','🧾 Audit Log'],['set','⚙️ Settings']]
+  :[['dash','📊 My Dashboard'],['fu','⏰ My Follow-ups'],['calls','📞 My Call History']];
+ $('nav').innerHTML=nav.map(([k,l])=>`<div class="ni" data-k="${k}" onclick="go('${k}')">${l}</div>`).join('');go('dash');
+}
+function go(k){cur=k;PG=1;document.querySelectorAll('.ni').forEach(e=>e.classList.toggle('on',e.dataset.k===k));$('side').classList.remove('open');$('ttl').textContent=document.querySelector(`.ni[data-k="${k}"]`).textContent.slice(3);$('hact').innerHTML='';
+ $('view').innerHTML='<p style="color:var(--mut)">Loading…</p>';(V[(isA()?'a_':'e_')+k]||V[k])()}
+const refresh=()=>go(cur);
+
+/* ---------- shared data ---------- */
+const leadsQ=()=>sb.from('leads').select(`*,beneficiaries!leads_beneficiary_id_fkey(${BCOLS}),profiles(full_name,employee_code)`).order('created_at').order('id');
+const kpi=(l,v,c='')=>`<div class="kpi ${c}"><b>${l}</b><i>${v}</i></div>`;
+function table(cols,rows,empty='No records.'){return`<div class="tw"><table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${cols.length}" style="text-align:center;color:var(--mut);padding:24px">${empty}</td></tr>`}</tbody></table></div>`}
+function pager(n,fn){const s=(PG-1)*LIM;return`<div class="pg"><span>Showing ${n?s+1:0}–${Math.min(s+LIM,n)} of ${n}</span><span><button class="btn s sm" onclick="PG>1&&(PG--,${fn}())">Prev</button> ${PG} <button class="btn s sm" onclick="PG*LIM<${n}&&(PG++,${fn}())">Next</button></span></div>`}
+const slice=a=>a.slice((PG-1)*LIM,PG*LIM);
+
+const fmtD=d=>d?new Date(d+'T00:00').toLocaleDateString('en-GB'):'';
+const dgrp=(t,ks,x)=>`<div class="sec">${t}</div><div class="gd">${ks.map(k=>`<div class="dc"><label>${k==='apply_date'?'apply date':k.replace(/_/g,' ')}</label><div>${esc(k==='apply_date'?fmtD(x[k]):x[k])||'—'}</div></div>`).join('')}</div>`;
+const CR={reapplied_auto:'Already re-applied (auto)',reapplied_told:'Already re-applied (told)',status_changed:'Status no longer rejected',not_interested:'Not interested',wrong_number:'Wrong number'};
+const lBadge=l=>l.closed_reason?bdg('Closed: '+CR[l.closed_reason],'bad'):stBadge(l.status);
+const cnt=async q=>{const r=await q;return r.error?null:(r.count||0)};
+const V={};
+/* ====== ADMIN DASHBOARD ====== */
+let selEmp=null;
+V.a_dash=async function(){
+ const f=$('d-from')?.value||null,t=$('d-to')?.value||null;
+ const s=await run(sb.rpc('admin_summary',{p_from:f,p_to:t}));const[un,clc]=await Promise.all([cnt(sb.from('leads').select('id',{count:'exact',head:true}).is('assigned_to',null).is('closed_reason',null)),cnt(sb.from('leads').select('id',{count:'exact',head:true}).not('closed_reason','is',null))]);const E=s.by_emp,sum=k=>E.reduce((a,e)=>a+e[k],0);
+ $('view').innerHTML=`<div class="fs box" style="border-radius:8px"><label>From <input type="date" id="d-from" value="${f||''}"></label><label>To <input type="date" id="d-to" value="${t||''}"></label><button class="btn" onclick="V.a_dash()">Apply</button><button class="btn s" onclick="$('d-from').value=$('d-to').value='';V.a_dash()">Reset</button></div>
+ <div class="kpis">${kpi('Total Beneficiaries',s.beneficiaries)}${kpi('Rejected Applications',s.rejected,'bad')}${kpi('Assigned Leads',s.assigned,'info')}${kpi('Unassigned Leads',un??s.unassigned,'warn')}${kpi('Closed / Re-applied',clc??0,'bad')}${kpi('Employees',s.employees)}${kpi('Total Calls',sum('calls'))}${kpi('Connected Calls',sum('connected'),'ok')}${kpi('Leads Generated',sum('leads'))}${kpi('Documents Received',sum('docs'))}${kpi('Payments Received',sum('payments'),'ok')}${kpi('Completed Leads',sum('completed'),'ok')}</div>
+ <div class="box"><div class="sec" style="margin:0;padding:12px">Employee Performance (click a name for details)</div>${table(['Employee','Assigned','Calls','Connected','Leads','Documents','Payments','Completed'],E.map(e=>[`<a href="#" onclick="empDetail('${e.id}');return false" style="color:var(--blue);font-weight:600">${esc(e.full_name)}</a> <small>${esc(e.employee_code||'')}</small>`,e.assigned,e.calls,e.connected,e.leads,e.docs,e.payments,e.completed]))}</div>`;
+};
+async function empDetail(id){const L=await all(()=>leadsQ().eq('assigned_to',id));const e=L[0]?.profiles;
+ openM('m1','Employee leads',table(['Application','Applicant','Status','Assigned'],L.map(l=>[esc(l.beneficiaries.application_id),esc(l.beneficiaries.applicant_name),lBadge(l),fmt(l.assigned_at)]),'No leads assigned.'))}
+
+/* ====== BENEFICIARY MASTER ====== */
+let BCNT=0,BOPT=null,BT=null,BSEQ=0;
+const BFLT=[['b-d','district'],['b-b','block'],['b-g','gp'],['b-v','village'],['b-s','application_status'],['b-r','rejection_reason'],['b-p','pension_type']];
+function benQ(sel,cnt){const g=i=>$(i)?.value||'';let q=sb.from('beneficiaries').select(sel,cnt?{count:'exact'}:undefined);
+ BFLT.forEach(([id,k])=>{if(g(id))q=q.eq(k,g(id))});
+ const t=g('b-q').trim().replace(/[,()%*\\]/g,' ').trim();
+ if(t)q=q.or(['application_id','application_number','applicant_name','father_spouse_name','mobile_no','village','gp'].map(c=>`${c}.ilike.%${t}%`).join(','));
+ return q.order('application_id')}
+async function benOptions(){
+ try{const r=await sb.rpc('rpc_ben_filters');if(!r.error&&r.data)return r.data}catch(e){}
+ // fallback if patch5.sql was not run: read only the 7 filter columns, all pages in parallel
+ const cols=BFLT.map(x=>x[1]).join(',');const c=await sb.from('beneficiaries').select('id',{count:'exact',head:true});const n=c.count||0;
+ const pages=await Promise.all(Array.from({length:Math.ceil(n/1000)},(_,k)=>sb.from('beneficiaries').select(cols).order('id').range(k*1000,k*1000+999)));
+ const rows=pages.flatMap(p=>p.data||[]);const o={};BFLT.forEach(([,k])=>o[k]=uniq(rows,k));return o}
+V.a_ben=async function(){
+ if(!BOPT)BOPT=await benOptions();
+ const sel=(id,k,l)=>`<select id="${id}" onchange="PG=1;benF()">${opts(BOPT[k]||[],'',l)}</select>`;
+ $('view').innerHTML=`<div class="box"><div class="fs"><input type="text" id="b-q" placeholder="Search ID, name, mobile, village…" oninput="PG=1;clearTimeout(BT);BT=setTimeout(benF,350)">${sel('b-d','district','All Districts')}${sel('b-b','block','All Blocks')}${sel('b-g','gp','All GPs')}${sel('b-v','village','All Villages')}${sel('b-s','application_status','All Statuses')}${sel('b-r','rejection_reason','All Reasons')}${sel('b-p','pension_type','All Pension Types')}<button class="btn s" onclick="benCSV()">Export Filtered CSV</button></div><div id="b-t"></div></div>`;benF()};
+async function benCSV(){toast('Preparing export…');const R=await all(()=>benQ(BCOLS+',id',false));dl('filtered_beneficiaries.csv',csv(R,FIELDS.filter(f=>!SENS.includes(f)&&f!=='photo')),'text/csv')}
+async function benF(){const t=$('b-t');if(!t)return;const my=++BSEQ;t.style.opacity=.5;
+ let res;try{res=await benQ(BCOLS+',id',true).range((PG-1)*LIM,PG*LIM-1)}catch(e){res={error:e}}
+ if(my!==BSEQ)return;t.style.opacity=1;const {data,count,error}=res;
+ if(error){t.innerHTML=`<div class="card" style="color:var(--bad)">Could not load: ${esc(error.message||String(error))}</div>`;return}
+ BCNT=count||0;
+ t.innerHTML=table(['Application ID','Applicant','Father/Spouse','District / Block','Pension','Age/Sex','Status','Mobile',''],data.map(r=>[`<b>${esc(r.application_id)}</b>`,esc(r.applicant_name),esc(r.father_spouse_name),esc(r.district)+'<br><small>'+esc(r.block)+'</small>',esc(r.pension_type),esc(r.age)+' / '+esc(r.gender),bdg(r.application_status||'Pending',/reject/i.test(r.application_status)?'bad':/approv/i.test(r.application_status)?'ok':'warn'),esc(r.mobile_no),`<button class="btn s sm" onclick="benView('${r.id}')">View</button>`]))+pager(BCNT,'benF')}
+async function benView(id){const r=await run(sb.from('beneficiaries').select('*,beneficiary_sensitive(*)').eq('id',id).single());const x={...r,...(r.beneficiary_sensitive||{})};
+ const grp=(t,ks)=>`<div class="sec">${t}</div><div class="gd">${ks.map(k=>`<div class="dc"><label>${k.replace(/_/g,' ')}</label><div>${esc(x[k])||'—'}</div></div>`).join('')}</div>`;
+ openM('m1',`${x.applicant_name||''} [${x.application_id}]`,(x.photo?`<img src="${esc(x.photo)}" style="width:90px;height:108px;object-fit:cover;border-radius:4px;float:right">`:'')+grp('Application',['district','application_id','application_number','application_status','pension_type','rejection_reason'])+grp('Personal',['applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category'])+grp('Address',['sub_division','address_type','block','gp','village','habitation','pin'])+grp('Bank',['account_holder_name','account_number','ifsc_code','branch_name'])+`<p style="margin-top:12px"><button class="btn s" onclick="navigator.clipboard.writeText(${esc(JSON.stringify(JSON.stringify(x)))}).then(()=>toast('Copied'))">Copy Full Details</button></p>`)}
+
+/* ====== LEAD ASSIGNMENT / TRANSFER (admin) ====== */
+let LD=[],LF=[],EMPS=[];
+V.a_dup=async function(){$('hact').innerHTML='<button class="btn s" onclick="recheck()">🔄 Re-check</button> <button class="btn s" onclick="dupCSV()">⬇ Export CSV</button>';
+ const D=await run(sb.rpc('rpc_duplicates'));
+ $('view').innerHTML=`<div class="kpis">${kpi('Old records (superseded)',D.length,'warn')}${kpi('People re-applied',new Set(D.map(d=>d.new_id)).size,'info')}${kpi('Old leads auto-closed',D.filter(d=>d.lead_closed_reason==='reapplied_auto').length,'bad')}</div>
+ <div class="card" style="font-size:13px;color:var(--mut)">Same person (name + father/spouse + mobile) found in more than one batch. The <b>newest application</b> is the live record everywhere else; older ones are kept here for reference only.</div>
+ <div class="box"><div class="fs"><input type="text" id="dp-q" placeholder="Search name / mobile / application ID…" oninput="PG=1;dupF()"></div><div id="dp-t"></div></div>`;
+ window._D=D;dupF()};
+function dupCSV(){dl('reapplied_people.csv',csv(window._D||[],['applicant_name','mobile_no','old_application_id','old_apply_date','old_status','new_application_id','new_apply_date','new_status','lead_closed_reason']),'text/csv')}
+function dupF(){const q=($('dp-q')?.value||'').toLowerCase();const F=(window._D||[]).filter(d=>!q||[d.applicant_name,d.mobile_no,d.old_application_id,d.new_application_id].join(' ').toLowerCase().includes(q));
+ const bs=s=>`<span class="badge ${/reject/i.test(s||'')?'bad':'ok'}">${esc(s||'—')}</span>`;
+ $('dp-t').innerHTML=table(['Applicant','Mobile','OLD application','OLD status','→ NEW (current) application','NEW status','Old lead',''],F.slice((PG-1)*LIM,PG*LIM).map(d=>[esc(d.applicant_name),esc(d.mobile_no),esc(d.old_application_id)+'<br><small>'+(fmtD(d.old_apply_date)||'—')+'</small>',bs(d.old_status),'<b>'+esc(d.new_application_id)+'</b><br><small>'+(fmtD(d.new_apply_date)||'—')+'</small>',bs(d.new_status),d.lead_closed_reason?`<span class="badge warn">${esc(CR[d.lead_closed_reason]||d.lead_closed_reason)}</span>`:(d.lead_id?'open':'—'),d.lead_id?`<button class="btn sm" onclick="openLead('${d.lead_id}')">Details</button>`:'']),'No duplicate people found.')+pager(F.length,'dupF')}
+V.a_leads=async function(){$('hact').innerHTML='<button class="btn s" onclick="recheck()">🔄 Re-check Re-applied</button>';
+ [LD,EMPS]=await Promise.all([all(leadsQ),run(sb.from('profiles').select('id,full_name,employee_code,is_active').eq('role','employee').order('full_name'))]);
+ const act=EMPS.filter(e=>e.is_active);const B=LD.map(l=>l.beneficiaries);
+ $('view').innerHTML=`<div class="kpis">${kpi('Rejected Leads',LD.length,'bad')}${kpi('Unassigned',LD.filter(l=>!l.assigned_to&&!l.closed_reason).length,'warn')}${kpi('Pending (not completed)',LD.filter(l=>l.assigned_to&&!l.closed_reason&&l.status!=='completed').length,'info')}${kpi('Completed',LD.filter(l=>l.status==='completed').length,'ok')}${kpi('Closed / Re-applied',LD.filter(l=>l.closed_reason).length,'bad')}</div>
+ <div class="box"><div class="fs"><input type="text" id="l-q" placeholder="Search beneficiary / ID / employee…" oninput="PG=1;leadF()"><select id="l-e" onchange="PG=1;leadF()"><option value="">All Employees</option><option value="none">Unassigned</option>${EMPS.map(e=>`<option value="${e.id}">${esc(e.full_name)}</option>`).join('')}</select>
+ <select id="l-s" onchange="PG=1;leadF()"><option value="">All Stages</option><option value="closed">Closed / Re-applied</option>${STAGES.map(s=>`<option value="${s}">${SL[s]}</option>`).join('')}</select><select id="l-d" onchange="PG=1;leadF()">${opts(uniq(B,'district'),'','All Districts')}</select><select id="l-b" onchange="PG=1;leadF()">${opts(uniq(B,'block'),'','All Blocks')}</select>
+ <label style="font-size:12px;color:var(--mut)">Apply date: from</label><input type="date" id="l-f" onchange="PG=1;leadF()"><label style="font-size:12px;color:var(--mut)">to</label><input type="date" id="l-t2" onchange="PG=1;leadF()"><button class="btn s sm" onclick="$('l-f').value=$('l-t2').value='';PG=1;leadF()">Clear dates</button></div>
+ <div class="fs" style="background:#eff6ff"><b style="font-size:13px">Assign selected →</b><select id="as-e">${act.map(e=>`<option value="${e.id}">${esc(e.full_name)} (${esc(e.employee_code||'')})</option>`).join('')}</select><button class="btn g" onclick="assignSel()">Assign Selected</button><button class="btn s" onclick="document.querySelectorAll('.lk').forEach(c=>c.checked=true)">Select page</button><button class="btn s" onclick="selAllFiltered()">Select all filtered unassigned</button></div><div id="l-t"></div></div>`;leadF()};
+let SELALL=null;
+function leadF(){const g=i=>$(i).value,q=g('l-q').toLowerCase();SELALL=null;
+ LF=LD.filter(l=>{const b=l.beneficiaries;return(!g('l-e')||(g('l-e')==='none'?!l.assigned_to:l.assigned_to===g('l-e')))&&(!g('l-s')||(g('l-s')==='closed'?!!l.closed_reason:l.status===g('l-s')))&&(!g('l-d')||b.district===g('l-d'))&&(!g('l-b')||b.block===g('l-b'))&&(!g('l-f')||(b.apply_date&&String(b.apply_date).slice(0,10)>=g('l-f')))&&(!g('l-t2')||(b.apply_date&&String(b.apply_date).slice(0,10)<=g('l-t2')))&&(!q||[b.application_id,b.applicant_name,b.mobile_no,b.village,l.profiles?.full_name].some(x=>(x||'').toLowerCase().includes(q)))});
+ $('l-t').innerHTML=table(['','Application ID','Apply Date','Applicant','District / Block / GP','Rejection Reason','Stage','Assigned To',''],slice(LF).map(l=>{const b=l.beneficiaries;return[(l.assigned_to||l.closed_reason)?'':`<input type="checkbox" class="lk" value="${l.id}">`,`<b>${esc(b.application_id)}</b>`,fmtD(b.apply_date)||'—',esc(b.applicant_name),esc(b.district)+' / '+esc(b.block)+' / '+esc(b.gp),esc(b.rejection_reason),lBadge(l),l.profiles?esc(l.profiles.full_name):bdg('Unassigned','warn'),`<button class="btn s sm" onclick="openLead('${l.id}')">Open</button>`]}))+pager(LF.length,'leadF')}
+function selAllFiltered(){SELALL=LF.filter(l=>!l.assigned_to&&!l.closed_reason).map(l=>l.id);document.querySelectorAll('.lk').forEach(c=>c.checked=true);toast(SELALL.length+' unassigned leads selected (all pages)')}
+async function recheck(){const n=await run(sb.rpc('rpc_detect_reapplied'));const c=await run(sb.rpc('rpc_carry_over_assignment'));toast(n+' lead(s) closed, '+c+' new lead(s) given to same employee');refresh()}
+async function assignSel(){const ids=SELALL||[...document.querySelectorAll('.lk:checked')].map(c=>c.value);if(!ids.length)return toast('Select leads first',1);
+ if(!confirm(`Assign ${ids.length} lead(s)?`))return;let n=0;for(let i=0;i<ids.length;i+=200)n+=await run(sb.rpc('rpc_assign',{p_leads:ids.slice(i,i+200),p_emp:$('as-e').value}));toast(n+' lead(s) assigned');refresh()}
+async function transferUI(id){const l=await run(leadsQ().eq('id',id).single());const E=(await run(sb.from('profiles').select('id,full_name,employee_code').eq('role','employee').eq('is_active',true))).filter(e=>e.id!==l.assigned_to);
+ openM('m2','Transfer Lead',`<div class="fg" style="grid-template-columns:1fr"><div><label>Application</label><b>${esc(l.beneficiaries.application_id)} — ${esc(l.beneficiaries.applicant_name)}</b></div><div><label>Current Employee</label><b>${esc(l.profiles?.full_name)}</b></div><div><label>New Employee</label><select id="t-e">${E.map(e=>`<option value="${e.id}">${esc(e.full_name)} (${esc(e.employee_code||'')})</option>`).join('')}</select></div><div><label>Transfer Reason (optional)</label><textarea id="t-r" rows="2"></textarea></div></div><p style="margin-top:14px"><button class="btn d" onclick="doTransfer('${id}',${l.status==='completed'})">Confirm Transfer</button> <button class="btn s" onclick="closeM('m2')">Cancel</button></p>`)}
+async function doTransfer(id,done){let ov=false;if(done){if(!confirm('This lead is COMPLETED. Transfer anyway (admin override)?'))return;ov=true}
+ await run(sb.rpc('rpc_transfer',{p_lead:id,p_new:$('t-e').value,p_reason:$('t-r').value||null,p_override:ov}));closeM('m2');toast('Lead transferred');openLead(id);refresh()}
+
+/* ====== LEAD DETAIL (admin + employee) ====== */
+async function openLead(id){
+ const l=await run(leadsQ().eq('id',id).single());
+ const full=await run(sb.from('beneficiaries').select('photo,beneficiary_sensitive(*)').eq('id',l.beneficiary_id).single());
+ const[calls,docs,pay,trf,cl]=await Promise.all([run(sb.from('call_history').select('*,profiles(full_name)').eq('lead_id',id).order('called_at',{ascending:false})),run(sb.from('document_status').select('*').eq('lead_id',id).maybeSingle()),run(sb.from('payment_records').select('*').eq('lead_id',id).maybeSingle()),
+  isA()?run(sb.from('transfer_history').select('*,pf:profiles!transfer_history_from_employee_fkey(full_name),pt:profiles!transfer_history_to_employee_fkey(full_name)').eq('lead_id',id).order('transferred_at',{ascending:false})):[],run(sb.from('settings').select('value').eq('key','doc_checklist').maybeSingle())]);
+ const b={...l.beneficiaries,...(full.beneficiary_sensitive||{}),photo:full.photo},ci=STAGES.indexOf(l.status),mine=!isA()&&l.assigned_to===me.id&&!l.closed_reason,items=cl?.value||[],ck=docs?.checklist||{};
+ const nxt=STAGES[ci+1];
+ const nb=isA()&&l.superseded_by?await run(sb.from('beneficiaries').select('application_id,apply_date,application_status').eq('id',l.superseded_by).maybeSingle()):null;
+ const banner=l.closed_reason?`<div class="card" style="border-left:4px solid var(--bad);background:var(--badbg)"><b>⚠ Lead closed: ${CR[l.closed_reason]}</b> — do not call.${nb?`<br><small>Newer application ${esc(nb.application_id)} · applied ${fmtD(nb.apply_date)} · status: ${esc(nb.application_status)}</small>`:''}${isA()?` <button class="btn s sm" onclick="reopen('${id}')">Reopen lead</button>`:''}</div>`:'';
+ const det=['applicant_name','father_spouse_name','mobile_no','age','gender','pension_type','application_status','rejection_reason','district','block','gp','village','habitation','pin'];
+ openM('m1',`${b.applicant_name||''}${isA()?' ['+b.application_id+']':''}`,`
+ ${banner}<div class="sec">Workflow</div><div class="steps">${STAGES.map((s,i)=>`<div class="step ${i<ci||l.status==='completed'?'done':i===ci?'cur':''}">${SL[s]}<small>${fmt(l[TS[s]])}</small></div>`).join('')}</div>
+ ${mine&&nxt?`<p style="margin-top:10px">${nxt==='completed'?`<button class="btn g" onclick="stage('${id}','completed')">✔ Mark Complete</button>`:`<button class="btn" onclick="stage('${id}','${nxt}')">Advance to: ${SL[nxt]}</button>`}</p>`:''}
+ ${isA()?`<p style="margin-top:10px">Assigned to: <b>${esc(l.profiles?.full_name||'Unassigned')}</b> ${l.assigned_to?`<button class="btn d" onclick="transferUI('${id}')">🔁 TRANSFER LEAD</button>`:''}</p>`:''}
+ ${b.photo?`<img src="${esc(b.photo)}" style="width:90px;height:108px;object-fit:cover;border-radius:4px;float:right;margin-top:14px" onerror="this.remove()">`:''}${dgrp('Application',isA()?['apply_date','application_id','application_number','application_status','pension_type','rejection_reason']:['apply_date','application_status','pension_type','rejection_reason'],b)}${dgrp('Personal Details',['applicant_name','father_spouse_name','dob','age','gender','aadhaar_number','mobile_no','social_category'],b)}${dgrp('Address',['sub_division','address_type','district','block','gp','village','habitation','pin'],b)}${dgrp('Bank Details',['account_holder_name','account_number','ifsc_code','branch_name'],b)}
+ ${mine?`<div class="sec">Record Call</div><div class="fg"><div><label>Outcome</label><select id="c-o">${opts(OUT)}</select></div><div><label>Call date & time</label><input type="datetime-local" id="c-at" value="${new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16)}"></div><div><label>Next follow-up date</label><input type="date" id="c-nd"></div><div><label>Next follow-up time</label><input type="time" id="c-nt"></div><div style="grid-column:1/-1"><label>Notes</label><textarea id="c-n" rows="2"></textarea></div></div><p style="margin-top:8px"><button class="btn" onclick="doCall('${id}')">Save Call</button></p>
+ <div class="sec">Documents</div><div class="fg"><div><label>Status</label><select id="d-s">${opts(['Documents Not Received','Documents Partially Received','Documents Received','Documents Verified'],docs?.status)}</select></div></div><p style="margin:8px 0">${items.map((x,i)=>`<label style="margin-right:14px;font-size:13px"><input type="checkbox" class="dk" data-k="${esc(x)}" ${ck[x]?'checked':''}> ${esc(x)}</label>`).join('')}</p><button class="btn" onclick="saveDocs('${id}')">Save Documents</button>
+ <div class="sec">Payment</div><div class="fg"><div><label>Status</label><select id="p-s">${opts(['Pending','Received','Failed','Refunded'],pay?.status)}</select></div><div><label>Amount</label><input type="number" id="p-a" value="${pay?.amount??(PAYCFG.default_amount||'')}"></div><div><label>Date</label><input type="date" id="p-d" value="${pay?.paid_on||''}"></div><div><label>Mode</label><select id="p-m">${opts(['Cash','UPI','Bank Transfer','Cheque','Other'],pay?.mode)}</select></div><div><label>Transaction Ref</label><input id="p-r" value="${esc(pay?.reference)}"></div><div><label>Notes</label><input id="p-n" value="${esc(pay?.notes)}"></div></div><p style="margin-top:8px"><button class="btn" onclick="savePay('${id}')">Save Payment</button> <button class="btn g" onclick="payQR('${id}')">📲 Send Payment QR</button></p>
+ <div class="sec">Close Lead</div><div class="fg"><div><label>Reason</label><select id="x-r"><option value="reapplied_told">Applicant already re-applied</option><option value="not_interested">Not interested</option><option value="wrong_number">Wrong number</option></select></div><div><button class="btn d" onclick="closeLead('${id}')">Close Lead</button></div></div>`
+ :`<div class="sec">Documents & Payment</div><div class="gd"><div class="dc"><label>Documents</label><div>${esc(docs?.status||'—')}</div></div><div class="dc"><label>Payment</label><div>${esc(pay?.status||'—')} ${pay?.amount?'₹'+pay.amount:''} ${pay?.verified?bdg('Verified','ok'):''}</div></div></div>${isA()&&pay?`<p style="margin-top:8px"><button class="btn ${pay.verified?'s':'g'}" onclick="verifyPay('${id}',${!pay.verified})">${pay.verified?'Un-verify':'Verify'} Payment</button></p>`:''}`}
+ <div class="sec">Call History (read-only)</div>${table(['When','By','Outcome','Notes','Next follow-up'],calls.map(c=>[fmt(c.called_at),esc(c.profiles?.full_name),bdg(c.outcome),esc(c.notes),fmt(c.next_followup)]),'No calls yet.')}
+ ${isA()?`<div class="sec">Transfer History</div>${table(['When','From','To','Reason'],trf.map(t=>[fmt(t.transferred_at),esc(t.pf?.full_name),esc(t.pt?.full_name),esc(t.reason)]),'Never transferred.')}`:''}`)}
+const after=id=>{openLead(id);if(cur!=='dash'||!isA())refresh()};
+async function closeLead(id){if(!confirm('Close this lead? It will leave your active list.'))return;await run(sb.rpc('rpc_close_lead',{p_lead:id,p_reason:$('x-r').value}));toast('Lead closed');closeM('m1');refresh()}
+async function reopen(id){if(!confirm('Reopen this lead? Auto-detection will not close it again.'))return;await run(sb.rpc('rpc_reopen_lead',{p_lead:id}));toast('Lead reopened');openLead(id);refresh()}
+async function doCall(id){const nd=$('c-nd').value,nt=$('c-nt').value;if(nd&&!nt||!nd&&nt)return toast('Enter both follow-up date and time',1);
+ await run(sb.rpc('rpc_log_call',{p_lead:id,p_outcome:$('c-o').value,p_called_at:new Date($('c-at').value).toISOString(),p_notes:$('c-n').value||null,p_next:nd?new Date(nd+'T'+nt).toISOString():null}));toast('Call saved');after(id)}
+async function stage(id,s){if(s==='completed'&&!confirm('Mark this lead as COMPLETED?'))return;await run(sb.rpc('rpc_set_stage',{p_lead:id,p_stage:s}));toast('Stage updated');after(id)}
+async function saveDocs(id){const c={};document.querySelectorAll('.dk').forEach(x=>c[x.dataset.k]=x.checked);await run(sb.rpc('rpc_save_docs',{p_lead:id,p_status:$('d-s').value,p_checklist:c}));toast('Documents saved');after(id)}
+async function savePay(id){await run(sb.rpc('rpc_save_payment',{p_lead:id,p_status:$('p-s').value,p_amount:$('p-a').value||null,p_date:$('p-d').value||null,p_mode:$('p-m').value,p_ref:$('p-r').value||null,p_notes:$('p-n').value||null}));toast('Payment saved');after(id)}
+async function verifyPay(id,ok){await run(sb.rpc('rpc_verify_payment',{p_lead:id,p_ok:ok}));toast('Updated');openLead(id)}
+
+/* ====== EMPLOYEE DASHBOARD ====== */
+let MY=[],MYALL=[];
+V.e_dash=async function(){
+ MYALL=await all(leadsQ);MY=MYALL.filter(l=>!l.closed_reason);const c=s=>MY.filter(l=>l.status===s).length,rank=s=>MY.filter(l=>STAGES.indexOf(l.status)>=STAGES.indexOf(s)).length;
+ const fu=(await run(sb.from('follow_ups').select('id').eq('done',false).lte('due_at',new Date(Date.now()+864e5).toISOString()))).length;
+ $('view').innerHTML=`<div class="kpis">${kpi('Total Assigned',MY.length)}${kpi('Call Pending',c('call_pending'),'warn')}${kpi('Call Connected',rank('call_connected'),'info')}${kpi('Lead Generated',rank('lead_generated'))}${kpi('Documents Received',rank('documents_received'))}${kpi('Payment Received',rank('payment_received'),'ok')}${kpi('Completed',c('completed'),'ok')}${kpi('Follow-up Required',fu,'bad')}</div>
+ <div class="box"><div class="fs"><input type="text" id="m-q" placeholder="Search my leads…" oninput="PG=1;myF()"><select id="m-s" onchange="PG=1;myF()"><option value="">All Stages</option><option value="closed">Closed / Re-applied</option>${STAGES.map(s=>`<option value="${s}">${SL[s]}</option>`).join('')}</select></div><div id="m-t"></div></div>`;myF()};
+function myF(){const q=$('m-q').value.toLowerCase(),s=$('m-s').value;const F=(s==='closed'?MYALL.filter(l=>l.closed_reason):MY).filter(l=>(!s||s==='closed'||l.status===s)&&(!q||[l.beneficiaries.applicant_name,l.beneficiaries.mobile_no,l.beneficiaries.village].some(x=>(x||'').toLowerCase().includes(q))));
+ $('m-t').innerHTML=table(['Apply Date','Applicant','Mobile','Village / GP','Reason','Stage',''],slice(F).map(l=>{const b=l.beneficiaries;return[fmtD(b.apply_date)||'—',esc(b.applicant_name),`<a href="tel:${esc(b.mobile_no)}">${esc(b.mobile_no)}</a>`,esc(b.village)+' / '+esc(b.gp),esc(b.rejection_reason),lBadge(l),`<button class="btn sm" onclick="openLead('${l.id}')">Open</button>`]}))+pager(F.length,'myF')}
+
+/* ====== FOLLOW-UPS (RLS scopes to own for employees) ====== */
+V.fu=async function(){
+ const F=await run(sb.from('follow_ups').select('*,leads(id,beneficiaries!leads_beneficiary_id_fkey(application_id,applicant_name,mobile_no)),profiles(full_name)').eq('done',false).order('due_at'));
+ const now=new Date(),s=new Date(now);s.setHours(0,0,0,0);const e=new Date(s.getTime()+864e5);
+ const sec=(t,a,c)=>`<div class="box"><div class="sec" style="margin:0;padding:12px;color:var(--${c})">${t} (${a.length})</div>${table(['Due','Applicant','Mobile','Note',...(isA()?['Employee']:[]),''],a.map(f=>{const b=f.leads.beneficiaries;return[fmt(f.due_at),`${esc(b.applicant_name)} <small>${isA()?esc(b.application_id):''}</small>`,esc(b.mobile_no),esc(f.note),...(isA()?[esc(f.profiles?.full_name)]:[]),`<button class="btn sm" onclick="openLead('${f.leads.id}')">Open</button>`]}),'None.')}</div>`;
+ $('view').innerHTML=sec('Overdue',F.filter(f=>new Date(f.due_at)<s),'bad')+sec("Today's",F.filter(f=>new Date(f.due_at)>=s&&new Date(f.due_at)<e),'warn')+sec('Upcoming',F.filter(f=>new Date(f.due_at)>=e),'info')};
+
+/* ====== CALL HISTORY ====== */
+V.calls=async function(){const C=await all(()=>sb.from('call_history').select('*,profiles(full_name),leads(beneficiaries!leads_beneficiary_id_fkey(application_id,applicant_name))').order('called_at',{ascending:false}).order('id'));
+ $('view').innerHTML=`<div class="box">${table(['When','Employee',isA()?'Application':'','Applicant','Outcome','Notes'],C.slice(0,500).map(c=>[fmt(c.called_at),esc(c.profiles?.full_name),(isA()?esc(c.leads.beneficiaries.application_id):''),esc(c.leads.beneficiaries.applicant_name),bdg(c.outcome),esc(c.notes)]))}<div class="pg">Showing latest ${Math.min(500,C.length)} of ${C.length}</div></div>`};
+
+/* ====== EMPLOYEES (admin) ====== */
+V.a_emp=async function(){const s=await run(sb.rpc('admin_summary',{p_from:null,p_to:null}));
+ $('hact').innerHTML=`<button class="btn" onclick="newEmp()">+ New Employee</button>`;
+ const P=await run(sb.from('profiles').select('*').eq('role','employee').order('full_name'));
+ $('view').innerHTML=`<div class="box">${table(['Name','Emp ID','Mobile','Email','Status','Assigned','Completed','Actions'],P.map(p=>{const e=s.by_emp.find(x=>x.id===p.id)||{};return[esc(p.full_name),esc(p.employee_code),esc(p.mobile),esc(p.email),bdg(p.is_active?'Active':'Inactive',p.is_active?'ok':'bad'),e.assigned,e.completed,`<button class="btn sm ${p.is_active?'d':'g'}" onclick="toggleEmp('${p.id}',${!p.is_active})">${p.is_active?'Deactivate':'Activate'}</button> <button class="btn s sm" onclick="empDetail('${p.id}')">Leads</button>`]}))}</div>`};
+function newEmp(){openM('m2','Create Employee Account',`<div class="fg" style="grid-template-columns:1fr"><div><label>Employee Name</label><input id="n-n"></div><div><label>Employee ID</label><input id="n-c"></div><div><label>Mobile</label><input id="n-m"></div><div><label>Email / Username (email format)</label><input id="n-e" type="email"></div><div><label>Password (min 8)</label><input id="n-p" type="password"></div></div><p style="margin-top:12px"><button class="btn" onclick="createEmp()">Create</button></p>`)}
+async function createEmp(){const{data,error}=await sb.functions.invoke('create-employee',{body:{full_name:$('n-n').value,employee_code:$('n-c').value,mobile:$('n-m').value,email:$('n-e').value,password:$('n-p').value}});
+ if(error||data?.error){let m=data?.error||error.message;try{const j=await error.context.json();m=(j.error||j.message||JSON.stringify(j))+' (HTTP '+error.context.status+')'}catch(x){}return toast(m,1)}closeM('m2');toast('Employee created');refresh()}
+async function toggleEmp(id,v){if(!confirm(v?'Activate this account?':'Deactivate? They will lose access immediately.'))return;await run(sb.from('profiles').update({is_active:v}).eq('id',id));refresh()}
+
+/* ====== PAYMENTS (admin) ====== */
+V.a_pay=async function(){const P=await all(()=>sb.from('payment_records').select('*,leads(id,profiles(full_name),beneficiaries!leads_beneficiary_id_fkey(application_id,applicant_name))').order('updated_at',{ascending:false}).order('id'));
+ const by={};P.filter(p=>p.status==='Received').forEach(p=>{const n=p.leads.profiles?.full_name||'—';by[n]=(by[n]||0)+Number(p.amount||0)});
+ $('view').innerHTML=`<div class="kpis">${Object.entries(by).map(([n,a])=>kpi(n+' (received)','₹'+a.toLocaleString('en-IN'),'ok')).join('')||''}</div><div class="box">${table(['Application','Applicant','Employee','Status','Amount','Date','Mode','Ref','Verified',''],P.map(p=>[esc(p.leads.beneficiaries.application_id),esc(p.leads.beneficiaries.applicant_name),esc(p.leads.profiles?.full_name),bdg(p.status,p.status==='Received'?'ok':p.status==='Failed'?'bad':'warn'),p.amount?'₹'+p.amount:'—',esc(p.paid_on),esc(p.mode),esc(p.reference),p.verified?bdg('Verified','ok'):bdg('No','warn'),`<button class="btn sm s" onclick="verifyPay('${p.leads.id}',${!p.verified})">${p.verified?'Un-verify':'Verify'}</button>`]))}</div>`};
+V.a_trf=async function(){const T=await all(()=>sb.from('transfer_history').select('*,pf:profiles!transfer_history_from_employee_fkey(full_name),pt:profiles!transfer_history_to_employee_fkey(full_name),pb:profiles!transfer_history_transferred_by_fkey(full_name)').order('transferred_at',{ascending:false}).order('id'));
+ $('view').innerHTML=`<div class="box">${table(['Application ID','Previous Employee','New Employee','Date & Time','Reason','Transferred By'],T.map(t=>[esc(t.application_id),esc(t.pf?.full_name),esc(t.pt?.full_name),fmt(t.transferred_at),esc(t.reason),esc(t.pb?.full_name)]),'No transfers yet.')}</div>`};
+V.a_aud=async function(){const A=await run(sb.from('audit_logs').select('*').order('at',{ascending:false}).limit(500));const P=Object.fromEntries((await run(sb.from('profiles').select('id,full_name'))).map(p=>[p.id,p.full_name]));
+ $('view').innerHTML=`<div class="box">${table(['When','Actor','Action','Entity','Details'],A.map(a=>[fmt(a.at),esc(P[a.actor]||a.actor),bdg(a.action),esc(a.entity),`<small>${esc(JSON.stringify(a.details))}</small>`]))}</div>`};
+
+/* ====== SETTINGS (document checklist) ====== */
+V.a_set=async function(){const s=await run(sb.from('settings').select('value').eq('key','doc_checklist').single());
+ $('view').innerHTML=`<div class="card"><h3>Document Checklist</h3><p style="font-size:13px;color:var(--mut);margin:6px 0">One item per line. Employees tick these per lead.</p><textarea id="s-c" rows="8" style="width:100%">${esc(s.value.join('\n'))}</textarea><p style="margin-top:8px"><button class="btn" onclick="saveSet()">Save</button></p></div>`};
+async function saveSet(){await run(sb.from('settings').upsert({key:'doc_checklist',value:$('s-c').value.split('\n').map(x=>x.trim()).filter(Boolean)}));toast('Saved')}
+
+/* ====== PAYMENT QR (UPI) ====== */
+const enc=encodeURIComponent;
+const upiUri=a=>`upi://pay?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'EPMS Odisha')}&am=${parseFloat(a)}&cu=INR&tn=${enc('MBPY service fee')}`;
+const payLink=a=>{const u=new URL(PAYCFG.pay_base||new URL('pay.html',location.href).href);u.search=`?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'EPMS Odisha')}&am=${parseFloat(a)}`;return u.href};
+let PQ={};
+async function payQR(id){
+ if(!PAYCFG.upi_id)return toast('UPI ID not set yet. Admin: Settings → Payment (UPI) Settings.',1);
+ const l=await run(leadsQ().eq('id',id).single());PQ={name:l.beneficiaries.applicant_name,mob:String(l.beneficiaries.mobile_no||'').replace(/\D/g,'').slice(-10)};
+ openM('m2','Send Payment QR',`<div class="fg" style="grid-template-columns:1fr"><div><label>Amount (₹) — change if needed</label><input type="number" id="q-a" value="${esc($('p-a')?.value||PAYCFG.default_amount||'')}" oninput="qrDraw()"></div></div><div id="q-box" style="display:flex;justify-content:center;margin:14px 0"></div><p style="margin-top:10px"><button class="btn g" onclick="qrLinkWA()">Send Payment Link on WhatsApp</button> <button class="btn s" onclick="qrWA()">Send QR Image</button> <button class="btn s" onclick="qrDl()">Download QR</button></p><p style="font-size:12px;color:var(--mut);margin-top:8px">Link: opens the applicant's WhatsApp chat with the payment link. QR Image: phone → pick WhatsApp chat; computer → image is copied, press Ctrl+V in chat.</p><p style="font-size:12px;color:var(--mut);margin-top:10px">After the applicant pays, set Payment Status = Received in the lead, add the transaction reference, and save.</p>`);qrDraw()}
+function qrDraw(){const a=parseFloat($('q-a').value),b=$('q-box');b.innerHTML='';if(!(a>0))return;new QRCode(b,{text:upiUri(a),width:210,height:210})}
+function qrImage(a){return new Promise(res=>{const src=$('q-box').querySelector('canvas'),W=420,H=480,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+ x.fillStyle='#fff';x.fillRect(0,0,W,H);x.textAlign='center';x.fillStyle='#0b2545';x.font='bold 22px sans-serif';x.fillText('EPMS Odisha — Service Payment',W/2,40);
+ x.fillStyle='#15803d';x.font='bold 44px sans-serif';x.fillText('₹ '+a,W/2,100);x.imageSmoothingEnabled=false;x.drawImage(src,60,120,300,300);
+ x.font='16px sans-serif';x.fillStyle='#475569';x.fillText('Scan with PhonePe / GPay / Paytm',W/2,458);c.toBlob(res,'image/png')})}
+const qrAmt=()=>{const a=parseFloat($('q-a').value);if(!(a>0)){toast('Enter a valid amount',1);return null}return a};
+async function qrWA(){const a=qrAmt();if(!a)return;const blob=await qrImage(a),file=new File([blob],'payment-qr.png',{type:'image/png'}),cap=`Namaste ${PQ.name}, MBPY service ka ₹${a} ka bhugtan is QR ko scan karke karein.`;
+ if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],text:cap});return}catch(e){if(e.name==='AbortError')return}}
+ if(PQ.mob.length<10)return toast('Applicant mobile number is missing/invalid',1);
+ let ok=false;try{await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);ok=true}catch(e){}
+ if(!ok){const l=document.createElement('a');l.href=URL.createObjectURL(blob);l.download='payment-qr.png';l.click()}
+ window.open(`https://wa.me/91${PQ.mob}?text=${enc(cap)}`,'_blank');
+ toast(ok?'QR copied. In the WhatsApp chat press Ctrl+V and Send.':'QR downloaded. Attach it in the WhatsApp chat and Send.')}
+function qrLinkWA(){const a=qrAmt();if(!a)return;if(PQ.mob.length<10)return toast('Applicant mobile number is missing/invalid',1);
+ window.open(`https://wa.me/91${PQ.mob}?text=${enc(`Namaste ${PQ.name}, MBPY service ka ₹${a} ka bhugtan karne ke liye is link ko kholein aur UPI app se pay karein: ${payLink(a)}`)}`,'_blank')}
+async function qrDl(){const a=qrAmt();if(!a)return;const l=document.createElement('a');l.href=URL.createObjectURL(await qrImage(a));l.download='payment-qr.png';l.click()}
+const _setOld=V.a_set;
+V.a_set=async function(){await _setOld();const c=(await run(sb.from('settings').select('value').eq('key','payment_config').maybeSingle()))?.value||{};
+ $('view').insertAdjacentHTML('beforeend',`<div class="card"><h3>Payment (UPI) Settings</h3><p style="font-size:13px;color:var(--mut);margin:6px 0 10px">Use the organisation's own UPI ID only. Employees send QR/links made from this.</p><div class="fg"><div><label>UPI ID (e.g. name@sbi)</label><input id="u-id" value="${esc(c.upi_id)}"></div><div><label>Payee name (shown to applicant)</label><input id="u-n" value="${esc(c.payee_name)}"></div><div><label>Default amount (₹)</label><input id="u-a" type="number" value="${esc(c.default_amount)}"></div><div style="grid-column:1/-1"><label>Payment page address (optional, e.g. https://pay.yourdomain.in) — leave blank to use this site</label><input id="u-b" value="${esc(c.pay_base)}"></div></div><p style="margin-top:10px"><button class="btn" onclick="savePayCfg()">Save Payment Settings</button></p></div>`)};
+async function savePayCfg(){const v={upi_id:$('u-id').value.trim(),payee_name:$('u-n').value.trim(),default_amount:$('u-a').value.trim(),pay_base:$('u-b').value.trim()};if(v.pay_base&&!/^https:\/\/[^\s]+$/.test(v.pay_base))return toast('Payment page address must start with https://',1);
+ if(!/^[\w.\-]{2,}@[\w.\-]{2,}$/.test(v.upi_id))return toast('Enter a valid UPI ID like name@bank',1);if(!v.payee_name)return toast('Enter payee name',1);
+ await run(sb.from('settings').upsert({key:'payment_config',value:v}));PAYCFG=v;toast('Payment settings saved')}
+
+/* ====== IMPORT / EXPORT / BACKUP (existing features, now writing to Supabase) ====== */
+const cleanKey=k=>String(k||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const RULES={apply_date:['applydate','applicationdate','appliedon','applieddate','dateofapplication','submissiondate','submitteddate','date'],district:['district','dist','districtname'],application_id:['applicationid','appid','id','applicantid'],application_number:['applicationnumber','applicationno','appno','ackno'],application_status:['applicationstatus','status','appstatus','currentstatus'],rejection_reason:['rejectionreason','rejectreason','remarks','reason'],pension_type:['pensiontype','pension','scheme','schemename'],photo:['photo','applicantphoto','image','picture','photourl','pic'],applicant_name:['applicantname','name','beneficiaryname','nameofapplicant'],father_spouse_name:['fatherspousename','fatherhusbandname','fatherorhusbandname','fatherorspousename','fathername','husbandname','spousename','guardianname','guardian','relationname','relativename','father','husband','spouse'],dob:['dob','dateofbirth','birthdate'],age:['age','years'],gender:['gender','sex'],aadhaar_number:['aadhaarnumber','aadhaar','aadhar','aadharno','uid'],mobile_no:['mobileno','mobile','phone','contactno','contact','cellno'],social_category:['socialcategory','caste','category'],sub_division:['subdivision','subdiv'],address_type:['addresstype'],block:['block','blockname','ulb','blockulb'],gp:['gp','grampanchayat','panchayat'],village:['village','villagename'],habitation:['habitation','ward'],pin:['pin','pincode','postalcode'],account_holder_name:['accountholdername','accountholder','holdername'],account_number:['accountnumber','accountno','bankaccno','accno'],ifsc_code:['ifsccode','ifsc'],branch_name:['branchname','branch']};
+function cleanPhoto(v){v=String(v||'').trim();if(!v)return'';const m=v.match(/src\s*=\s*["']([^"']+)["']/i);if(m)v=m[1];
+ if(!/^(https?:|data:)/i.test(v)&&(/^\.?\//.test(v)||/download|photo/i.test(v)))v='https://ssepd.odisha.gov.in'+(v.startsWith('./')?v.slice(1):v.startsWith('/')?v:'/'+v);return v}
+async function extractImages(buf){const map={},ord=[];try{const z=await JSZip.loadAsync(buf);const media=[];z.forEach((q,f)=>{if(q.startsWith('xl/media/')&&!f.dir)media.push(q)});
+ media.sort((a,b)=>parseInt(a.match(/\d+/)?.[0]||0)-parseInt(b.match(/\d+/)?.[0]||0));const mime=q=>q.toLowerCase().endsWith('png')?'image/png':'image/jpeg';
+ for(const q of media)ord.push(`data:${mime(q)};base64,`+await z.file(q).async('base64'));
+ const rf=z.file('xl/drawings/_rels/drawing1.xml.rels'),df=z.file('xl/drawings/drawing1.xml');
+ if(rf&&df){const P=new DOMParser(),rd=P.parseFromString(await rf.async('text'),'application/xml'),dd=P.parseFromString(await df.async('text'),'application/xml'),t={};
+  for(const r of rd.getElementsByTagName('Relationship')){let g=r.getAttribute('Target');g=g.startsWith('../')?'xl/'+g.slice(3):g.startsWith('xl/')?g:'xl/drawings/'+g;t[r.getAttribute('Id')]=g}
+  for(const a of[...dd.getElementsByTagName('xdr:twoCellAnchor'),...dd.getElementsByTagName('xdr:oneCellAnchor')]){const fr=a.getElementsByTagName('xdr:from')[0],bl=a.getElementsByTagName('a:blip')[0];if(!fr||!bl)continue;
+   const rw=parseInt(fr.getElementsByTagName('xdr:row')[0].textContent,10),tp=t[bl.getAttribute('r:embed')];if(tp&&z.file(tp))map[rw>0?rw-1:0]=`data:${mime(tp)};base64,`+await z.file(tp).async('base64')}}}catch(e){console.warn(e)}
+ return{map,ord}}
+function tableRows(html){const t=new DOMParser().parseFromString(html,'text/html').querySelector('table');if(!t)return null;const rs=[...t.querySelectorAll('tr')];if(rs.length<2)return null;
+ const h=[...rs[0].querySelectorAll('th,td')].map(c=>c.textContent.trim());
+ return rs.slice(1).map(r=>{const cs=[...r.querySelectorAll('td')];if(!cs.length)return null;const o={};h.forEach((k,i)=>{const c=cs[i];if(!c)return;const im=c.querySelector('img');o[k]=im?im.getAttribute('src'):c.textContent.trim()});return o}).filter(Boolean)}
+const FUZZ={aadhaar_number:/aadha?a?r|^\s*uid/i,social_category:/social|caste/i};
+const MON={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+function normDate(v){v=String(v||'').trim();if(!v)return'';let y,m,d,x;
+ if(x=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/)){y=+x[1];m=+x[2];d=+x[3]}
+ else if(x=v.match(/^(\d{1,2})[\/\-. ](\d{1,2})[\/\-. ](\d{2,4})/)){d=+x[1];m=+x[2];y=+x[3];if(y<100)y+=2000}
+ else if(x=v.match(/^(\d{1,2})[\-\/ ]([A-Za-z]{3})[a-z]*[\-\/ ,]*(\d{2,4})/)){d=+x[1];m=MON[x[2].toLowerCase()];y=+x[3];if(y<100)y+=2000}
+ else if(/^\d{5}$/.test(v)){const t=new Date(Math.round((+v-25569)*864e5));y=t.getUTCFullYear();m=t.getUTCMonth()+1;d=t.getUTCDate()}
+ else return'';
+ if(!m||m>12||!d||d>31||y<2000||y>2100)return'';return y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0')}
+function mapRow(raw,idx,img){const out={};for(const[c,m]of Object.entries(RULES)){out[c]='';for(const k of Object.keys(raw)){if(m.includes(cleanKey(k))){out[c]=raw[k]==null?'':String(raw[k]).trim();break}}}
+ if(!out.father_spouse_name)for(const k of Object.keys(raw)){if(/father|husband|spouse|guardian/i.test(k)){out.father_spouse_name=String(raw[k]??'').trim();break}}for(const[c,re]of Object.entries(FUZZ)){if(!out[c]){const k=Object.keys(raw).find(k=>re.test(k)&&String(raw[k]??'').trim());if(k)out[c]=String(raw[k]).trim()}}out.sub_division=out.sub_division.replace(/\s*address\s*type\s*$/i,'');out.apply_date=normDate(out.apply_date);out.photo=img?.map?.[idx]||img?.ord?.[idx]||cleanPhoto(out.photo);return out}
+V.a_imp=function(){$('view').innerHTML=`<div style="max-width:760px;margin:auto"><div class="card"><h3>Import Excel / CSV</h3><p style="font-size:13px;color:var(--mut);margin:6px 0 10px">Duplicates (same Application ID or Application Number) are skipped automatically. Rejected applications become leads automatically.</p><input type="file" id="f-x" accept=".xlsx,.xls,.csv,.tsv,.html,.htm" onchange="importFile(event)"><h4 style="margin:14px 0 6px;font-size:14px">Or paste a table copied from the portal (photos included):</h4><div id="paste" contenteditable="true" style="min-height:90px;max-height:200px;overflow:auto;border:2px solid var(--bd);border-radius:6px;padding:10px;background:#fff;font-size:13px"></div><p style="margin-top:8px"><button class="btn" onclick="pasteImport()">Import Pasted Table</button></p><p id="i-m" style="margin-top:10px;font-weight:600;font-size:13px"></p></div>
+ <div class="card"><h3>Export</h3><p style="margin:8px 0"><button class="btn" onclick="exportAll()">Export All Beneficiaries (CSV)</button></p></div>
+ <div class="card"><h3>JSON Backup & Restore</h3><p style="margin:8px 0"><button class="btn s" onclick="exportJSON()">Download JSON Backup</button> <button class="btn s" onclick="$('f-j').click()">Restore JSON</button><input type="file" id="f-j" accept=".json" style="display:none" onchange="importJSON(event)"></p><p style="font-size:12px;color:var(--mut)">Restore only adds missing records (duplicates skipped); it never overwrites or deletes.</p></div></div>`};
+async function pushRows(rows,img){const m=$('i-m');let ins=0,dup=0,upd=0;const R=rows.map((r,i)=>mapRow(r,i,img)).filter(r=>r.application_id||r.application_number).map(r=>(r.application_id||(r.application_id=r.application_number),r));const skip=rows.length-R.length;
+ const un=rows[0]?Object.keys(rows[0]).filter(k=>!Object.values(RULES).some(a=>a.includes(cleanKey(k)))&&!Object.values(FUZZ).some(re=>re.test(k))):[];
+ const B=R.some(r=>(r.photo||'').startsWith('data:'))?20:200;
+ for(let i=0;i<R.length;i+=B){m.textContent=`Importing ${Math.min(i+B,R.length)} / ${R.length}…`;const c=R.slice(i,i+B);const r=await run(sb.rpc('rpc_import_beneficiaries',{p_rows:c}));ins+=r.inserted;dup+=r.duplicates_skipped;await run(sb.rpc('rpc_fill_missing',{p_rows:c}));upd+=(await run(sb.rpc('rpc_update_status',{p_rows:c.map(r=>({application_id:r.application_id,application_status:r.application_status,rejection_reason:r.rejection_reason}))})))||0}
+ m.textContent='Checking re-applied applicants…';const rc=await run(sb.rpc('rpc_detect_reapplied'))||0;const co=await run(sb.rpc('rpc_carry_over_assignment'))||0;const nd=R.filter(r=>!r.apply_date).length;
+ m.innerHTML=`<span style="color:var(--ok)">Done: ${ins} new records, ${dup} already existed (their blank fields/photos were filled), ${skip} rows without ID ignored. Photos found: ${R.filter(r=>r.photo).length}. ${upd} existing record(s) got a new status. ${rc} old lead(s) moved to Duplicates / closed. ${co} new lead(s) handed to the same employee.</span>`+(nd?`<br><span style="color:var(--warn)">${nd} row(s) have no readable Apply Date — re-apply detection will use import order for them.</span>`:'')+(un.length?`<br><span style="color:var(--warn)">Columns not recognised (ignored): ${esc(un.join(', '))}</span>`:'')}
+async function importFile(e){const f=e.target.files[0];if(!f)return;$('i-m').textContent='Reading…';const ext=f.name.split('.').pop().toLowerCase();
+ if(ext==='html'||ext==='htm'){const r=tableRows(await f.text());return r?pushRows(r,null):toast('No table found in file',1)}
+ const buf=await f.arrayBuffer();const img=ext==='xlsx'?await extractImages(buf):null;const wb=XLSX.read(buf,{type:'array',raw:false});
+ await pushRows(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{raw:false,defval:''}),img)}
+async function pasteImport(){const r=tableRows($('paste').innerHTML);if(!r)return toast('No table found. Copy the table from the portal and paste it in the box.',1);await pushRows(r,null);$('paste').innerHTML=''}
+async function fetchFull(){return(await all(()=>sb.from('beneficiaries').select('*,beneficiary_sensitive(*)').order('application_id'))).map(r=>({...r,...(r.beneficiary_sensitive||{})}))}
+async function exportAll(){dl('mbpy_all_beneficiaries.csv',csv(await fetchFull(),FIELDS),'text/csv')}
+async function exportJSON(){dl(`MBPY_BACKUP_${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(await fetchFull(),null,1),'application/json')}
+function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{try{const a=JSON.parse(ev.target.result);if(!Array.isArray(a))throw 0;await pushRows(a)}catch(x){toast('Invalid backup JSON',1)}};r.readAsText(f)}
+
+boot();
+</script></body></html>
