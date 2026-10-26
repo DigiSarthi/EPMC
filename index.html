@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SSEPD MBPY CRM</title>
+<title>EPMS Odisha — Eastern Pension Mitra Services</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -43,15 +43,32 @@ td{padding:8px 11px;border-bottom:1px solid #edf2f7}tr:hover td{background:#f8fa
 .dc{background:#fff;padding:8px 11px;border-radius:4px;border:1px solid var(--bd)}.dc label{display:block;font-size:11px;color:var(--mut);font-weight:600}.dc div{font-size:13px;font-weight:600;word-break:break-word}
 .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}.fg label{font-size:12px;font-weight:600;color:var(--mut);display:block;margin-bottom:3px}.fg input,.fg select,.fg textarea{width:100%}
 .steps{display:flex;gap:6px;flex-wrap:wrap}.step{flex:1;min-width:120px;padding:8px;border-radius:6px;background:#e2e8f0;font-size:12px;text-align:center}.step.done{background:var(--okbg);color:var(--ok)}.step.cur{background:var(--blue);color:#fff}.step small{display:block;font-size:10px;opacity:.85}
-#login{margin:auto;background:#fff;padding:32px;border-radius:10px;width:92%;max-width:380px;box-shadow:0 10px 30px rgba(0,0,0,.15)}#login h2{color:var(--navy);margin-bottom:4px}#login input{width:100%;margin:6px 0}
+#login{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;background:radial-gradient(circle at 15% 10%,#1d4f91 0,transparent 45%),radial-gradient(circle at 90% 90%,#0e7490 0,transparent 40%),linear-gradient(135deg,#0b2545,#133a68)}
+.lg{background:#fff;border-radius:16px;width:100%;max-width:400px;padding:34px 30px 24px;box-shadow:0 20px 50px rgba(0,0,0,.35);text-align:center}
+.lg-logo{width:64px;height:64px;border-radius:18px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;letter-spacing:1px;background:linear-gradient(135deg,#2563eb,#0ea5e9);box-shadow:0 8px 20px rgba(37,99,235,.4)}
+.lg h2{color:var(--navy);font-size:24px;letter-spacing:.5px}.lg .sub{color:var(--mut);font-size:13px;margin:4px 0 22px}
+.lg label{display:block;text-align:left;font-size:12px;font-weight:600;color:var(--mut);margin:12px 0 4px}
+.lg input{width:100%;padding:12px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:15px;outline:none;transition:.15s}.lg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.pwr{position:relative}.pwr input{padding-right:64px}.pwr button{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--blue);font-size:12px;font-weight:700;cursor:pointer;padding:6px}
+.lg .go{width:100%;margin-top:20px;padding:13px;font-size:15px;border-radius:10px;font-weight:700;letter-spacing:.3px}
+.lg .note{margin-top:20px;padding:10px 12px;background:#f1f5f9;border-radius:8px;font-size:11.5px;color:var(--mut);line-height:1.5}
+.lg .ft{margin-top:12px;font-size:11px;color:#94a3b8}
 #toast{position:fixed;bottom:20px;right:20px;padding:12px 18px;border-radius:6px;color:#fff;background:var(--ok);display:none;z-index:2000;max-width:80vw}
 .card{background:#fff;border:1px solid var(--bd);border-radius:8px;padding:14px;margin-bottom:14px}
 @media(max-width:800px){aside{position:fixed;inset:0 auto 0 0;z-index:50;transform:translateX(-100%)}aside.open{transform:none}#menu{display:inline-block}#view{padding:12px}}
 </style></head><body>
-<div id="login"><h2>SSEPD ODISHA</h2><p style="color:var(--mut);font-size:13px;margin-bottom:12px">MBPY Beneficiary CRM — sign in</p>
-<input id="em" type="email" placeholder="Email / Username"><input id="pw" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')login()">
-<button class="btn" style="width:100%;margin-top:8px" onclick="login()">Sign In</button><p id="lerr" style="color:var(--bad);font-size:13px;margin-top:10px"></p></div>
-<aside id="side" style="display:none"><div class="brand"><h2>SSEPD ODISHA</h2><span id="who"></span></div><nav id="nav"></nav>
+<div id="login"><div class="lg">
+<div class="lg-logo">EP</div>
+<h2>EPMS ODISHA</h2>
+<p class="sub"><b>Eastern Pension Mitra Services</b><br>Beneficiary CRM — Staff Sign In</p>
+<label for="em">Email / Username</label><input id="em" type="email" placeholder="you@example.com" autocomplete="username">
+<label for="pw">Password</label><div class="pwr"><input id="pw" type="password" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"><button type="button" onclick="const p=$('pw');p.type=p.type==='password'?'text':'password';this.textContent=p.type==='password'?'SHOW':'HIDE'">SHOW</button></div>
+<button class="btn go" onclick="login()">Sign In</button>
+<p id="lerr" style="color:var(--bad);font-size:13px;margin-top:12px;min-height:16px"></p>
+<div class="note">EPMS Odisha is a <b>private service provider</b>. This is not a government website.</div>
+<div class="ft">© EPMS Odisha · Authorised staff only</div>
+</div></div>
+<aside id="side" style="display:none"><div class="brand"><h2>EPMS ODISHA</h2><span id="who"></span></div><nav id="nav"></nav>
 <div style="padding:14px;border-top:1px solid rgba(255,255,255,.1)"><button class="btn s" style="width:100%" onclick="sb.auth.signOut().then(()=>location.reload())">Sign Out</button></div></aside>
 <main id="mainw" style="display:none"><header><div><button class="btn s" id="menu" onclick="$('side').classList.toggle('open')">☰</button> <h1 id="ttl" style="display:inline"></h1></div><div id="hact"></div></header><div id="view"></div></main>
 <div class="mb" id="m1"><div class="mc"><div class="mh"><h3 id="m1t"></h3><button onclick="closeM('m1')">✕</button></div><div class="mbd" id="m1b"></div></div></div>
@@ -267,8 +284,8 @@ async function saveSet(){await run(sb.from('settings').upsert({key:'doc_checklis
 
 /* ====== PAYMENT QR (UPI) ====== */
 const enc=encodeURIComponent;
-const upiUri=a=>`upi://pay?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'SSEPD MBPY')}&am=${parseFloat(a)}&cu=INR&tn=${enc('MBPY service fee')}`;
-const payLink=a=>{const u=new URL(PAYCFG.pay_base||new URL('pay.html',location.href).href);u.search=`?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'SSEPD MBPY')}&am=${parseFloat(a)}`;return u.href};
+const upiUri=a=>`upi://pay?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'EPMS Odisha')}&am=${parseFloat(a)}&cu=INR&tn=${enc('MBPY service fee')}`;
+const payLink=a=>{const u=new URL(PAYCFG.pay_base||new URL('pay.html',location.href).href);u.search=`?pa=${enc(PAYCFG.upi_id)}&pn=${enc(PAYCFG.payee_name||'EPMS Odisha')}&am=${parseFloat(a)}`;return u.href};
 let PQ={};
 async function payQR(id){
  if(!PAYCFG.upi_id)return toast('UPI ID not set yet. Admin: Settings → Payment (UPI) Settings.',1);
@@ -276,7 +293,7 @@ async function payQR(id){
  openM('m2','Send Payment QR',`<div class="fg" style="grid-template-columns:1fr"><div><label>Amount (₹) — change if needed</label><input type="number" id="q-a" value="${esc($('p-a')?.value||PAYCFG.default_amount||'')}" oninput="qrDraw()"></div></div><div id="q-box" style="display:flex;justify-content:center;margin:14px 0"></div><p style="margin-top:10px"><button class="btn g" onclick="qrLinkWA()">Send Payment Link on WhatsApp</button> <button class="btn s" onclick="qrWA()">Send QR Image</button> <button class="btn s" onclick="qrDl()">Download QR</button></p><p style="font-size:12px;color:var(--mut);margin-top:8px">Link: opens the applicant's WhatsApp chat with the payment link. QR Image: phone → pick WhatsApp chat; computer → image is copied, press Ctrl+V in chat.</p><p style="font-size:12px;color:var(--mut);margin-top:10px">After the applicant pays, set Payment Status = Received in the lead, add the transaction reference, and save.</p>`);qrDraw()}
 function qrDraw(){const a=parseFloat($('q-a').value),b=$('q-box');b.innerHTML='';if(!(a>0))return;new QRCode(b,{text:upiUri(a),width:210,height:210})}
 function qrImage(a){return new Promise(res=>{const src=$('q-box').querySelector('canvas'),W=420,H=480,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
- x.fillStyle='#fff';x.fillRect(0,0,W,H);x.textAlign='center';x.fillStyle='#0b2545';x.font='bold 22px sans-serif';x.fillText('SSEPD MBPY Service Payment',W/2,40);
+ x.fillStyle='#fff';x.fillRect(0,0,W,H);x.textAlign='center';x.fillStyle='#0b2545';x.font='bold 22px sans-serif';x.fillText('EPMS Odisha — Service Payment',W/2,40);
  x.fillStyle='#15803d';x.font='bold 44px sans-serif';x.fillText('₹ '+a,W/2,100);x.imageSmoothingEnabled=false;x.drawImage(src,60,120,300,300);
  x.font='16px sans-serif';x.fillStyle='#475569';x.fillText('Scan with PhonePe / GPay / Paytm',W/2,458);c.toBlob(res,'image/png')})}
 const qrAmt=()=>{const a=parseFloat($('q-a').value);if(!(a>0)){toast('Enter a valid amount',1);return null}return a};
