@@ -1,27 +1,55 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Payment</title>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EPMS Odisha — Payment</title>
+<link rel="icon" type="image/png" href="/favicon-64.png"><meta name="robots" content="noindex,nofollow">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
 *{box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif;margin:0}
 body{background:#f0f4f8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
-.c{background:#fff;border-radius:12px;padding:24px;max-width:380px;width:100%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.12)}
-h2{color:#0b2545;font-size:18px}p{color:#64748b;font-size:13px;margin-top:6px}
-.amt{font-size:34px;font-weight:700;color:#15803d;margin:14px 0 2px}.to{font-size:15px;font-weight:600}
-.btn{display:block;background:#15803d;color:#fff;text-decoration:none;padding:14px;border-radius:8px;font-weight:700;margin:16px 0 10px}
-#qr{display:flex;justify-content:center;margin:12px 0}.err{color:#b91c1c;font-weight:600}
-</style></head><body><div class="c"><h2>SSEPD MBPY Service Payment</h2><div id="out"></div></div>
+.c{background:#fff;border-radius:14px;padding:24px;max-width:400px;width:100%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.logo{width:100%;max-width:240px;height:auto;display:block;margin:0 auto 6px}
+p{color:#64748b;font-size:13px;margin-top:6px}.hi{font-size:15px;color:#0f172a;margin-top:14px}
+.amt{font-size:36px;font-weight:700;color:#15803d;margin:10px 0 2px}.to{font-size:15px;font-weight:600}
+.btn{display:block;width:100%;border:0;cursor:pointer;background:#15803d;color:#fff;text-decoration:none;padding:15px;border-radius:10px;font-weight:700;font-size:16px;margin:16px 0 8px}
+.btn:disabled{opacity:.6;cursor:wait}.err{color:#b91c1c;font-weight:600;font-size:14px;margin-top:12px}.ok{color:#15803d;font-weight:700;font-size:18px}
+#qr{display:flex;justify-content:center;margin:12px 0}.sm{font-size:12px;color:#94a3b8;margin-top:14px}
+</style></head><body><div class="c"><img class="logo" src="/logo.png" alt="EPMS Odisha — Eastern Pension Mitra Services"><div id="out"><p>Loading…</p></div></div>
 <script>
-const q=new URLSearchParams(location.search),pa=q.get('pa')||'',pn=q.get('pn')||'',am=q.get('am')||'',tn=q.get('tn')||'MBPY service fee';
-const out=document.getElementById('out');
-if(!/^[\w.\-]{2,}@[\w.\-]{2,}$/.test(pa)||!(parseFloat(am)>0)){out.innerHTML='<p class="err">Invalid payment link. Please ask for a new link.</p>'}
-else{
- const uri='upi://pay?pa='+encodeURIComponent(pa)+'&pn='+encodeURIComponent(pn)+'&am='+encodeURIComponent(parseFloat(am))+'&cu=INR&tn='+encodeURIComponent(tn);
- const a=document.createElement('div');a.className='amt';a.textContent='₹ '+parseFloat(am);
- const t=document.createElement('div');t.className='to';t.textContent='Pay to: '+pn;
- const u=document.createElement('p');u.textContent='UPI ID: '+pa;
- const b=document.createElement('a');b.className='btn';b.href=uri;b.textContent='Pay with UPI app (PhonePe / GPay / Paytm)';
- const qr=document.createElement('div');qr.id='qr';
- const n=document.createElement('p');n.textContent='On another phone? Scan this QR with any UPI app. Please confirm the name above before paying, and send the payment screenshot to your executive.';
- out.append(a,t,u,b,qr,n);new QRCode(qr,{text:uri,width:200,height:200});
+const SUPA='https://mhxjeqjhsljcwqgbjdkp.supabase.co/functions/v1',ANON='sb_publishable_0eYXblqghfQ9mCvi7Kd6lA_1UofbQJE';
+const Q=new URLSearchParams(location.search),out=document.getElementById('out');
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const call=async(fn,body)=>{const r=await fetch(SUPA+'/'+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:ANON},body:JSON.stringify(body)});let j={};try{j=await r.json()}catch(e){}if(!r.ok)throw new Error(j.error||'Something went wrong. Please try again.');return j};
+const show=(...n)=>{out.replaceChildren(...n)};
+const fail=m=>show(el('p','err',m));
+
+if(Q.get('t')){ /* ===== Razorpay (secure link) ===== */
+ const token=Q.get('t');let order=null,paid=false;
+ const start=async()=>{
+  try{order=await call('create-order',{token})}catch(e){return fail(e.message)}
+  const btn=el('button','btn','Pay ₹'+(order.amount/100)+' securely');
+  const msg=el('p','err','');
+  btn.onclick=()=>{
+   msg.textContent='';
+   const rz=new Razorpay({key:order.key_id,amount:order.amount,currency:order.currency,order_id:order.order_id,name:'EPMS Odisha',description:order.description,
+    prefill:{name:order.name||''},theme:{color:'#15803d'},
+    handler:async r=>{btn.disabled=true;btn.textContent='Confirming payment…';
+     try{const v=await call('verify-payment',{token,razorpay_order_id:r.razorpay_order_id,razorpay_payment_id:r.razorpay_payment_id,razorpay_signature:r.razorpay_signature});paid=true;
+      show(el('div','ok','✔ Payment successful'),el('p','','Thank you'+(order.name?', '+order.name:'')+'. We have received ₹'+(order.amount/100)+'.'),el('p','','Payment ID: '+v.payment_id),el('p','sm','Please keep this for your records. Our executive will contact you about the next step.'))}
+     catch(e){btn.disabled=false;btn.textContent='Pay ₹'+(order.amount/100)+' securely';msg.textContent=e.message}},
+    modal:{ondismiss:()=>{if(!paid)msg.textContent='Payment cancelled. You can try again.'}}});
+   rz.on('payment.failed',r=>{msg.textContent='Payment failed: '+((r.error&&r.error.description)||'please try again')});
+   rz.open()};
+  show(el('p','hi','Hello'+(order.name?', '+order.name:'')+','),el('p','','Service fee for your MBPY application support'),el('div','amt','₹ '+(order.amount/100)),el('div','to','Pay to: EPMS Odisha'),btn,msg,el('p','sm','Secure payment by Razorpay · UPI, Cards, Net Banking · EPMS Odisha is a private service provider, not a government website.'));
+ };
+ start();
+}else{ /* ===== legacy UPI link (old links keep working) ===== */
+ const pa=Q.get('pa')||'',pn=Q.get('pn')||'',am=Q.get('am')||'',tn=Q.get('tn')||'MBPY service fee';
+ if(!/^[\w.\-]{2,}@[\w.\-]{2,}$/.test(pa)||!(parseFloat(am)>0)){fail('Invalid payment link. Please ask for a new link.')}
+ else{
+  const uri='upi://pay?pa='+encodeURIComponent(pa)+'&pn='+encodeURIComponent(pn)+'&am='+encodeURIComponent(parseFloat(am))+'&cu=INR&tn='+encodeURIComponent(tn);
+  const b=el('a','btn','Pay with UPI app (PhonePe / GPay / Paytm)');b.href=uri;const qr=el('div');qr.id='qr';
+  show(el('div','amt','₹ '+parseFloat(am)),el('div','to','Pay to: '+pn),el('p','','UPI ID: '+pa),b,qr,el('p','','On another phone? Scan this QR with any UPI app. EPMS Odisha is a private service provider, not a government website. Please confirm the name above before paying, and send the payment screenshot to your executive.'));
+  new QRCode(qr,{text:uri,width:200,height:200});
+ }
 }
 </script></body></html>
