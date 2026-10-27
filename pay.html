@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EPMS Odisha — Payment</title>
 <link rel="icon" type="image/png" href="/favicon-64.png"><meta name="robots" content="noindex,nofollow">
+<meta property="og:title" content="Secure payment — EPMS Odisha"><meta property="og:description" content="Pay your MBPY service fee securely by UPI, card or net banking."><meta property="og:image" content="https://epmsodisha.in/logo.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
@@ -26,6 +27,7 @@ if(Q.get('t')){ /* ===== Razorpay (secure link) ===== */
  const token=Q.get('t');let order=null,paid=false;
  const start=async()=>{
   try{order=await call('create-order',{token})}catch(e){return fail(e.message)}
+  if(!order||!(Number(order.amount)>=100)||!order.order_id||!order.key_id)return fail('Could not load the payment details. Please ask for a new payment link.');
   const btn=el('button','btn','Pay ₹'+(order.amount/100)+' securely');
   const msg=el('p','err','');
   btn.onclick=()=>{
