@@ -34,10 +34,13 @@ if(Q.get('t')){ /* ===== Razorpay (secure link) ===== */
    msg.textContent='';
    const rz=new Razorpay({key:order.key_id,amount:order.amount,currency:order.currency,order_id:order.order_id,name:'EPMS Odisha',description:order.description,
     prefill:{name:order.name||''},theme:{color:'#15803d'},
-    handler:async r=>{btn.disabled=true;btn.textContent='Confirming payment…';
-     try{const v=await call('verify-payment',{token,razorpay_order_id:r.razorpay_order_id,razorpay_payment_id:r.razorpay_payment_id,razorpay_signature:r.razorpay_signature});paid=true;
-      show(el('div','ok','✔ Payment successful'),el('p','','Thank you'+(order.name?', '+order.name:'')+'. We have received ₹'+(order.amount/100)+'.'),el('p','','Payment ID: '+v.payment_id),el('p','sm','Please keep this for your records. Our executive will contact you about the next step.'))}
-     catch(e){btn.disabled=false;btn.textContent='Pay ₹'+(order.amount/100)+' securely';msg.textContent=e.message}},
+    handler:async r=>{
+     const confirm=async()=>{btn.disabled=true;btn.textContent='Confirming payment…';msg.textContent='';
+      try{const v=await call('verify-payment',{token,razorpay_order_id:r.razorpay_order_id,razorpay_payment_id:r.razorpay_payment_id,razorpay_signature:r.razorpay_signature});paid=true;
+       show(el('div','ok','✔ Payment successful'),el('p','','Thank you'+(order.name?', '+order.name:'')+'. We have received ₹'+(order.amount/100)+'.'),el('p','','Payment ID: '+v.payment_id),el('p','sm','Please keep this for your records. Our executive will contact you about the next step.'))}
+      catch(e){paid=true;btn.disabled=false;btn.textContent='Retry confirmation';btn.onclick=confirm;
+       msg.textContent='Your payment of ₹'+(order.amount/100)+' was received by the bank, but we could not confirm it on our side yet. Please do NOT pay again. Tap “Retry confirmation”, or share this Payment ID with our executive: '+r.razorpay_payment_id}};
+     confirm()},
     modal:{ondismiss:()=>{if(!paid)msg.textContent='Payment cancelled. You can try again.'}}});
    rz.on('payment.failed',r=>{msg.textContent='Payment failed: '+((r.error&&r.error.description)||'please try again')});
    rz.open()};
