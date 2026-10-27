@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EPMS Odisha — Pay by QR</title>
+<link rel="icon" type="image/png" href="/favicon-64.png"><meta name="robots" content="noindex,nofollow">
+<meta property="og:title" content="Pay by QR — EPMS Odisha"><meta property="og:description" content="Scan this QR with any UPI app to pay EPMS Odisha."><meta property="og:image" content="https://epmsodisha.in/qr.jpg">
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif;margin:0}
+body{background:#f0f4f8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.c{background:#fff;border-radius:14px;padding:22px;max-width:400px;width:100%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.logo{width:100%;max-width:220px;height:auto;display:block;margin:0 auto 8px}
+.amt{font-size:34px;font-weight:700;color:#15803d;margin:8px 0 0}.to{font-size:14px;font-weight:600;color:#0f172a}
+.q{width:100%;max-width:300px;height:auto;border-radius:12px;margin:14px auto;display:block;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.a{display:inline-block;background:#15803d;color:#fff;text-decoration:none;padding:12px 20px;border-radius:10px;font-weight:700;font-size:14px;margin:4px 0}
+.n{background:#f1f5f9;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#475569;text-align:left;line-height:1.55;margin-top:14px}.n b{color:#0f172a}
+p.sm{font-size:11.5px;color:#94a3b8;margin-top:12px}
+</style></head><body><div class="c">
+<img class="logo" src="/logo.png" alt="EPMS Odisha — Eastern Pension Mitra Services">
+<div id="amt"></div>
+<div class="to">Pay to: EPMS Odisha Pvt Ltd</div>
+<img class="q" src="/qr.jpg" alt="UPI QR code for EPMS Odisha Pvt Ltd">
+<a class="a" href="/qr.jpg" download="EPMS-Odisha-QR.jpg">⬇ Save QR image</a>
+<div class="n"><b>How to pay</b><br>
+1. Open GPay / PhonePe / Paytm and tap <b>Scan QR</b>.<br>
+2. <b>Enter the amount</b> shown above and pay.<br>
+3. Confirm the name <b>EPMS Odisha Pvt Ltd</b> before you pay.<br>
+4. Send the <b>payment screenshot</b> to your executive.<br><br>
+<b>Using the same phone?</b> Tap “Save QR image”, then in your UPI app choose <b>Scan QR → Upload from gallery</b>.</div>
+<p class="sm">EPMS Odisha is a private service provider, not a government website.</p>
+</div>
+<script>
+const a=parseFloat(new URLSearchParams(location.search).get('am'));
+if(a>=1&&a<=100000){const d=document.getElementById('amt');const s=document.createElement('p');s.style.cssText='font-size:13px;color:#64748b;margin-top:6px';s.textContent='Service fee for your MBPY application support';const v=document.createElement('div');v.className='amt';v.textContent='₹ '+a;d.append(s,v)}
+</script></body></html>
