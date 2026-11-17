@@ -1,470 +1,783 @@
 <!DOCTYPE html>
-<html lang="hi-Latn">
+<html lang="hi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0c0b14">
-<title>For Ruchi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,500&family=Jost:wght@300;400&display=swap" rel="stylesheet">
-<style>
-/* ============ DESIGN TOKENS ============ */
-:root{
-  --ink:#0c0b14; --deep:#171322; --gold:#e6c58e; --rose:#c98a94; --paper:#efe6d8; --dim:#8f879a;
-  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
-  --sans:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:var(--ink);color:var(--paper);overflow:hidden}
-body{font-family:var(--serif);font-size:clamp(1.2rem,4.6vw,1.55rem);line-height:1.6}
-body::before{content:"";position:fixed;inset:0;background:
-  radial-gradient(120% 60% at 50% 110%,rgba(201,138,148,.22),transparent 60%),
-  radial-gradient(80% 50% at 50% -10%,rgba(230,197,142,.07),transparent 70%);pointer-events:none}
-#bg{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#F4F0EB">
+    <title>10 Reasons, One Love — For Ruchi</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&family=Great+Vibes&display=swap');
 
-/* ============ SCENES ============ */
-.scene{position:fixed;inset:0;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity 1.2s ease,visibility 0s 1.2s;
-  padding:max(28px,env(safe-area-inset-top)) 26px max(60px,env(safe-area-inset-bottom));display:flex}
-.scene.on{opacity:1;visibility:visible;transition:opacity 1.4s ease .3s}
-.wrap{margin:auto;width:100%;max-width:34rem;text-align:left}
-.center{text-align:center;display:flex;flex-direction:column;align-items:center}
-.note{font-family:var(--sans);font-weight:300;font-size:.78rem;letter-spacing:.06em;color:var(--dim)}
-h1,h2{font-weight:400;font-style:italic;line-height:1.2}
-h1{font-size:clamp(2.4rem,11vw,3.8rem)}
-h2{font-size:clamp(1.9rem,8vw,2.8rem)}
+        :root {
+            /* Premium Studio Palette */
+            --paper: #F4F0EB;
+            --paper-dark: #E6DFD3;
+            --ink: #1C1C1A;
+            --ink-light: #3A3532;
+            --wine: #6B2737;
+            --olive: #606C38;
+            --accent: #D4A373;
+            --white: #FFFFFF;
+            
+            /* Shadows & Effects */
+            --shadow-subtle: 0 10px 30px rgba(28, 28, 26, 0.05);
+            --shadow-float: 0 20px 40px rgba(28, 28, 26, 0.08);
+            --shadow-dark: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
 
-/* typed letter */
-.letter p{margin-bottom:1.15em;white-space:pre-wrap}
-.letter p:first-child{color:var(--gold);font-size:1.15em}
-.caret{display:inline-block;width:2px;height:1em;background:var(--gold);margin-left:2px;vertical-align:-.12em;animation:blink 1s steps(1) infinite}
-@keyframes blink{50%{opacity:0}}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-.next{margin-top:1.4rem;font:inherit;font-style:italic;color:var(--gold);background:none;border:0;border-bottom:1px solid rgba(230,197,142,.4);
-  padding:.2rem 0;cursor:pointer;opacity:0;transform:translateY(6px);transition:opacity 1.2s,transform 1.2s;pointer-events:none}
-.next.show{opacity:1;transform:none;pointer-events:auto}
-button:focus-visible{outline:2px solid var(--gold);outline-offset:6px}
+        body {
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
 
-/* ============ GATE: hold to light ============ */
-#hold{position:relative;width:132px;height:132px;margin:2.6rem 0 1.2rem;background:none;border:0;cursor:pointer;touch-action:none;color:var(--gold)}
-#hold svg{position:absolute;inset:0;transform:rotate(-90deg)}
-#hold .track{stroke:rgba(230,197,142,.18)}
-#hold .bar{stroke:var(--gold);stroke-linecap:round;stroke-dasharray:339.3;stroke-dashoffset:339.3}
-#hold .flame{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px;border-radius:50%;background:var(--gold);
-  box-shadow:0 0 18px 6px rgba(230,197,142,.55),0 0 60px 16px rgba(201,138,148,.25);animation:beat 2.6s ease-in-out infinite}
-@keyframes beat{0%,100%{transform:scale(.8)}12%{transform:scale(1.25)}24%{transform:scale(.9)}36%{transform:scale(1.1)}}
+        /* Handcrafted Paper Texture Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+            mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
 
-/* ============ SKY ============ */
-#field{position:relative;width:100%;height:min(52vh,420px);margin:1.4rem 0}
-#lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-#lines polyline{fill:none;stroke:rgba(230,197,142,.5);stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 4s ease}
-#lines.draw polyline{stroke-dashoffset:0}
-.star{position:absolute;width:44px;height:44px;margin:-22px;background:none;border:0;cursor:pointer}
-.star::before{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;margin:-4.5px;border-radius:50%;background:var(--paper);
-  box-shadow:0 0 12px 3px rgba(239,230,216,.5);animation:tw 3s ease-in-out infinite;animation-delay:var(--d)}
-.star.found::before{background:var(--gold);width:13px;height:13px;margin:-6.5px;box-shadow:0 0 22px 8px rgba(230,197,142,.6);animation:none}
-@keyframes tw{50%{opacity:.35;transform:scale(.7)}}
-#memo{min-height:11em;text-align:center;transition:opacity .6s}
-#memo b{display:block;font-weight:400;font-style:italic;color:var(--gold);font-size:1.4em}
+        /* Typography Helpers */
+        .serif { font-family: 'Cormorant Garamond', serif; }
+        .script { font-family: 'Great Vibes', cursive; }
+        .sans { font-family: 'DM Sans', sans-serif; }
+        
+        .eyebrow {
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            font-weight: 500;
+            color: var(--olive);
+        }
 
-/* ============ MIND NOISE ============ */
-#noise{position:relative;width:100%;height:44vh;max-height:360px;margin:1rem 0;transition:height 1.6s,margin 1.6s,opacity 1s}
-#noise.out{height:0;margin:0;opacity:0;overflow:hidden}
-.th{position:absolute;font:italic 1em var(--serif);color:var(--dim);background:none;border:0;cursor:pointer;padding:8px;
-  animation:drift var(--t) ease-in-out infinite alternate;transition:opacity 1.2s,filter 1.2s}
-.th.gone{opacity:0;filter:blur(8px);pointer-events:none}
-@keyframes drift{from{transform:translate(-12px,4px)}to{transform:translate(14px,-16px)}}
+        /* Top Progress Bar */
+        .progress-bar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--wine);
+            transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
 
-/* ============ PROMISES ============ */
-.seal{display:block;width:100%;text-align:left;font:inherit;color:inherit;background:rgba(239,230,216,.04);border:1px solid rgba(230,197,142,.22);
-  border-radius:3px;padding:1.1rem 1.2rem;margin-bottom:.9rem;cursor:pointer;position:relative;transition:background .8s,border-color .8s}
-.seal span{display:block;filter:blur(7px);opacity:.5;transition:filter 1.2s,opacity 1.2s}
-.seal::after{content:"touch to open";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font:300 .78rem var(--sans);letter-spacing:.08em;color:var(--gold);transition:opacity .6s}
-.seal.open{background:rgba(201,138,148,.09);border-color:rgba(201,138,148,.45);cursor:default}
-.seal.open span{filter:none;opacity:1}.seal.open::after{opacity:0}
+        /* Core Sections */
+        .section {
+            min-height: 100svh;
+            display: none;
+            place-items: center;
+            padding: 2rem 1.5rem;
+            position: relative;
+        }
+        .section.active {
+            display: grid;
+            animation: cinematicFadeIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
 
-/* ============ ASK ============ */
-.btns{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:2.2rem;min-height:3.4rem}
-.btn{font:inherit;font-style:italic;font-size:1.05em;padding:.7rem 1.6rem;border-radius:999px;cursor:pointer;border:1px solid rgba(230,197,142,.5);background:none;color:var(--gold);transition:transform .3s,background .3s}
-.btn.yes{background:var(--gold);color:var(--ink);border-color:var(--gold);box-shadow:0 0 34px rgba(230,197,142,.3)}
-.btn.yes:hover{transform:scale(1.06)}
-#nope{touch-action:none}
-#nope.fly{position:fixed;z-index:9;transition:left .35s cubic-bezier(.2,.9,.3,1),top .35s cubic-bezier(.2,.9,.3,1)}
+        @keyframes cinematicFadeIn {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
 
-/* ============ FINALE ============ */
-.sign{font-size:2.1em;font-style:italic;color:var(--gold);margin-top:.4rem;opacity:0;transition:opacity 3s}
-.sign.show,.fade.show{opacity:1}
-.fade{opacity:0;transition:opacity 2.5s}
-.photo{width:min(240px,70%);margin:1.6rem auto 0;padding:10px 10px 34px;background:var(--paper);transform:rotate(-2deg);box-shadow:0 18px 50px rgba(0,0,0,.5);display:none}
-.photo img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
-.photo.has{display:block}
+        /* --- COVER SECTION --- */
+        #cover {
+            text-align: center;
+            background: radial-gradient(circle at 50% 40%, var(--white) 0%, var(--paper) 100%);
+        }
+        .cover-frame {
+            position: absolute;
+            inset: 1.5rem;
+            border: 1px solid rgba(28, 28, 26, 0.1);
+            pointer-events: none;
+        }
+        .cover-content h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            line-height: 0.9;
+            color: var(--wine);
+            margin: 2rem 0 1rem;
+            letter-spacing: -0.02em;
+        }
+        .cover-content h1 em {
+            color: var(--ink);
+            font-style: italic;
+            font-weight: 400;
+        }
+        
+        /* Interactive Envelope */
+        .envelope-container {
+            width: 260px;
+            height: 170px;
+            margin: 3rem auto;
+            position: relative;
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .envelope-container:hover {
+            transform: translateY(-5px);
+        }
+        .envelope-body {
+            position: absolute;
+            inset: 0;
+            background: #D5C7B7;
+            box-shadow: var(--shadow-float);
+            border-radius: 2px;
+        }
+        .envelope-body::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.05) 100%);
+            clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+            z-index: 2;
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #E2D6C8;
+            clip-path: polygon(0 0, 100% 0, 50% 65%);
+            transform-origin: top;
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 30%;
+        }
+        .envelope-seal {
+            width: 45px;
+            height: 45px;
+            background: var(--wine);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: var(--paper);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            transform: translateY(50%);
+            box-shadow: 0 4px 10px rgba(107, 39, 55, 0.4);
+        }
+        .envelope-container.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+        
+        .btn {
+            background: transparent;
+            border: 1px solid var(--ink);
+            color: var(--ink);
+            padding: 1rem 2rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--ink);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: -1;
+        }
+        .btn:hover {
+            color: var(--paper);
+        }
+        .btn:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
 
-/* chrome */
-#dots{position:fixed;left:0;right:0;bottom:max(18px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:9px;z-index:5;opacity:0;transition:opacity 1s;pointer-events:none}
-#dots.on{opacity:1}
-#dots i{width:5px;height:5px;border-radius:50%;background:rgba(239,230,216,.25);transition:all .8s}
-#dots i.cur{background:var(--gold);box-shadow:0 0 8px var(--gold)}
-#mute{position:fixed;top:max(14px,env(safe-area-inset-top));right:16px;z-index:6;display:none;font:300 .75rem var(--sans);color:var(--dim);background:none;border:0;cursor:pointer;padding:8px}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-</style>
+        /* --- MAIN BOOK SECTION --- */
+        #book {
+            align-items: center;
+            background: var(--paper);
+        }
+        .book-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .book-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(28, 28, 26, 0.1);
+            padding-bottom: 1rem;
+            margin-bottom: 3rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+        }
+        
+        .page-stage {
+            min-height: 60vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-render {
+            width: 100%;
+            animation: pageEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes pageEnter {
+            0% { opacity: 0; transform: scale(0.98) translateY(20px); filter: blur(4px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        }
+
+        /* LAYOUT 1: Editorial */
+        .layout-editorial {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 3rem;
+            background: var(--white);
+            border: 1px solid rgba(28, 28, 26, 0.1);
+            position: relative;
+        }
+        .layout-editorial::before {
+            content: attr(data-num);
+            position: absolute;
+            top: -2rem;
+            right: 2rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 15rem;
+            color: rgba(28, 28, 26, 0.03);
+            line-height: 1;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .layout-editorial .content-wrapper {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            border-left: 2px solid var(--wine);
+            padding-left: 2rem;
+        }
+        .layout-editorial h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: var(--ink);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+        }
+        .layout-editorial p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--ink-light);
+            max-width: 500px;
+        }
+
+        /* LAYOUT 2: Botanical */
+        .layout-botanical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        .layout-botanical .svg-container {
+            width: 120px;
+            margin-bottom: 2rem;
+            color: var(--olive);
+        }
+        .layout-botanical h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--wine);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+        .layout-botanical p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            max-width: 600px;
+            color: var(--ink);
+        }
+
+        /* LAYOUT 3: Letter */
+        .layout-letter {
+            background: var(--paper-dark);
+            padding: 4rem;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.02);
+            position: relative;
+        }
+        .layout-letter::after {
+            content: '';
+            position: absolute;
+            top: 2rem; left: 2rem; right: 2rem; bottom: 2rem;
+            border: 1px solid rgba(28, 28, 26, 0.1);
+            pointer-events: none;
+        }
+        .layout-letter h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(3rem, 7vw, 5rem);
+            color: var(--ink);
+            margin-bottom: 2rem;
+            transform: rotate(-2deg);
+        }
+        .layout-letter p {
+            font-size: 1.25rem;
+            line-height: 2;
+            color: var(--ink-light);
+            font-style: italic;
+            max-width: 550px;
+            margin-left: auto;
+            text-align: justify;
+        }
+
+        /* LAYOUT 4: Cinematic */
+        .layout-cinematic {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 5rem 3rem;
+            text-align: center;
+            box-shadow: var(--shadow-dark);
+            border-radius: 4px;
+        }
+        .layout-cinematic .eyebrow {
+            color: var(--accent);
+            margin-bottom: 2rem;
+            display: block;
+        }
+        .layout-cinematic h2 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--paper);
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 20px rgba(255,255,255,0.1);
+        }
+        .layout-cinematic p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: rgba(244, 240, 235, 0.8);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* LAYOUT 5: Scrapbook */
+        .layout-scrapbook {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 1rem;
+        }
+        .scrapbook-frame {
+            background: var(--white);
+            padding: 2rem 2rem 4rem 2rem;
+            box-shadow: var(--shadow-float);
+            transform: rotate(3deg);
+            position: relative;
+            max-width: 500px;
+        }
+        .tape {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 120px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            backdrop-filter: blur(2px);
+        }
+        .layout-scrapbook h2 {
+            font-size: 2.2rem;
+            color: var(--wine);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 1rem;
+        }
+        .layout-scrapbook p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--ink);
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4rem;
+        }
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid var(--ink);
+            background: transparent;
+            color: var(--ink);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover:not(:disabled) {
+            background: var(--ink);
+            color: var(--paper);
+        }
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .counter {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--ink-light);
+        }
+
+        /* --- FINALE SECTION --- */
+        #finale {
+            text-align: center;
+            background: var(--ink);
+            color: var(--paper);
+        }
+        .finale-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        #finale h2 {
+            font-size: clamp(3.5rem, 8vw, 6rem);
+            color: var(--paper);
+            margin-bottom: 3rem;
+            line-height: 1;
+        }
+        #finale p {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            color: rgba(244, 240, 235, 0.85);
+            margin-bottom: 2rem;
+            text-align: justify;
+        }
+        .signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--accent);
+            margin: 4rem 0;
+            transform: rotate(-3deg);
+        }
+        #finale .btn {
+            border-color: var(--paper);
+            color: var(--paper);
+        }
+        #finale .btn::before { background: var(--paper); }
+        #finale .btn:hover { color: var(--ink); }
+
+        /* SVG Draw Animation Class */
+        .svg-draw path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLine 3s ease-in-out forwards;
+        }
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .layout-editorial, .layout-letter { padding: 2rem; }
+            .layout-editorial::before { font-size: 8rem; top: -1rem; right: 1rem; }
+            .layout-editorial .content-wrapper { padding-left: 1rem; }
+            .scrapbook-frame { padding: 1.5rem 1.5rem 3rem 1.5rem; }
+            #finale p { text-align: left; }
+        }
+    </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
-<button id="mute" aria-label="Toggle music">music on</button>
-<div id="dots"></div>
+    <div class="progress-bar-fixed"><div class="progress-bar-fill" id="progressFill"></div></div>
 
-<!-- 1 · GATE -->
-<section class="scene" id="gate"><div class="wrap center">
-  <p class="note" id="gateTop"></p>
-  <h1 id="gateTitle"></h1>
-  <button id="hold" aria-label="Press and hold to begin">
-    <svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="54" fill="none" stroke-width="1.5"/><circle class="bar" cx="60" cy="60" r="54" fill="none" stroke-width="2"/></svg>
-    <span class="flame"></span>
-  </button>
-  <p class="note">press and hold the light</p>
-</div></section>
+    <!-- COVER SECTION -->
+    <section class="section active" id="cover">
+        <div class="cover-frame"></div>
+        <div class="cover-content">
+            <div class="eyebrow">A Handcrafted Digital Artbook</div>
+            <h1 class="serif">10 Reasons<br><em>to Love You</em></h1>
+            
+            <div class="envelope-container" id="openEnvelope">
+                <div class="envelope-body"></div>
+                <div class="envelope-flap">
+                    <div class="envelope-seal">G</div>
+                </div>
+            </div>
+            
+            <p class="serif" style="font-style: italic; font-size: 1.25rem; color: var(--wine); margin-bottom: 2rem;">
+                Meri Ruchi ke naam, dil se...
+            </p>
+            <button class="btn" id="startBtn">Open Letter</button>
+        </div>
+    </section>
 
-<!-- 2 · LETTER, PART ONE -->
-<section class="scene" id="l1"><div class="wrap"><div class="letter" id="l1t"></div><button class="next" data-go="sky">show me</button></div></section>
+    <!-- MAIN BOOK SECTION -->
+    <section class="section" id="book">
+        <div class="book-container">
+            <div class="book-header">
+                <span>Gobind & Ruchi</span>
+                <span>Volume I</span>
+            </div>
+            
+            <div class="page-stage" id="pageStage">
+                <!-- Pages injected here -->
+            </div>
 
-<!-- 3 · STAR SKY -->
-<section class="scene" id="sky"><div class="wrap center">
-  <p class="note" id="skyHint"></p>
-  <div id="field"><svg id="lines" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline id="poly"/></svg></div>
-  <div id="memo"></div>
-  <button class="next" data-go="l2">there's more</button>
-</div></section>
+            <div class="controls">
+                <button class="nav-btn" id="prevBtn" aria-label="Previous">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <div class="counter" id="counter">01 / 10</div>
+                <button class="nav-btn" id="nextBtn" aria-label="Next">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
 
-<!-- 4 · LETTER, PART TWO -->
-<section class="scene" id="l2"><div class="wrap"><div class="letter" id="l2t"></div><button class="next" data-go="mind">continue</button></div></section>
+    <!-- FINALE SECTION -->
+    <section class="section" id="finale">
+        <div class="finale-content">
+            <div class="eyebrow" style="color: var(--olive); margin-bottom: 2rem;">End of Volume I</div>
+            <h2 class="serif">Bas tum.<br>Hamesha tum.</h2>
+            <p class="serif">
+                Ruchi, tumse pyaar karne ki wajah sirf 10 nahi hain. Bas aaj ke liye itni hi likhi hain. Tumhari chhoti-chhoti baatein, hamari hasi, kabhi nok-jhok aur door rehkar bhi ek doosre ko yaad karna — ye sab mere liye bahut special hai. Main chahta hoon ki tum hamesha khush raho, apne sapne poore karo, aur kabhi ye mat bhoolna ki koi hai jo tumhe dil se chahta hai.
+            </p>
+            <p class="serif">
+                Waise toh tumse pyaar karne ki wajah bahut saari hain, lekin aaj sirf 10 batayi hain. Kyunki kutti, tu mere efforts ki value hi nahi karti! 😂❤️
+            </p>
+            <div class="signature">Sirf tumhara, Gobind</div>
+            <button class="btn" id="restartBtn">Read Again</button>
+        </div>
+    </section>
 
-<!-- 4b · MIND NOISE -->
-<section class="scene" id="mind"><div class="wrap center">
-  <p class="note" id="mindHint"></p>
-  <div id="noise"></div>
-  <div class="letter" id="mindT" style="text-align:left;width:100%"></div>
-  <button class="next" data-go="pro">continue</button>
-</div></section>
+    <script>
+        const reasons = [
+            {
+                layout: 'editorial',
+                title: "Tum meri apni si ho",
+                text: "Pata nahi kaise, par tumse baat karte-karte tum meri zindagi ka itna apna hissa ban gayi ki ab har achhi baat tumhe batane ka mann karta hai."
+            },
+            {
+                layout: 'botanical',
+                title: "Tumse baat karke sukoon milta hai",
+                text: "Din kaisa bhi gaya ho, tumse do baatein ho jaayein toh dil halka sa ho jaata hai. Tumhari baaton mein ek alag hi sukoon hai."
+            },
+            {
+                layout: 'letter',
+                title: "Tum meri pehli khushi ho",
+                text: "Koi achhi khabar mile toh sabse pehle tumhe batane ka mann karta hai. Khushi tumhare saath baantne se aur badh jaati hai."
+            },
+            {
+                layout: 'scrapbook',
+                title: "Tumhari chhoti baatein bhi khaas hain",
+                text: "Tumhari chhoti-chhoti baatein, tumhara andaaz aur tumhari aadatein — shayad tumhe aam lagein, par mere liye ye sab bahut khaas hain."
+            },
+            {
+                layout: 'cinematic',
+                title: "Tum mujhe sun leti ho",
+                text: "Har baar solution zaroori nahi hota. Kabhi-kabhi bas kisi ka dhyaan se sun lena kaafi hota hai, aur tum mere liye woh ehsaas ho."
+            },
+            {
+                layout: 'editorial',
+                title: "Tumhare saath main khud hoon",
+                text: "Tumse baat karte waqt mujhe banawat ki zaroorat nahi lagti. Main jaisa hoon, waisa tumhare saamne reh sakta hoon."
+            },
+            {
+                layout: 'botanical',
+                title: "Door rehkar bhi paas ho",
+                text: "Faasla hamare beech ho sakta hai, par tum mere khayalon aur dil se kabhi door nahi hoti."
+            },
+            {
+                layout: 'scrapbook',
+                title: "Tumhari muskurahat ke liye",
+                text: "Tum khush raho, dil se muskurao — ye dekhna mere liye kisi bhi gift se kam nahi hai."
+            },
+            {
+                layout: 'letter',
+                title: "Tum meri favourite notification ho",
+                text: "Phone par tumhara naam dikhe toh chehre par apne aap smile aa jaati hai. Itni si baat bhi mera din bana deti hai."
+            },
+            {
+                layout: 'cinematic',
+                title: "Tumhare saath sapne dekhna achha lagta hai",
+                text: "Kal kaisa hoga, ye sab nahi pata. Bas itna achha lagta hai ki apne aane wale kal mein tumhe soch sakta hoon."
+            }
+        ];
 
-<!-- 5 · PROMISES -->
-<section class="scene" id="pro"><div class="wrap">
-  <h2 id="proTitle" style="margin-bottom:1.6rem"></h2><div id="seals"></div>
-  <button class="next" data-go="ask">one last thing</button>
-</div></section>
+        // Custom SVGs for layouts
+        const svgs = {
+            botanical: `<svg class="svg-draw" viewBox="0 0 100 200" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M50 200 Q40 150 50 100 T60 20 T50 0" /><path d="M50 140 Q70 120 80 100 Q60 90 50 110" /><path d="M48 80 Q20 60 10 40 Q30 30 45 55" /><circle cx="50" cy="5" r="3" fill="currentColor"/></svg>`,
+            editorial: `<svg class="svg-draw" viewBox="0 0 100 10" fill="none" stroke="var(--wine)" stroke-width="2"><path d="M0 5 L100 5" /></svg>`
+        };
 
-<!-- 6 · THE QUESTION -->
-<section class="scene" id="ask"><div class="wrap center">
-  <h2 id="askQ"></h2><p class="note" id="askSub" style="margin-top:1.2rem"></p>
-  <div class="btns"><button class="btn yes" id="yes"></button><button class="btn" id="nope"></button></div>
-</div></section>
+        let currentIndex = 0;
+        const pageStage = document.getElementById('pageStage');
+        const counter = document.getElementById('counter');
+        const progressFill = document.getElementById('progressFill');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
 
-<!-- 7 · FINALE -->
-<section class="scene" id="end"><div class="wrap">
-  <div class="letter" id="endT"></div>
-  <p class="sign" id="sign"></p>
-  <p class="note fade" id="date" style="margin-top:.6rem"></p>
-  <div class="photo" id="photo"><img alt=""></div>
-</div></section>
-
-<script>
-/* =====================================================================
-   ✎  EDIT EVERYTHING HERE — this is the only part you need to change.
-   Make the words yours: add real memories, inside jokes, dates, places.
-   ===================================================================== */
-const CONFIG = {
-  to: "Ruchi",
-  from: "Gobind",
-  signature: "Gobind",                     // signature at the end
-  nick: "tumhara Baba",                    // shown under your name
-  date: "16 November 2026",                // ← date shown at the very end
-  music: "",                               // ← optional, e.g. "song.mp3" (keep the file in the same folder)
-  photo: "",                               // ← optional, e.g. "us.jpg" (shown at the very end)
-
-  gateTop: "raat ho gayi hai, aur main sirf tumhe soch raha hoon",
-  gateTitle: "Ruchi, ye sirf tumhare liye hai.",
-
-  letter1: [
-    "Meri Puchu,",
-    "Pata nahi kitni baar ye message likhna shuru kiya, aur har baar laga ki shabd kam pad rahe hain.",
-    "Toh socha, message nahi, tumhare liye kuch bana deta hoon. Thoda time laga, par dil se banaya hai.",
-    "Sorry, Baba. Wo wala sorry nahi jo bas ladai khatam karne ke liye bol dete hain. Maine sach mein baith ke socha hai ki tumhe kaisa laga hoga.",
-    "Sabse pehle, mujhe tum par doubt nahi karna chahiye tha. Jo ladki mujhe itna pyaar karti hai, usse pehle sawaal nahi, pehle bharosa dena chahiye tha. Uske liye dil se sorry.",
-    "Aaram se padhna, ok? Har line maine tumhe sochte hue likhi hai."
-  ],
-
-  skyHint: "tap each star",
-  skyDone: "look. together they make something.",
-  stars: [  // x/y = position in the sky (%). Replace with your real memories.
-  {
-    x:16, y:20,
-    t:"Tumhara hona",
-    m:"3 September 2023 ko ek simple si Hi se shuru hui baat kab meri zindagi ka itna important hissa ban gayi, pata hi nahi chala. Aaj bhi tumse baat karna mere din ka sabse favourite hissa hai. Tumhara hona hi mere liye bahut maayne rakhta hai."
-  },
-  {
-    x:72, y:12,
-    t:"Tumhari muskurahat",
-    m:"Pata hai Ruchi, mujhe tumhari smile kitni pasand hai? Main chahta hoon ki tum hamesha aise hi muskurati raho. Kabhi meri wajah se tumhari smile kam na ho. Tumhari khushi mere liye sach mein bahut important hai."
-  },
-  {
-    x:46, y:40,
-    t:"Hamari kahani",
-    m:"14 June 2024 ko Esplanade Mall mein tumse pehli baar milna, 8 July ko tumhara mujhe propose karna... ye sab mere dil ke bahut kareeb hai. Hamari kahani mein bahut saari yaadein hain, aur main aage bhi tumhare saath hazaaron yaadein banana chahta hoon."
-  },
-  {
-    x:84, y:52,
-    t:"Tumhari chhoti chhoti baatein",
-    m:"Tumhari baatein, tumhara mujhe samjhana, tumhara care karna aur kabhi kabhi bina wajah mujhe pareshan karna... mujhe tumhari ye saari aadatein pasand hain. Shayad main hamesha bol nahi pata, par tumhari koi bhi chhoti baat mere liye chhoti nahi hoti."
-  },
-  {
-    x:24, y:68,
-    t:"Tumhara pyaar",
-    m:"Tumne mere liye jo chhoti chhoti cheezein ki hain, jo waqt diya hai aur jis tarah mujhe apna samjha hai, main un sabki kadar karta hoon. Main shayad har baar apne dil ki baat sahi se nahi keh pata, lekin tumhara pyaar mere liye bahut keemti hai."
-  },
-  {
-    x:60, y:84,
-    t:"Meri Kuchu-Puchu, Meri Baba",
-    m:"Duniya ke liye tum Ruchismita ho, mere liye meri Ruchi, meri Puchu, meri Baba. ❤️ Pata nahi in naamon mein aisa kya hai, lekin tumhe in naamon se bulane mein ek alag hi apnapan aur sukoon milta hai. Main bas chahta hoon ki ye pyaar aur apnapan hamesha bana rahe."
-  }
-  ],
-
-  letter2: [
-    "Baba, tumko me kabhi v khona nehi chahta.. Mene tumhare sath bohat sapne dekha hai.",
-    "Par ek sach bolna hai. Main overthinker hoon. Jab koi baat adhoori lagti hai, mera dimaag khud se kahaniyan bana leta hai, aur zyada-tar galat wali.",
-    "Usi shor mein maine tum par doubt kiya. Us waqt tumhe jo laga hoga, uske liye mujhe sach mein bahut bura lag raha hai.",
-    "Aur mujhe ye bhi samajh aata hai ki jo baat tumne chhupayi, wo shayad is dar se thi ki main naraz ho jaunga ya hurt ho jaunga. Agar tumhe aisa dar laga, toh kahin na kahin meri bhi galti hai."
-  ],
-
-  mindHint: "this is the noise in my head. tap each thought to calm it.",
-  mindDone: "the noise is gone. only you remain.",
-  thoughts: ["kya hua?","kuch chhupa rahi hai?","phir kyun nahi bataya?","agar ye sach nikla toh?","kya main kaafi hoon?","aur agar...","sab theek hai na?"],
-  mind: [
-    "Pata hai mera dimaag kab shaant hota hai? Jab tum bina dare mujhe sach bata deti ho.",
-    "Isliye ek chhoti si request hai, Baba. Order nahi hai, bas dil ki baat: aage se koi bhi baat mujhse mat chhupana. Chhoti ho ya badi, ya aisi jisse tumhe lage ki main naraz ho jaunga.",
-    "Main promise karta hoon, pehle sunoonga. Pehle tum, gussa baad mein. Aur meri overthinking tumhari galti nahi hai. Use theek karna mera kaam hai.",
-    "Bas tum bata dena. Main sambhal loonga. Hum dono milke."
-  ],
-
-  proTitle: "I Promice",
-  promises: [
-    "Doubt karne se pehle main tumse poochhunga, aur bharosa pehle rakhunga.",
-    "Jab mera dimaag shor karega, main use khud sambhaalunga. Tum par nahi daalunga.",
-    "Tum jo bhi bataogi, main pehle sunoonga, phir react karunga.",
-    "Main tumhe har din paane aur jyada pyar karne ki koshish karunga."
-  ],
-
-  ask: "Meri Puchu, kya tum mujhe maaf karogi?",
-  askSub: "koi pressure nahi. jitna time chahiye, lo.",
-  yes: "Haan",
-  nope: ["Sochungi", "Kyu yrr?", "Aur ek mauka de na", "Maridebi sala", "Tu kae mana karibu be?", "Tora ete aukat sala, mote mana karibu?", "Dhari ki dekha mote", "No option mariki dekha sala", "Kan be, har manilu?", "Hau noo marr ebe", "Na Na Na Na", "Option nehi hai tere pass", "Haan Finnally ❤️"],
-  nopeFinal: "Haan, obviously",
-
-  finale: [
-    "Thank you, Baba.",
-    "Mujhe ek aur mauka dene ke liye. Ruke rehne ke liye. Aur ek aise insaan ke saath sabr rakhne ke liye jo abhi tumhe aur behtar pyaar karna seekh raha hai.",
-    "Tum meri zindagi mein sirf ek insaan nahi ho, Ruchi. Tum wo wajah ho jisse baaki sab cheezein matter karti hain.",
-    "Ye wada nahi kar sakta ki kabhi galti nahi karunga. Par ye wada hai ki tumhare layak banne ki koshish kabhi band nahi karunga.",
-    "Aur jab bhi mera dimaag shor kare, bas itna bol dena: main yahin hoon. Main sun loonga.",
-    "Tum meri sabse pyaari aadat ho."
-  ],
-  signOff: "Hamesha tumhara,"
-};
-
-/* ============================ ENGINE ============================ */
-const $ = s => document.querySelector(s), C = CONFIG;
-const ORDER = ["gate","l1","sky","l2","mind","pro","ask","end"];
-let skip = false, cur = null;
-addEventListener("pointerdown", () => skip = true);
-addEventListener("keydown", () => skip = true);
-
-const sleep = async ms => { const e = performance.now()+ms; while(performance.now()<e && !skip) await new Promise(r=>setTimeout(r,25)); };
-
-async function typeInto(el, text){
-  let out = "";
-  for (let i=0;i<text.length;i++){
-    if (skip){ el.textContent = text; return; }
-    const ch = text[i];
-    if (Math.random()<.016 && /[a-z]/.test(ch)){            // a human slip, then a correction
-      el.textContent = out + "asdfghjkl"[Math.floor(Math.random()*9)]; await sleep(230);
-      el.textContent = out; await sleep(150);
-    }
-    out += ch; el.textContent = out;
-    let d = 32 + Math.random()*48;
-    if (",;:".includes(ch)) d += 240;
-    if (".!?".includes(ch)) d += 520;
-    await sleep(d);
-    if (i%12===0) el.closest(".scene").scrollTo({top:1e5,behavior:"smooth"});
-  }
-}
-async function typeParas(box, paras){
-  for (const p of paras){
-    skip = false;
-    const el = document.createElement("p");
-    el.innerHTML = "<span></span><i class='caret'></i>";
-    box.append(el);
-    await typeInto(el.firstChild, p);
-    el.querySelector(".caret").remove();
-    skip = false; await sleep(750);
-  }
-}
-const reveal = btn => btn && btn.classList.add("show");
-
-/* scene switching + progress dots */
-const dots = $("#dots");
-ORDER.slice(1).forEach(() => dots.append(document.createElement("i")));
-function go(id){
-  if (cur) $("#"+cur).classList.remove("on");
-  cur = id; $("#"+id).classList.add("on");
-  dots.classList.toggle("on", id!=="gate");
-  [...dots.children].forEach((d,i)=>d.classList.toggle("cur", i===ORDER.indexOf(id)-1));
-  skip = false;
-  setTimeout(() => scenes[id] && scenes[id](), 1400);
-}
-document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go));
-
-/* ============================ SCENES ============================ */
-const scenes = {
-  async l1(){ await typeParas($("#l1t"), C.letter1); reveal($("#l1 .next")); },
-  async l2(){ await typeParas($("#l2t"), C.letter2); reveal($("#l2 .next")); },
-
-  sky(){
-    if ($("#field .star")) return;
-    const field = $("#field"), memo = $("#memo"); let found = 0;
-    $("#skyHint").textContent = C.skyHint;
-    $("#poly").setAttribute("points", C.stars.map(s=>s.x+","+s.y).join(" "));
-    $("#poly").setAttribute("pathLength","1");
-    C.stars.forEach((s,i) => {
-      const b = document.createElement("button");
-      b.className = "star"; b.style.cssText = `left:${s.x}%;top:${s.y}%;--d:${i*.5}s`; b.setAttribute("aria-label", s.t);
-      b.onclick = async () => {
-        if (!b.classList.contains("found")){ b.classList.add("found"); found++; navigator.vibrate?.(15); }
-        memo.style.opacity = 0; await new Promise(r=>setTimeout(r,300));
-        memo.innerHTML = `<b>${s.t}</b>${s.m}`; memo.style.opacity = 1;
-        if (found === C.stars.length){
-          setTimeout(() => { $("#lines").classList.add("draw"); $("#skyHint").textContent = C.skyDone; }, 3500);
-          setTimeout(() => reveal($("#sky .next")), 6000);
+        function generateHTML(reason, index) {
+            const numStr = String(index + 1).padStart(2, '0');
+            
+            if (reason.layout === 'editorial') {
+                return `
+                    <div class="page-render layout-editorial" data-num="${numStr}">
+                        <div class="content-wrapper">
+                            <span class="eyebrow" style="margin-bottom: 1rem;">Reason ${numStr}</span>
+                            <h2 class="serif">${reason.title}</h2>
+                            <p class="serif">"${reason.text}"</p>
+                            <div style="margin-top: 2rem; max-width: 100px;">${svgs.editorial}</div>
+                        </div>
+                    </div>`;
+            } else if (reason.layout === 'botanical') {
+                return `
+                    <div class="page-render layout-botanical">
+                        <div class="svg-container">${svgs.botanical}</div>
+                        <span class="eyebrow" style="margin-bottom: 1rem;">Reason ${numStr}</span>
+                        <h2 class="serif">${reason.title}</h2>
+                        <p class="serif">${reason.text}</p>
+                    </div>`;
+            } else if (reason.layout === 'letter') {
+                return `
+                    <div class="page-render layout-letter">
+                        <span class="eyebrow" style="position:absolute; top:3rem; left:3rem;">Chapter ${numStr}</span>
+                        <h2 style="margin-top: 2rem;">${reason.title}</h2>
+                        <p>${reason.text}</p>
+                    </div>`;
+            } else if (reason.layout === 'cinematic') {
+                return `
+                    <div class="page-render layout-cinematic">
+                        <span class="eyebrow">Exhibit ${numStr}</span>
+                        <h2 class="serif">${reason.title}</h2>
+                        <div style="width:1px; height: 50px; background:var(--accent); margin: 0 auto 2rem;"></div>
+                        <p class="serif">"${reason.text}"</p>
+                    </div>`;
+            } else if (reason.layout === 'scrapbook') {
+                return `
+                    <div class="page-render layout-scrapbook">
+                        <div class="scrapbook-frame">
+                            <div class="tape"></div>
+                            <span class="eyebrow" style="display:block; margin-bottom: 1rem; text-align:center;">Fragment ${numStr}</span>
+                            <h2 class="serif">${reason.title}</h2>
+                            <p>${reason.text}</p>
+                        </div>
+                    </div>`;
+            }
         }
-      };
-      field.append(b);
-    });
-  },
 
-  mind(){
-    if ($("#noise").children.length) return;
-    $("#mindHint").textContent = C.mindHint; let left = C.thoughts.length;
-    C.thoughts.forEach((t,i) => {
-      const b = document.createElement("button"); b.className = "th"; b.textContent = t;
-      b.style.cssText = `left:${6+Math.random()*50}%;top:${(i/C.thoughts.length)*80+Math.random()*6}%;--t:${3+Math.random()*3}s;font-size:${.9+Math.random()*.5}em`;
-      b.onclick = async () => {
-        b.classList.add("gone"); navigator.vibrate?.(10);
-        if (--left) return;
-        await new Promise(r=>setTimeout(r,1200));
-        $("#mindHint").textContent = C.mindDone; $("#noise").classList.add("out");
-        await new Promise(r=>setTimeout(r,1800));
-        await typeParas($("#mindT"), C.mind); reveal($("#mind .next"));
-      };
-      $("#noise").append(b);
-    });
-  },
+        function updateView() {
+            // Re-render HTML to re-trigger CSS animations
+            pageStage.innerHTML = generateHTML(reasons[currentIndex], currentIndex);
+            
+            counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / 10`;
+            progressFill.style.width = `${((currentIndex + 1) / 10) * 100}%`;
+            
+            prevBtn.disabled = currentIndex === 0;
+            
+            // Update Next button icon for the last slide
+            if (currentIndex === 9) {
+                nextBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>`;
+            } else {
+                nextBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>`;
+            }
+        }
 
-  pro(){
-    if ($("#seals").children.length) return;
-    $("#proTitle").textContent = C.proTitle; let open = 0;
-    C.promises.forEach(p => {
-      const b = document.createElement("button"); b.className = "seal"; b.innerHTML = `<span>${p}</span>`;
-      b.onclick = () => { if (b.classList.contains("open")) return; b.classList.add("open"); navigator.vibrate?.(15);
-        if (++open === C.promises.length) setTimeout(() => reveal($("#pro .next")), 1500); };
-      $("#seals").append(b);
-    });
-  },
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-  ask(){
-    $("#askQ").textContent = C.ask; $("#askSub").textContent = C.askSub;
-    $("#yes").textContent = C.yes; $("#nope").textContent = C.nope[0];
-    $("#yes").onclick = () => { burst(); go("end"); };
-  },
+        // Event Listeners
+        const envelopeContainer = document.getElementById('openEnvelope');
+        const startBtn = document.getElementById('startBtn');
 
-  async end(){
-    burst();
-    await typeParas($("#endT"), C.finale);
-    const s = $("#sign"); s.innerHTML = `${C.signOff}<br>${C.signature}<br><small style="font-size:.45em;opacity:.8">${C.nick}</small>`; s.classList.add("show");
-    await sleep(2500); $("#date").textContent = "tumhare liye likha gaya, " + C.date; $("#date").classList.add("show");
-    if (C.photo){ const p = $("#photo"); p.querySelector("img").src = C.photo; p.classList.add("has"); }
-  }
-};
+        function openBook() {
+            envelopeContainer.classList.add('open');
+            setTimeout(() => {
+                showSection('book');
+                updateView();
+            }, 800);
+        }
 
-/* the button that can't be caught — until she's had her fun */
-(() => {
-  const n = $("#nope"); let hits = 0;
-  const dodge = e => {
-    if (hits >= C.nope.length-1) return;
-    e.preventDefault(); hits++;
-    n.textContent = hits >= C.nope.length-1 ? C.nopeFinal : C.nope[hits];
-    n.classList.add("fly");
-    const w = n.offsetWidth, h = n.offsetHeight;
-    n.style.left = 12 + Math.random()*(innerWidth - w - 24) + "px";
-    n.style.top  = 12 + Math.random()*(innerHeight - h - 90) + "px";
-    $("#yes").style.transform = `scale(${1 + hits*.08})`;
-  };
-  n.addEventListener("pointerdown", dodge);
-  n.addEventListener("pointerenter", e => { if (e.pointerType==="mouse") dodge(e); });
-  n.onclick = () => { if (hits >= C.nope.length-1){ burst(); go("end"); } };
-})();
+        envelopeContainer.addEventListener('click', openBook);
+        startBtn.addEventListener('click', openBook);
 
-/* gate: hold the light */
-(() => {
-  $("#gateTop").textContent = C.gateTop; $("#gateTitle").textContent = C.gateTitle;
-  const hold = $("#hold"), bar = hold.querySelector(".bar"); let t0 = 0, raf = 0, done = false;
-  const step = () => {
-    const p = Math.min((performance.now()-t0)/1700, 1);
-    bar.style.strokeDashoffset = 339.3*(1-p);
-    if (p >= 1){ done = true; navigator.vibrate?.(40); startMusic(); go("l1"); return; }
-    raf = requestAnimationFrame(step);
-  };
-  hold.addEventListener("pointerdown", e => { e.preventDefault(); if(done) return; t0 = performance.now(); raf = requestAnimationFrame(step); });
-  const stop = () => { if(done) return; cancelAnimationFrame(raf); bar.style.transition="stroke-dashoffset .5s"; bar.style.strokeDashoffset = 339.3; setTimeout(()=>bar.style.transition="",500); };
-  ["pointerup","pointerleave","pointercancel"].forEach(ev => hold.addEventListener(ev, stop));
-  hold.addEventListener("contextmenu", e => e.preventDefault());
-  hold.addEventListener("keydown", e => { if (e.key==="Enter"||e.key===" "){ done=true; startMusic(); go("l1"); } });
-})();
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < 9) {
+                currentIndex++;
+                updateView();
+            } else {
+                showSection('finale');
+                progressFill.style.width = '100%';
+            }
+        });
 
-/* optional music */
-let audio = null;
-function startMusic(){
-  if (!C.music || audio) return;
-  audio = new Audio(C.music); audio.loop = true; audio.volume = .5; audio.play().catch(()=>{});
-  const m = $("#mute"); m.style.display = "block";
-  m.onclick = () => { audio.muted = !audio.muted; m.textContent = audio.muted ? "music off" : "music on"; };
-}
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateView();
+            }
+        });
 
-/* ====================== NIGHT SKY + EMBERS (canvas) ====================== */
-const cv = $("#bg"), cx = cv.getContext("2d"); let W, H, D, stars = [], embers = [], px = 0, py = 0;
-function size(){ D = Math.min(devicePixelRatio||1, 2); W = cv.width = innerWidth*D; H = cv.height = innerHeight*D; }
-addEventListener("resize", size); size();
-for (let i=0;i<90;i++) stars.push({x:Math.random(),y:Math.random(),r:Math.random()*1.2+.3,p:Math.random()*6.3,s:.4+Math.random()*1.2,z:Math.random()});
-addEventListener("pointermove", e => { px = (e.clientX/innerWidth-.5); py = (e.clientY/innerHeight-.5); });
-function burst(){
-  for (let i=0;i<110;i++) embers.push({x:Math.random()*W,y:H*(.75+Math.random()*.35),v:.5+Math.random()*1.6,r:(1+Math.random()*2.6)*D,a:0,w:Math.random()*6.3,life:0,max:300+Math.random()*300,c:Math.random()<.7?"230,197,142":"201,138,148"});
-}
-(function draw(t=0){
-  cx.clearRect(0,0,W,H);
-  for (const s of stars){
-    const a = .25 + .6*Math.abs(Math.sin(t/1000*s.s + s.p));
-    cx.fillStyle = `rgba(239,230,216,${a*(.4+s.z*.6)})`;
-    cx.beginPath(); cx.arc((s.x*W - px*30*s.z*D + W)%W, (s.y*H - py*30*s.z*D + H)%H, s.r*D, 0, 6.3); cx.fill();
-  }
-  embers = embers.filter(e => e.life < e.max);
-  for (const e of embers){
-    e.life++; e.y -= e.v*D; e.x += Math.sin(e.life/40 + e.w)*.6*D;
-    const k = e.life/e.max, a = Math.sin(Math.min(k,1)*Math.PI)*.85;
-    const g = cx.createRadialGradient(e.x,e.y,0,e.x,e.y,e.r*5);
-    g.addColorStop(0,`rgba(${e.c},${a})`); g.addColorStop(1,`rgba(${e.c},0)`);
-    cx.fillStyle = g; cx.beginPath(); cx.arc(e.x,e.y,e.r*5,0,6.3); cx.fill();
-  }
-  requestAnimationFrame(draw);
-})();
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            currentIndex = 0;
+            showSection('book');
+            updateView();
+        });
 
-go("gate");
-</script>
+        // Keyboard & Swipe Support
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('book').classList.contains('active')) return;
+            if (e.key === 'ArrowRight') nextBtn.click();
+            if (e.key === 'ArrowLeft') prevBtn.click();
+        });
+
+        let touchStartX = 0;
+        document.getElementById('book').addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+        
+        document.getElementById('book').addEventListener('touchend', e => {
+            let touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) nextBtn.click();
+            if (touchEndX - touchStartX > 50) prevBtn.click();
+        }, {passive: true});
+
+    </script>
 </body>
 </html>
