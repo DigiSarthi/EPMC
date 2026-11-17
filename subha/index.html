@@ -20,7 +20,7 @@
         body {
             background-color: #fce4ec; font-family: 'Quicksand', sans-serif;
             display: flex; justify-content: center; align-items: center;
-            height: 100vh; overflow: hidden; touch-action: none;
+            height: 100vh; overflow: hidden; touch-action: none; /* Mobile scroll block */
         }
 
         #game-container {
@@ -90,8 +90,15 @@
 
         .falling-item { position: absolute; font-size: 40px; z-index: 5; }
         .floating-score { position: absolute; font-weight: bold; font-size: 24px; animation: floatUp 1s ease-out forwards; z-index: 20; text-shadow: 1px 1px 0 #fff; }
+        
         #controls { position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: space-around; padding: 0 20px; z-index: 15; }
-        .control-btn { width: 70px; height: 70px; border-radius: 50%; font-size: 30px; background: rgba(255, 255, 255, 0.7); border: 2px solid #ffb6c1; display: flex; justify-content: center; align-items: center; }
+        
+        .control-btn { 
+            width: 70px; height: 70px; border-radius: 50%; font-size: 30px; 
+            background: rgba(255, 255, 255, 0.7); border: 2px solid #ffb6c1; 
+            display: flex; justify-content: center; align-items: center; 
+            touch-action: manipulation; /* Mobile touch delay fix */
+        }
 
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
@@ -167,12 +174,13 @@
         let items = [];
         let moveDirection = 0; 
         let tiltGamma = 0; 
+        let audioCtx; // Audio context declared globally for mobile fix
 
         const CHAR_SPEED = 6;
         const snacks = [
             { emoji: '🥟', points: 10 }, { emoji: '🍕', points: 10 },
             { emoji: '🧆', points: 10 }, { emoji: '🍔', points: 10 },
-            { emoji: '🍩', points: 10 }, { emoji: '💩', points: -25 } // Tatti entry! Minus 25 point 😂
+            { emoji: '🍩', points: 10 }, { emoji: '💩', points: -25 }
         ];
 
         const roasts = [
@@ -184,23 +192,25 @@
             "Chhi chhi kya khaa rahi hai be!"
         ];
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(type) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            
-            if (type === 'good') {
-                osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            } else { // Gross fart sound for Poop 💩
-                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(100, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.5);
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-            }
-            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+            try {
+                if (!audioCtx) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                
+                if (type === 'good') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                } else { 
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.5);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                }
+                osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+            } catch (e) { console.log("Audio Error", e); }
         }
 
         function handleOrientation(event) {
@@ -219,9 +229,11 @@
             character.style.left = `${charX}%`;
         }
 
+        // Mobile Controls
         const startMoveLeft = (e) => { e.preventDefault(); moveDirection = -1; };
         const startMoveRight = (e) => { e.preventDefault(); moveDirection = 1; };
         const stopMove = (e) => { e.preventDefault(); moveDirection = 0; };
+        
         document.getElementById('btn-left').addEventListener('touchstart', startMoveLeft, {passive: false});
         document.getElementById('btn-left').addEventListener('mousedown', startMoveLeft);
         document.getElementById('btn-right').addEventListener('touchstart', startMoveRight, {passive: false});
@@ -236,7 +248,7 @@
             const startX = 10 + Math.random() * 80;
             itemEl.style.left = `${startX}%`; itemEl.style.top = `-50px`;
             playArea.appendChild(itemEl);
-            items.push({ el: itemEl, x: startX, y: -50, speed: 4 + Math.random() * 5, points: itemData.points, isPoop: itemData.points < 0 });
+            items.push({ el: itemEl, x: startX, y: -50, speed: 4 + Math.random() * 5, points: itemData.points });
         }
 
         function showFloatingScore(points, x, y) {
@@ -277,7 +289,6 @@
                         playSound('good');
                         character.classList.add('eating');
                     } else {
-                        // Tatti Logic: Muh chota ho jayega aur bimar dikhegi 😂
                         charWidth = Math.max(70, charWidth - 15); 
                         playSound('bad');
                         character.classList.add('disgust');
@@ -294,11 +305,6 @@
                 }
                 
                 if (item.y > playAreaRect.height) { 
-                    if(item.points > 0 && Math.random() > 0.7) {
-                        funnyMessage.innerText = "Samosa gir gaya, par Tatti chhod di? 😂";
-                        funnyMessage.classList.remove('hidden');
-                        setTimeout(() => funnyMessage.classList.add('hidden'), 2000);
-                    }
                     item.el.remove(); items.splice(i, 1); 
                 }
             }
@@ -316,10 +322,8 @@
             
             const rankTitle = document.getElementById('rank-title');
             const msg = document.getElementById('personalized-msg');
-            
             resultFace.style.width = `${Math.max(120, charWidth)}px`;
 
-            // Poop Special Roasts 😂
             if (score < 0) {
                 rankTitle.innerText = "Tatti-Khor Rani 💩🤮";
                 msg.innerText = "Chhi Subha! Samosa chhod ke baith ke tatti kha rahi thi kya? Jaake pehle muh dho ke aa! 🤮😂";
@@ -342,16 +346,29 @@
             }
         }
 
-        function initGame() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+        function initGame(e) {
+            if(e && e.type === 'touchstart') e.preventDefault(); // Sirf touch ko block karenge double fire rokne ke liye
             
-            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission().then(permissionState => {
-                    if (permissionState === 'granted') window.addEventListener('deviceorientation', handleOrientation);
-                }).catch(console.error);
-            } else {
-                window.addEventListener('deviceorientation', handleOrientation);
+            // Audio Context Fix for Mobile Browsers
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch(err) { console.log("Audio not supported"); }
             }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            
+            // Gyroscope API request
+            try {
+                if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission().then(permissionState => {
+                        if (permissionState === 'granted') window.addEventListener('deviceorientation', handleOrientation);
+                    }).catch(console.error);
+                } else {
+                    window.addEventListener('deviceorientation', handleOrientation);
+                }
+            } catch(err) {}
 
             startScreen.classList.add('hidden'); endScreen.classList.add('hidden'); gameScreen.classList.remove('hidden');
             
@@ -367,8 +384,11 @@
             gameLoop();
         }
 
+        // Event listeners for desktop click and mobile touch
         startBtn.addEventListener('click', initGame);
+        startBtn.addEventListener('touchstart', initGame, {passive: false});
         restartBtn.addEventListener('click', initGame);
+        restartBtn.addEventListener('touchstart', initGame, {passive: false});
     </script>
 </body>
 </html>
