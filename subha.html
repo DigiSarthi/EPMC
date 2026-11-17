@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Catch Subha's Snacks! 😂</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@600&display=swap');
+
+        :root {
+            --bg-peach: #ffe4e1; 
+            --accent-pink: #ffb6c1; 
+            --accent-purple: #dda0dd; 
+            --text-color: #5c4033;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+        body {
+            background-color: #fce4ec; font-family: 'Quicksand', sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden; touch-action: none;
+        }
+
+        #game-container {
+            width: 100%; max-width: 400px; height: 100vh; max-height: 800px;
+            background: linear-gradient(135deg, var(--bg-peach), #fff0f5);
+            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;
+        }
+
+        .screen {
+            width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; padding: 20px;
+        }
+
+        .hidden { display: none !important; }
+
+        h1 {
+            font-family: 'Fredoka One', cursive; color: var(--accent-purple);
+            font-size: 28px; margin-bottom: 10px; text-shadow: 2px 2px #fff;
+        }
+
+        .mascot-img {
+            width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+            border: 5px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        button {
+            background-color: #ff4757; color: #fff; border: none;
+            padding: 15px 25px; font-size: 18px; font-family: 'Fredoka One', cursive;
+            border-radius: 25px; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); cursor: pointer;
+        }
+        button:active { transform: scale(0.95); }
+
+        #ui-bar {
+            position: absolute; top: 0; width: 100%; padding: 15px 20px;
+            display: flex; justify-content: space-between; font-family: 'Fredoka One', cursive;
+            font-size: 20px; color: var(--text-color); z-index: 10;
+        }
+
+        #funny-message, #gross-message {
+            position: absolute; top: 60px; background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px; border-radius: 15px; font-weight: bold;
+            color: #ff4757; animation: popIn 0.3s ease-out; z-index: 5;
+            border: 2px solid #ff4757;
+        }
+
+        /* Poop Message Styling - Brown */
+        #gross-message { background: #8d6e63; color: #fff; border-color: #5d4037; font-size: 22px; top: 120px; }
+
+        #play-area { position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 80px); }
+
+        #character {
+            position: absolute; bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            width: 70px; height: 70px; 
+            border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--accent-purple);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: left 0.1s ease-out, width 0.3s, filter 0.2s, transform 0.1s;
+            z-index: 10;
+        }
+
+        .eating { border-color: #4CAF50 !important; filter: brightness(1.2); }
+        /* Disgust makes face look sick/brownish */
+        .disgust { filter: sepia(80%) hue-rotate(30deg) saturate(200%) brightness(0.8) !important; transform: translateX(-50%) scale(0.8) !important; border-color: #5d4037 !important; }
+
+        .falling-item { position: absolute; font-size: 40px; z-index: 5; }
+        .floating-score { position: absolute; font-weight: bold; font-size: 24px; animation: floatUp 1s ease-out forwards; z-index: 20; text-shadow: 1px 1px 0 #fff; }
+        #controls { position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: space-around; padding: 0 20px; z-index: 15; }
+        .control-btn { width: 70px; height: 70px; border-radius: 50%; font-size: 30px; background: rgba(255, 255, 255, 0.7); border: 2px solid #ffb6c1; display: flex; justify-content: center; align-items: center; }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-50px) scale(1.5); } }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <h1>Subha ki Pet-Pooja 😂</h1>
+            <div class="mascot">
+                <img src="subha.png" alt="Face" class="mascot-img">
+            </div>
+            <p style="margin-bottom:10px; color:#d32f2f; font-weight:bold;">Warning: Samosa khao, Tatti nahi! 💩</p>
+            <p style="margin-bottom:20px; color:#5c4033; font-size:14px;">Tilt phone or use buttons.</p>
+            <button id="start-btn">KHAANA SHURU KARO</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen hidden">
+            <div id="ui-bar">
+                <div id="score-display">Score: 0</div>
+                <div id="timer-display">Time: 60s</div>
+            </div>
+            
+            <div id="funny-message" class="hidden">Khana mat girana bhukkad!</div>
+            <div id="gross-message" class="hidden">Chhi chhi! Tatti kha li! 🤮💩</div>
+
+            <div id="play-area">
+                <!-- Custom Face Character -->
+                <img id="character" src="subha.png" alt="Subha">
+            </div>
+
+            <div id="controls">
+                <button id="btn-left" class="control-btn">⬅️</button>
+                <button id="btn-right" class="control-btn">➡️</button>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="screen hidden">
+            <h1 id="end-title">Time Up!</h1>
+            <div class="mascot" id="end-mascot">
+                <img src="subha.png" alt="Face" class="mascot-img end-mascot-img" id="result-face">
+            </div>
+            <h2 id="final-score-text">Score: 0</h2>
+            <h3 id="rank-title">Rank</h3>
+            <p id="personalized-msg" style="margin-top: 10px; font-weight: bold; color: #d32f2f; padding: 0 15px;"></p>
+            <button id="restart-btn" style="margin-top: 20px;">Ek Aur Baar Khayegi? 🔁</button>
+        </div>
+    </div>
+
+    <script>
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const character = document.getElementById('character');
+        const resultFace = document.getElementById('result-face');
+        const playArea = document.getElementById('play-area');
+        const scoreDisplay = document.getElementById('score-display');
+        const timerDisplay = document.getElementById('timer-display');
+        const funnyMessage = document.getElementById('funny-message');
+        const grossMessage = document.getElementById('gross-message');
+
+        let score = 0, timeLeft = 60, charWidth = 70;
+        let gameInterval, spawnerInterval, msgInterval, animationFrameId;
+        let isPlaying = false;
+        let charX = 50; 
+        let items = [];
+        let moveDirection = 0; 
+        let tiltGamma = 0; 
+
+        const CHAR_SPEED = 6;
+        const snacks = [
+            { emoji: '🥟', points: 10 }, { emoji: '🍕', points: 10 },
+            { emoji: '🧆', points: 10 }, { emoji: '🍔', points: 10 },
+            { emoji: '🍩', points: 10 }, { emoji: '💩', points: -25 } // Tatti entry! Minus 25 point 😂
+        ];
+
+        const roasts = [
+            "Subha, chair toot jayegi teri! 😂",
+            "Kitna khayegi bhalu? 🐻",
+            "Samosa gira toh paap lagega!",
+            "Tatti se bach ke rahiyo! 💩",
+            "Muh chota hai par bhookh badi!",
+            "Chhi chhi kya khaa rahi hai be!"
+        ];
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            
+            if (type === 'good') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            } else { // Gross fart sound for Poop 💩
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            }
+            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        function handleOrientation(event) {
+            if (!isPlaying) return;
+            let gamma = event.gamma; 
+            if (gamma > 45) gamma = 45; if (gamma < -45) gamma = -45;
+            tiltGamma = gamma / 4; 
+        }
+
+        function updateCharacterPosition() {
+            if (!isPlaying) return;
+            if (Math.abs(tiltGamma) > 0.5) charX += tiltGamma;
+            else charX += moveDirection * CHAR_SPEED;
+            
+            charX = Math.max(5, Math.min(95, charX));
+            character.style.left = `${charX}%`;
+        }
+
+        const startMoveLeft = (e) => { e.preventDefault(); moveDirection = -1; };
+        const startMoveRight = (e) => { e.preventDefault(); moveDirection = 1; };
+        const stopMove = (e) => { e.preventDefault(); moveDirection = 0; };
+        document.getElementById('btn-left').addEventListener('touchstart', startMoveLeft, {passive: false});
+        document.getElementById('btn-left').addEventListener('mousedown', startMoveLeft);
+        document.getElementById('btn-right').addEventListener('touchstart', startMoveRight, {passive: false});
+        document.getElementById('btn-right').addEventListener('mousedown', startMoveRight);
+        window.addEventListener('touchend', stopMove); window.addEventListener('mouseup', stopMove);
+
+        function spawnItem() {
+            const itemData = snacks[Math.floor(Math.random() * snacks.length)];
+            const itemEl = document.createElement('div');
+            itemEl.classList.add('falling-item');
+            itemEl.innerText = itemData.emoji;
+            const startX = 10 + Math.random() * 80;
+            itemEl.style.left = `${startX}%`; itemEl.style.top = `-50px`;
+            playArea.appendChild(itemEl);
+            items.push({ el: itemEl, x: startX, y: -50, speed: 4 + Math.random() * 5, points: itemData.points, isPoop: itemData.points < 0 });
+        }
+
+        function showFloatingScore(points, x, y) {
+            const floatText = document.createElement('div');
+            floatText.classList.add('floating-score');
+            floatText.innerText = points > 0 ? `+${points} Yum!` : `Chhi! ${points}`;
+            floatText.style.color = points > 0 ? '#ff4757' : '#8d6e63';
+            floatText.style.left = `${x}%`; floatText.style.top = `${y}px`;
+            playArea.appendChild(floatText);
+            setTimeout(() => floatText.remove(), 1000);
+        }
+
+        function showRandomRoast() {
+            funnyMessage.innerText = roasts[Math.floor(Math.random() * roasts.length)];
+            funnyMessage.classList.remove('hidden');
+            setTimeout(() => funnyMessage.classList.add('hidden'), 2500);
+        }
+
+        function gameLoop() {
+            if (!isPlaying) return;
+            updateCharacterPosition();
+            
+            const charRect = character.getBoundingClientRect();
+            const playAreaRect = playArea.getBoundingClientRect();
+            
+            for (let i = items.length - 1; i >= 0; i--) {
+                let item = items[i];
+                item.y += item.speed; item.el.style.top = `${item.y}px`;
+                const itemRect = item.el.getBoundingClientRect();
+                
+                if (itemRect.bottom >= charRect.top + 10 && itemRect.top <= charRect.bottom && itemRect.right >= charRect.left + 5 && itemRect.left <= charRect.right - 5) {
+                    
+                    score += item.points;
+                    scoreDisplay.innerText = `Score: ${score}`;
+                    
+                    if (item.points > 0) {
+                        charWidth = Math.min(180, charWidth + 3); 
+                        playSound('good');
+                        character.classList.add('eating');
+                    } else {
+                        // Tatti Logic: Muh chota ho jayega aur bimar dikhegi 😂
+                        charWidth = Math.max(70, charWidth - 15); 
+                        playSound('bad');
+                        character.classList.add('disgust');
+                        grossMessage.innerText = "Chhi chhi! Tatti kha li! 🤮💩";
+                        grossMessage.classList.remove('hidden');
+                        setTimeout(() => grossMessage.classList.add('hidden'), 1500);
+                    }
+                    
+                    character.style.width = `${charWidth}px`; 
+                    showFloatingScore(item.points, item.x, item.y);
+                    
+                    setTimeout(() => character.classList.remove('eating', 'disgust'), 300);
+                    item.el.remove(); items.splice(i, 1); continue;
+                }
+                
+                if (item.y > playAreaRect.height) { 
+                    if(item.points > 0 && Math.random() > 0.7) {
+                        funnyMessage.innerText = "Samosa gir gaya, par Tatti chhod di? 😂";
+                        funnyMessage.classList.remove('hidden');
+                        setTimeout(() => funnyMessage.classList.add('hidden'), 2000);
+                    }
+                    item.el.remove(); items.splice(i, 1); 
+                }
+            }
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function endGame() {
+            isPlaying = false;
+            clearInterval(gameInterval); clearInterval(spawnerInterval); clearInterval(msgInterval);
+            cancelAnimationFrame(animationFrameId);
+            items.forEach(item => item.el.remove()); items = [];
+            
+            gameScreen.classList.add('hidden'); endScreen.classList.remove('hidden');
+            document.getElementById('final-score-text').innerText = `Total Score: ${score}`;
+            
+            const rankTitle = document.getElementById('rank-title');
+            const msg = document.getElementById('personalized-msg');
+            
+            resultFace.style.width = `${Math.max(120, charWidth)}px`;
+
+            // Poop Special Roasts 😂
+            if (score < 0) {
+                rankTitle.innerText = "Tatti-Khor Rani 💩🤮";
+                msg.innerText = "Chhi Subha! Samosa chhod ke baith ke tatti kha rahi thi kya? Jaake pehle muh dho ke aa! 🤮😂";
+            }
+            else if (score <= 50) { 
+                rankTitle.innerText = "Kuposhit (Malnourished) 🦴"; 
+                msg.innerText = "Kya fayda aisi zindagi ka? 2-4 baar toh pakka gobar khaya hai tune! 😂"; 
+            }
+            else if (score <= 150) { 
+                rankTitle.innerText = "Petu Halwai 👨‍🍳"; 
+                msg.innerText = "Chalo at least tatti kam khayi hai is baar. Par diet kab shuru hogi be? 🤣"; 
+            }
+            else if (score <= 300) { 
+                rankTitle.innerText = "Maha-Bhukkad Pro Max 🍔"; 
+                msg.innerText = "Kha kha ke screen se bahar aayegi kya? Tatti se bach bach ke itna kha liya! 🤡"; 
+            }
+            else { 
+                rankTitle.innerText = "Kumbhakaran Ki Behen 👹"; 
+                msg.innerText = "Maan gaye boss! Poori dukan kha gayi! Pakka raaste ka kachra bhi saaf kiya hoga! 🤯💀"; 
+            }
+        }
+
+        function initGame() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission().then(permissionState => {
+                    if (permissionState === 'granted') window.addEventListener('deviceorientation', handleOrientation);
+                }).catch(console.error);
+            } else {
+                window.addEventListener('deviceorientation', handleOrientation);
+            }
+
+            startScreen.classList.add('hidden'); endScreen.classList.add('hidden'); gameScreen.classList.remove('hidden');
+            
+            score = 0; timeLeft = 60; charX = 50; tiltGamma = 0; charWidth = 70;
+            character.style.width = `${charWidth}px`;
+            character.style.left = '50%'; character.style.transform = 'translateX(-50%)';
+            scoreDisplay.innerText = `Score: ${score}`; timerDisplay.innerText = `Time: ${timeLeft}s`;
+            
+            isPlaying = true;
+            gameInterval = setInterval(() => { timeLeft--; timerDisplay.innerText = `Time: ${timeLeft}s`; if (timeLeft <= 0) endGame(); }, 1000);
+            spawnerInterval = setInterval(spawnItem, 500); 
+            msgInterval = setInterval(showRandomRoast, 3000);
+            gameLoop();
+        }
+
+        startBtn.addEventListener('click', initGame);
+        restartBtn.addEventListener('click', initGame);
+    </script>
+</body>
+</html>
