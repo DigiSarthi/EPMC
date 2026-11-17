@@ -179,6 +179,18 @@
     </div>
 
     <script>
+        // ==========================================
+        // WHATSAPP / IN-APP BROWSER DETECTOR
+        // ==========================================
+        function checkInAppBrowser() {
+            var ua = navigator.userAgent || navigator.vendor || window.opera;
+            if ((ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("WhatsApp") > -1) || (ua.indexOf("wv") > -1)) {
+                alert("🚨 Bhai! WhatsApp browser mein game theek se nahi chalega (Sound/Touch block ho jata hai). Upar 3 dots (⋮) par click karke 'Open in Chrome' select karo aur full maza lo! 🚨");
+            }
+        }
+        // Run immediately when page loads
+        checkInAppBrowser();
+
         const startScreen = document.getElementById('start-screen');
         const quizScreen = document.getElementById('quiz-screen');
         const gameScreen = document.getElementById('game-screen');
@@ -263,20 +275,16 @@
             } catch (e) { }
         }
 
-        // ==========================================
-        // YAHAN HUA SABSE BADA MOBILE FIX
-        // Permissions ab FIRST click par mangenge
-        // ==========================================
         function initQuiz(e) {
             if(e && e.type === 'touchstart') e.preventDefault();
             
-            // 1. Audio Permission Activate
+            // Activate Audio Context
             if (!audioCtx) {
                 try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(err) {}
             }
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
             
-            // 2. Gyroscope Permission Activate on FIRST User Tap
+            // Request Gyroscope Permission
             try {
                 if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
                     DeviceOrientationEvent.requestPermission().then(permissionState => {
@@ -310,7 +318,7 @@
                 btn.innerText = opt.text;
                 
                 const answerFn = (e) => {
-                    e.preventDefault(); // Rokega mobile ko double click karne se
+                    e.preventDefault(); 
                     if(btn.disabled) return;
                     handleQuizAnswer(opt.roast);
                 };
