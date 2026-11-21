@@ -1,783 +1,963 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#F4F0EB">
-    <title>10 Reasons, One Love — For Ruchi</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&family=Great+Vibes&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Sirf Tere Liye, Ruchi ✨</title>
 
-        :root {
-            /* Premium Studio Palette */
-            --paper: #F4F0EB;
-            --paper-dark: #E6DFD3;
-            --ink: #1C1C1A;
-            --ink-light: #3A3532;
-            --wine: #6B2737;
-            --olive: #606C38;
-            --accent: #D4A373;
-            --white: #FFFFFF;
-            
-            /* Shadows & Effects */
-            --shadow-subtle: 0 10px 30px rgba(28, 28, 26, 0.05);
-            --shadow-float: 0 20px 40px rgba(28, 28, 26, 0.08);
-            --shadow-dark: 0 20px 50px rgba(0, 0, 0, 0.3);
-        }
+  <!-- Google Fonts: Plus Jakarta Sans (clean Hinglish), Caveat & Kalam (handwritten warmth) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Kalam:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FDF8F3',
+            paper: '#FFFDF9',
+            blush: '#FBEAE5',
+            terracotta: '#C86D58',
+            terracottaDark: '#B15A46',
+            sage: '#7A8B74',
+            sageSoft: '#EBF0E8',
+            espresso: '#362C28',
+            espressoLight: '#6E5E57',
+            goldSoft: '#E7C99B',
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            hand: ['Caveat', 'cursive'],
+            hindiHand: ['Kalam', 'cursive'],
+          },
+          boxShadow: {
+            pocket: '0 20px 45px -15px rgba(54, 44, 40, 0.12), 0 4px 14px -4px rgba(54, 44, 40, 0.05)',
+            card: '0 10px 28px -8px rgba(54, 44, 40, 0.08), 0 0 0 1px rgba(200, 109, 88, 0.16)',
+            sticky: '0 12px 24px -10px rgba(54, 44, 40, 0.14)',
+          }
         }
+      }
+    };
+  </script>
 
-        body {
-            background-color: var(--paper);
-            color: var(--ink);
-            font-family: 'DM Sans', sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+  <style>
+    /* ==========================================================================
+       COZY CREAM PAPER & SCRAPBOOK TEXTURE
+       ========================================================================== */
+    :root {
+      --bg-cream: #FDF8F3;
+      --paper: #FFFDF9;
+      --blush: #FBEAE5;
+      --terracotta: #C86D58;
+      --sage: #7A8B74;
+      --espresso: #362C28;
+    }
 
-        /* Handcrafted Paper Texture Overlay */
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.4;
-            mix-blend-mode: multiply;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        /* Typography Helpers */
-        .serif { font-family: 'Cormorant Garamond', serif; }
-        .script { font-family: 'Great Vibes', cursive; }
-        .sans { font-family: 'DM Sans', sans-serif; }
-        
-        .eyebrow {
-            font-size: 0.65rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            font-weight: 500;
-            color: var(--olive);
-        }
+    body {
+      background-color: var(--bg-cream);
+      color: var(--espresso);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(rgba(200, 109, 88, 0.06) 1px, transparent 0),
+        radial-gradient(rgba(122, 139, 116, 0.06) 1px, transparent 0);
+      background-size: 26px 26px;
+      background-position: 0 0, 13px 13px;
+    }
 
-        /* Top Progress Bar */
-        .progress-bar-fixed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: rgba(0,0,0,0.05);
-            z-index: 100;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--wine);
-            transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
+    /* ==========================================================================
+       1. POCKET ENVELOPE INTRO ANIMATIONS
+       ========================================================================== */
+    #intro-screen {
+      transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                  visibility 0.75s;
+    }
+    #intro-screen.is-hidden {
+      opacity: 0;
+      transform: scale(1.04) translateY(-14px);
+      visibility: hidden;
+      pointer-events: none;
+    }
 
-        /* Core Sections */
-        .section {
-            min-height: 100svh;
-            display: none;
-            place-items: center;
-            padding: 2rem 1.5rem;
-            position: relative;
-        }
-        .section.active {
-            display: grid;
-            animation: cinematicFadeIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0px) rotate(-1deg); }
+      50% { transform: translateY(-7px) rotate(1.5deg); }
+    }
+    .envelope-float {
+      animation: gentleFloat 3.6s ease-in-out infinite;
+    }
 
-        @keyframes cinematicFadeIn {
-            0% { opacity: 0; transform: translateY(15px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+    .envelope-flap {
+      transform-origin: top center;
+      transition: transform 0.6s cubic-bezier(0.34, 1.45, 0.64, 1);
+    }
+    .is-opening .envelope-flap {
+      transform: rotateX(180deg);
+    }
 
-        /* --- COVER SECTION --- */
-        #cover {
-            text-align: center;
-            background: radial-gradient(circle at 50% 40%, var(--white) 0%, var(--paper) 100%);
-        }
-        .cover-frame {
-            position: absolute;
-            inset: 1.5rem;
-            border: 1px solid rgba(28, 28, 26, 0.1);
-            pointer-events: none;
-        }
-        .cover-content h1 {
-            font-size: clamp(3rem, 10vw, 6rem);
-            line-height: 0.9;
-            color: var(--wine);
-            margin: 2rem 0 1rem;
-            letter-spacing: -0.02em;
-        }
-        .cover-content h1 em {
-            color: var(--ink);
-            font-style: italic;
-            font-weight: 400;
-        }
-        
-        /* Interactive Envelope */
-        .envelope-container {
-            width: 260px;
-            height: 170px;
-            margin: 3rem auto;
-            position: relative;
-            perspective: 1000px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .envelope-container:hover {
-            transform: translateY(-5px);
-        }
-        .envelope-body {
-            position: absolute;
-            inset: 0;
-            background: #D5C7B7;
-            box-shadow: var(--shadow-float);
-            border-radius: 2px;
-        }
-        .envelope-body::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.05) 100%);
-            clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
-            z-index: 2;
-        }
-        .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #E2D6C8;
-            clip-path: polygon(0 0, 100% 0, 50% 65%);
-            transform-origin: top;
-            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-            z-index: 3;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding-bottom: 30%;
-        }
-        .envelope-seal {
-            width: 45px;
-            height: 45px;
-            background: var(--wine);
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            color: var(--paper);
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.2rem;
-            transform: translateY(50%);
-            box-shadow: 0 4px 10px rgba(107, 39, 55, 0.4);
-        }
-        .envelope-container.open .envelope-flap {
-            transform: rotateX(180deg);
-            z-index: 1;
-        }
-        
-        .btn {
-            background: transparent;
-            border: 1px solid var(--ink);
-            color: var(--ink);
-            padding: 1rem 2rem;
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'DM Sans', sans-serif;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--ink);
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            z-index: -1;
-        }
-        .btn:hover {
-            color: var(--paper);
-        }
-        .btn:hover::before {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
+    /* ==========================================================================
+       2. LIVE TEXTING & TYPING ANIMATIONS
+       ========================================================================== */
+    @keyframes dotWave {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+      30% { transform: translateY(-4px); opacity: 1; }
+    }
+    .typing-dot {
+      animation: dotWave 1.2s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.16s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.32s; }
 
-        /* --- MAIN BOOK SECTION --- */
-        #book {
-            align-items: center;
-            background: var(--paper);
-        }
-        .book-container {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .book-header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(28, 28, 26, 0.1);
-            padding-bottom: 1rem;
-            margin-bottom: 3rem;
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--ink-light);
-        }
-        
-        .page-stage {
-            min-height: 60vh;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    @keyframes chatSpring {
+      0% { opacity: 0; transform: translateY(12px) scale(0.94); }
+      70% { opacity: 1; transform: translateY(-2px) scale(1.01); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .chat-pop {
+      animation: chatSpring 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
 
-        .page-render {
-            width: 100%;
-            animation: pageEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
+    /* ==========================================================================
+       3. MINI POLAROID / MEMORY TICKET CARDS
+       ========================================================================== */
+    .memory-card {
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.35s ease;
+    }
+    .memory-card:active {
+      transform: scale(0.985);
+    }
+    .memory-drawer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .memory-card.is-open .memory-drawer {
+      grid-template-rows: 1fr;
+    }
+    .memory-drawer-inner {
+      overflow: hidden;
+    }
 
-        @keyframes pageEnter {
-            0% { opacity: 0; transform: scale(0.98) translateY(20px); filter: blur(4px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
-        }
+    /* ==========================================================================
+       4. CUTE SURPRISE GIFT BOX WIGGLE & VOUCHER POP
+       ========================================================================== */
+    @keyframes giftWiggle {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      20% { transform: rotate(-6deg) scale(1.04); }
+      40% { transform: rotate(6deg) scale(1.04); }
+      60% { transform: rotate(-4deg) scale(1.02); }
+      80% { transform: rotate(4deg) scale(1.02); }
+    }
+    .gift-wiggle:hover {
+      animation: giftWiggle 0.85s ease-in-out;
+    }
 
-        /* LAYOUT 1: Editorial */
-        .layout-editorial {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            padding: 3rem;
-            background: var(--white);
-            border: 1px solid rgba(28, 28, 26, 0.1);
-            position: relative;
-        }
-        .layout-editorial::before {
-            content: attr(data-num);
-            position: absolute;
-            top: -2rem;
-            right: 2rem;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 15rem;
-            color: rgba(28, 28, 26, 0.03);
-            line-height: 1;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .layout-editorial .content-wrapper {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            border-left: 2px solid var(--wine);
-            padding-left: 2rem;
-        }
-        .layout-editorial h2 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            color: var(--ink);
-            line-height: 1;
-            margin-bottom: 1.5rem;
-        }
-        .layout-editorial p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--ink-light);
-            max-width: 500px;
-        }
+    @keyframes cardFlipIn {
+      0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .voucher-pop {
+      animation: cardFlipIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
 
-        /* LAYOUT 2: Botanical */
-        .layout-botanical {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-        .layout-botanical .svg-container {
-            width: 120px;
-            margin-bottom: 2rem;
-            color: var(--olive);
-        }
-        .layout-botanical h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            color: var(--wine);
-            margin-bottom: 1.5rem;
-            font-style: italic;
-        }
-        .layout-botanical p {
-            font-size: 1.2rem;
-            line-height: 1.7;
-            max-width: 600px;
-            color: var(--ink);
-        }
+    /* ==========================================================================
+       5. STAGGERED REVEAL FOR SECTIONS
+       ========================================================================== */
+    .pocket-section {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .pocket-section.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        /* LAYOUT 3: Letter */
-        .layout-letter {
-            background: var(--paper-dark);
-            padding: 4rem;
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.02);
-            position: relative;
-        }
-        .layout-letter::after {
-            content: '';
-            position: absolute;
-            top: 2rem; left: 2rem; right: 2rem; bottom: 2rem;
-            border: 1px solid rgba(28, 28, 26, 0.1);
-            pointer-events: none;
-        }
-        .layout-letter h2 {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(3rem, 7vw, 5rem);
-            color: var(--ink);
-            margin-bottom: 2rem;
-            transform: rotate(-2deg);
-        }
-        .layout-letter p {
-            font-size: 1.25rem;
-            line-height: 2;
-            color: var(--ink-light);
-            font-style: italic;
-            max-width: 550px;
-            margin-left: auto;
-            text-align: justify;
-        }
-
-        /* LAYOUT 4: Cinematic */
-        .layout-cinematic {
-            background: var(--ink);
-            color: var(--paper);
-            padding: 5rem 3rem;
-            text-align: center;
-            box-shadow: var(--shadow-dark);
-            border-radius: 4px;
-        }
-        .layout-cinematic .eyebrow {
-            color: var(--accent);
-            margin-bottom: 2rem;
-            display: block;
-        }
-        .layout-cinematic h2 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            color: var(--paper);
-            margin-bottom: 2rem;
-            text-shadow: 0 4px 20px rgba(255,255,255,0.1);
-        }
-        .layout-cinematic p {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            color: rgba(244, 240, 235, 0.8);
-            max-width: 650px;
-            margin: 0 auto;
-        }
-
-        /* LAYOUT 5: Scrapbook */
-        .layout-scrapbook {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem 1rem;
-        }
-        .scrapbook-frame {
-            background: var(--white);
-            padding: 2rem 2rem 4rem 2rem;
-            box-shadow: var(--shadow-float);
-            transform: rotate(3deg);
-            position: relative;
-            max-width: 500px;
-        }
-        .tape {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-2deg);
-            width: 120px;
-            height: 35px;
-            background: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            backdrop-filter: blur(2px);
-        }
-        .layout-scrapbook h2 {
-            font-size: 2.2rem;
-            color: var(--wine);
-            margin-bottom: 1rem;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            padding-bottom: 1rem;
-        }
-        .layout-scrapbook p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: var(--ink);
-            font-family: 'Great Vibes', cursive;
-            font-size: 1.8rem;
-        }
-
-        /* Controls */
-        .controls {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 4rem;
-        }
-        .nav-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 1px solid var(--ink);
-            background: transparent;
-            color: var(--ink);
-            display: grid;
-            place-items: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .nav-btn:hover:not(:disabled) {
-            background: var(--ink);
-            color: var(--paper);
-        }
-        .nav-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-        .counter {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 1.2rem;
-            color: var(--ink-light);
-        }
-
-        /* --- FINALE SECTION --- */
-        #finale {
-            text-align: center;
-            background: var(--ink);
-            color: var(--paper);
-        }
-        .finale-content {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        #finale h2 {
-            font-size: clamp(3.5rem, 8vw, 6rem);
-            color: var(--paper);
-            margin-bottom: 3rem;
-            line-height: 1;
-        }
-        #finale p {
-            font-size: 1.2rem;
-            line-height: 1.9;
-            color: rgba(244, 240, 235, 0.85);
-            margin-bottom: 2rem;
-            text-align: justify;
-        }
-        .signature {
-            font-family: 'Great Vibes', cursive;
-            font-size: 3.5rem;
-            color: var(--accent);
-            margin: 4rem 0;
-            transform: rotate(-3deg);
-        }
-        #finale .btn {
-            border-color: var(--paper);
-            color: var(--paper);
-        }
-        #finale .btn::before { background: var(--paper); }
-        #finale .btn:hover { color: var(--ink); }
-
-        /* SVG Draw Animation Class */
-        .svg-draw path {
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: drawLine 3s ease-in-out forwards;
-        }
-        @keyframes drawLine {
-            to { stroke-dashoffset: 0; }
-        }
-
-        @media (max-width: 768px) {
-            .layout-editorial, .layout-letter { padding: 2rem; }
-            .layout-editorial::before { font-size: 8rem; top: -1rem; right: 1rem; }
-            .layout-editorial .content-wrapper { padding-left: 1rem; }
-            .scrapbook-frame { padding: 1.5rem 1.5rem 3rem 1.5rem; }
-            #finale p { text-align: left; }
-        }
-    </style>
+    /* Washi tape decorative strip */
+    .washi-tape {
+      background: linear-gradient(135deg, rgba(251, 234, 229, 0.9), rgba(231, 201, 155, 0.65));
+      box-shadow: 0 1px 3px rgba(54, 44, 40, 0.08);
+    }
+  </style>
 </head>
-<body>
-    <div class="progress-bar-fixed"><div class="progress-bar-fill" id="progressFill"></div></div>
+<body class="antialiased selection:bg-blush selection:text-espresso">
 
-    <!-- COVER SECTION -->
-    <section class="section active" id="cover">
-        <div class="cover-frame"></div>
-        <div class="cover-content">
-            <div class="eyebrow">A Handcrafted Digital Artbook</div>
-            <h1 class="serif">10 Reasons<br><em>to Love You</em></h1>
-            
-            <div class="envelope-container" id="openEnvelope">
-                <div class="envelope-body"></div>
-                <div class="envelope-flap">
-                    <div class="envelope-seal">G</div>
-                </div>
-            </div>
-            
-            <p class="serif" style="font-style: italic; font-size: 1.25rem; color: var(--wine); margin-bottom: 2rem;">
-                Meri Ruchi ke naam, dil se...
-            </p>
-            <button class="btn" id="startBtn">Open Letter</button>
+  <!-- Ambient Floating Petals & Sparkles Canvas -->
+  <canvas id="petal-canvas" class="fixed inset-0 pointer-events-none z-40 w-full h-full"></canvas>
+
+  <!-- Subtle Sound Toggle Pill -->
+  <button
+    id="sound-toggle"
+    type="button"
+    aria-label="Toggle soft chime sound"
+    class="fixed top-3.5 right-3.5 z-30 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-paper/90 backdrop-blur-sm border border-terracotta/20 text-espressoLight hover:text-espresso text-[11px] font-medium shadow-xs cursor-pointer transition-colors"
+  >
+    <span id="sound-dot" class="w-1.5 h-1.5 rounded-full bg-terracotta"></span>
+    <span id="sound-label">Chime: On</span>
+  </button>
+
+  <!-- ========================================================================
+       STEP 1: CUTE POCKET ENVELOPE INTRO
+       ======================================================================== -->
+  <div id="intro-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-cream px-5">
+    <div class="absolute w-64 h-64 rounded-full bg-blush/60 blur-3xl pointer-events-none"></div>
+
+    <div class="relative w-full max-w-[390px] bg-paper rounded-[28px] p-7 text-center shadow-pocket border border-terracotta/15">
+      <!-- Top tiny date tag -->
+      <span class="inline-block px-3 py-1 rounded-full bg-blush/80 text-terracotta text-[11px] font-semibold tracking-wide mb-5">
+        For Ruchismita 🤍
+      </span>
+
+      <!-- Cute Animated Floating Envelope SVG -->
+      <div id="envelope-wrapper" class="envelope-float mx-auto w-36 h-28 mb-5 cursor-pointer" role="button" tabindex="0" aria-label="Open envelope">
+        <svg viewBox="0 0 160 120" class="w-full h-full drop-shadow-sm" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Envelope Back -->
+          <rect x="10" y="24" width="140" height="86" rx="14" fill="#FBEAE5" stroke="#C86D58" stroke-width="2"/>
+          <!-- Inner Note Peek -->
+          <rect x="24" y="16" width="112" height="60" rx="8" fill="#FFFDF9" stroke="#E7C99B" stroke-width="1.5"/>
+          <path d="M44 32H116M44 43H96" stroke="#7A8B74" stroke-width="2" stroke-linecap="round" stroke-opacity="0.55"/>
+          <!-- Envelope Bottom Fold -->
+          <path d="M12 106L74 63C77.6 60.5 82.4 60.5 86 63L148 106" fill="#FFFDF9" stroke="#C86D58" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Envelope Top Flap -->
+          <path class="envelope-flap" d="M12 28L75 70C78 72 82 72 85 70L148 28" fill="#FBEAE5" stroke="#C86D58" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Cute Little Heart Seal -->
+          <circle cx="80" cy="66" r="13" fill="#C86D58"/>
+          <path d="M80 71.5C80 71.5 73.5 67.3 73.5 63.3C73.5 61.3 75 59.8 76.9 59.8C78.1 59.8 79.3 60.5 80 61.5C80.7 60.5 81.9 59.8 83.1 59.8C85 59.8 86.5 61.3 86.5 63.3C86.5 67.3 80 71.5 80 71.5Z" fill="#FFFDF9"/>
+        </svg>
+      </div>
+
+      <h1 id="intro-headline" class="font-hindiHand text-2xl sm:text-[26px] font-bold text-espresso leading-snug">
+        Ek chhota sa surprise, sirf tere liye Ruchi ✨
+      </h1>
+      <p class="text-xs sm:text-sm text-espressoLight mt-2 leading-relaxed">
+        Koi badi baat nahi, bas dil se banaya hua ek chhota sa note.
+      </p>
+
+      <button
+        id="open-btn"
+        type="button"
+        class="mt-6 w-full py-3.5 px-6 rounded-2xl bg-terracotta hover:bg-terracottaDark active:scale-[0.98] text-paper text-sm font-semibold tracking-wide shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2"
+      >
+        <span>Tap to open</span>
+        <span>💌</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MAIN MOBILE-FIRST POCKET SCRAPBOOK (Max-Width 460px)
+       ======================================================================== -->
+  <main class="relative z-10 max-w-[460px] mx-auto px-4 pt-11 pb-20 space-y-8">
+
+    <!-- Top Pocket Header -->
+    <header class="text-center space-y-1">
+      <p class="font-hand text-2xl text-terracotta">Sirf tere liye, Ruchi 🌸</p>
+      <p class="text-[11px] uppercase tracking-[0.2em] text-espressoLight/80 font-medium">
+        A Little Pocket Keepsake
+      </p>
+    </header>
+
+    <!-- ======================================================================
+         SECTION 2: NATURAL HINGLISH TEXTING ANIMATION
+         ====================================================================== -->
+    <section id="sec-chat" class="pocket-section bg-paper rounded-[26px] p-5 shadow-card">
+      <!-- Chat Top Bar -->
+      <div class="flex items-center justify-between pb-3.5 mb-4 border-b border-blush">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-blush flex items-center justify-center text-base">
+            🤍
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-espresso leading-tight">Baba ❤️</h2>
+            <p id="typing-status" class="text-[11px] font-medium text-terracotta">typing...</p>
+          </div>
         </div>
+
+        <button
+          id="replay-btn"
+          type="button"
+          class="px-2.5 py-1 rounded-full bg-cream hover:bg-blush/60 border border-terracotta/20 text-[11px] font-medium text-espressoLight transition-colors cursor-pointer"
+        >
+          ↻ Replay
+        </button>
+      </div>
+
+      <!-- Messages Stream -->
+      <div id="chat-container" class="space-y-2.5 min-h-[260px] flex flex-col justify-end">
+        <!-- Hinglish bubbles injected dynamically -->
+      </div>
+
+      <!-- Gentle Next Prompt after chat finishes -->
+      <div id="chat-next-hint" class="hidden mt-4 pt-3 border-t border-cream text-center">
+        <a href="#sec-memories" class="inline-flex items-center gap-1 text-xs font-medium text-sage hover:text-terracotta transition-colors">
+          <span>Neeche kuch pyaari yaadein hain</span>
+          <span>↓</span>
+        </a>
+      </div>
     </section>
 
-    <!-- MAIN BOOK SECTION -->
-    <section class="section" id="book">
-        <div class="book-container">
-            <div class="book-header">
-                <span>Gobind & Ruchi</span>
-                <span>Volume I</span>
-            </div>
-            
-            <div class="page-stage" id="pageStage">
-                <!-- Pages injected here -->
-            </div>
+    <!-- ======================================================================
+         SECTION 3: OUR LITTLE REAL MEMORIES (3 Mini Polaroid / Ticket Cards)
+         ====================================================================== -->
+    <section id="sec-memories" class="pocket-section space-y-4">
+      <div class="text-center px-2">
+        <span class="inline-block px-3 py-0.5 rounded-full bg-sageSoft text-sage text-[11px] font-semibold">
+          Hamari Chhoti Si Yaadein
+        </span>
+        <h2 class="font-hindiHand text-2xl font-bold text-espresso mt-1.5">
+          Kuch Pal Jo Hamesha Khaas Rahenge
+        </h2>
+        <p class="text-xs text-espressoLight">
+          Har card par tap karke chhota sa note padh lena ✨
+        </p>
+      </div>
 
-            <div class="controls">
-                <button class="nav-btn" id="prevBtn" aria-label="Previous">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
-                <div class="counter" id="counter">01 / 10</div>
-                <button class="nav-btn" id="nextBtn" aria-label="Next">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
-                </button>
-            </div>
-        </div>
+      <div id="memories-grid" class="space-y-3.5">
+        <!-- Rendered from CONFIG.memories -->
+      </div>
     </section>
 
-    <!-- FINALE SECTION -->
-    <section class="section" id="finale">
-        <div class="finale-content">
-            <div class="eyebrow" style="color: var(--olive); margin-bottom: 2rem;">End of Volume I</div>
-            <h2 class="serif">Bas tum.<br>Hamesha tum.</h2>
-            <p class="serif">
-                Ruchi, tumse pyaar karne ki wajah sirf 10 nahi hain. Bas aaj ke liye itni hi likhi hain. Tumhari chhoti-chhoti baatein, hamari hasi, kabhi nok-jhok aur door rehkar bhi ek doosre ko yaad karna — ye sab mere liye bahut special hai. Main chahta hoon ki tum hamesha khush raho, apne sapne poore karo, aur kabhi ye mat bhoolna ki koi hai jo tumhe dil se chahta hai.
-            </p>
-            <p class="serif">
-                Waise toh tumse pyaar karne ki wajah bahut saari hain, lekin aaj sirf 10 batayi hain. Kyunki kutti, tu mere efforts ki value hi nahi karti! 😂❤️
-            </p>
-            <div class="signature">Sirf tumhara, Gobind</div>
-            <button class="btn" id="restartBtn">Read Again</button>
+    <!-- ======================================================================
+         SECTION 4: CUTE LITTLE SURPRISE BOX / "TAP FOR A SMILE" JAR
+         ====================================================================== -->
+    <section id="sec-surprise" class="pocket-section">
+      <div class="relative bg-paper rounded-[26px] p-6 text-center shadow-card overflow-hidden">
+        <!-- Decorative top washi tape -->
+        <div class="washi-tape w-24 h-5 mx-auto -mt-8 mb-4 rounded-xs opacity-85"></div>
+
+        <p class="font-hand text-2xl text-terracotta">Ek chhota sa surprise? 🎁</p>
+        <h2 class="text-base font-bold text-espresso mt-0.5">
+          Tap For a Smile
+        </h2>
+        <p class="text-xs text-espressoLight mt-1 max-w-[280px] mx-auto">
+          Jab bhi thoda low feel ho ya bas aise hi smile karna ho, is box par tap kar dena.
+        </p>
+
+        <!-- Interactive Gift Box Button -->
+        <div class="mt-5 flex justify-center">
+          <button
+            id="gift-btn"
+            type="button"
+            class="gift-wiggle group relative inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-blush hover:bg-terracotta text-espresso hover:text-paper font-semibold text-sm border border-terracotta/25 shadow-xs transition-all duration-300 cursor-pointer"
+          >
+            <span class="text-xl transition-transform group-hover:scale-110">🎁</span>
+            <span id="gift-btn-label">Tap kar, Ruchi ✨</span>
+          </button>
         </div>
+
+        <!-- Revealed Pocket Promise / Voucher Card -->
+        <div id="voucher-box" class="hidden mt-5 text-left">
+          <div id="voucher-card" class="voucher-pop rounded-2xl bg-cream border-2 border-dashed border-terracotta/40 p-4.5">
+            <div class="flex items-center justify-between text-[11px] font-semibold text-terracotta uppercase tracking-wider mb-1.5">
+              <span id="voucher-tag">Pocket Promise #1</span>
+              <span>Valid Always ♾️</span>
+            </div>
+            <p id="voucher-text" class="font-hindiHand text-lg text-espresso leading-relaxed">
+              <!-- Populated by JS -->
+            </p>
+            <div class="mt-3 pt-2.5 border-t border-terracotta/15 flex items-center justify-between">
+              <span class="text-[11px] text-espressoLight">Zero expectations, pure care</span>
+              <button
+                id="next-voucher-btn"
+                type="button"
+                class="text-xs font-semibold text-terracotta hover:text-terracottaDark cursor-pointer"
+              >
+                Ek aur dekho →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <script>
-        const reasons = [
-            {
-                layout: 'editorial',
-                title: "Tum meri apni si ho",
-                text: "Pata nahi kaise, par tumse baat karte-karte tum meri zindagi ka itna apna hissa ban gayi ki ab har achhi baat tumhe batane ka mann karta hai."
-            },
-            {
-                layout: 'botanical',
-                title: "Tumse baat karke sukoon milta hai",
-                text: "Din kaisa bhi gaya ho, tumse do baatein ho jaayein toh dil halka sa ho jaata hai. Tumhari baaton mein ek alag hi sukoon hai."
-            },
-            {
-                layout: 'letter',
-                title: "Tum meri pehli khushi ho",
-                text: "Koi achhi khabar mile toh sabse pehle tumhe batane ka mann karta hai. Khushi tumhare saath baantne se aur badh jaati hai."
-            },
-            {
-                layout: 'scrapbook',
-                title: "Tumhari chhoti baatein bhi khaas hain",
-                text: "Tumhari chhoti-chhoti baatein, tumhara andaaz aur tumhari aadatein — shayad tumhe aam lagein, par mere liye ye sab bahut khaas hain."
-            },
-            {
-                layout: 'cinematic',
-                title: "Tum mujhe sun leti ho",
-                text: "Har baar solution zaroori nahi hota. Kabhi-kabhi bas kisi ka dhyaan se sun lena kaafi hota hai, aur tum mere liye woh ehsaas ho."
-            },
-            {
-                layout: 'editorial',
-                title: "Tumhare saath main khud hoon",
-                text: "Tumse baat karte waqt mujhe banawat ki zaroorat nahi lagti. Main jaisa hoon, waisa tumhare saamne reh sakta hoon."
-            },
-            {
-                layout: 'botanical',
-                title: "Door rehkar bhi paas ho",
-                text: "Faasla hamare beech ho sakta hai, par tum mere khayalon aur dil se kabhi door nahi hoti."
-            },
-            {
-                layout: 'scrapbook',
-                title: "Tumhari muskurahat ke liye",
-                text: "Tum khush raho, dil se muskurao — ye dekhna mere liye kisi bhi gift se kam nahi hai."
-            },
-            {
-                layout: 'letter',
-                title: "Tum meri favourite notification ho",
-                text: "Phone par tumhara naam dikhe toh chehre par apne aap smile aa jaati hai. Itni si baat bhi mera din bana deti hai."
-            },
-            {
-                layout: 'cinematic',
-                title: "Tumhare saath sapne dekhna achha lagta hai",
-                text: "Kal kaisa hoga, ye sab nahi pata. Bas itna achha lagta hai ki apne aane wale kal mein tumhe soch sakta hoon."
-            }
-        ];
+    <!-- ======================================================================
+         SECTION 5: WARM CLOSING HANDWRITTEN STICKY NOTE
+         ====================================================================== -->
+    <section id="sec-closing" class="pocket-section pt-2">
+      <div class="relative bg-[#FFF9EC] rounded-[24px] p-6 sm:p-7 shadow-sticky border border-goldSoft/70 transform -rotate-1">
+        <!-- Pin / Washi Tape -->
+        <div class="washi-tape w-20 h-4 mx-auto -mt-8 mb-4 rounded-xs"></div>
 
-        // Custom SVGs for layouts
-        const svgs = {
-            botanical: `<svg class="svg-draw" viewBox="0 0 100 200" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M50 200 Q40 150 50 100 T60 20 T50 0" /><path d="M50 140 Q70 120 80 100 Q60 90 50 110" /><path d="M48 80 Q20 60 10 40 Q30 30 45 55" /><circle cx="50" cy="5" r="3" fill="currentColor"/></svg>`,
-            editorial: `<svg class="svg-draw" viewBox="0 0 100 10" fill="none" stroke="var(--wine)" stroke-width="2"><path d="M0 5 L100 5" /></svg>`
-        };
+        <p class="font-hindiHand text-xl sm:text-2xl text-espresso text-center leading-relaxed">
+          “Apna khayal rakhna, Ruchi.<br />Hamesha khush rehna. 🌿✨”
+        </p>
 
-        let currentIndex = 0;
-        const pageStage = document.getElementById('pageStage');
-        const counter = document.getElementById('counter');
-        const progressFill = document.getElementById('progressFill');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+        <p class="text-xs text-espressoLight text-center mt-2">
+          Situation chahe jo bhi ho, main hamesha teri khushi ke liye dua karunga.
+        </p>
 
-        function generateHTML(reason, index) {
-            const numStr = String(index + 1).padStart(2, '0');
-            
-            if (reason.layout === 'editorial') {
-                return `
-                    <div class="page-render layout-editorial" data-num="${numStr}">
-                        <div class="content-wrapper">
-                            <span class="eyebrow" style="margin-bottom: 1rem;">Reason ${numStr}</span>
-                            <h2 class="serif">${reason.title}</h2>
-                            <p class="serif">"${reason.text}"</p>
-                            <div style="margin-top: 2rem; max-width: 100px;">${svgs.editorial}</div>
-                        </div>
-                    </div>`;
-            } else if (reason.layout === 'botanical') {
-                return `
-                    <div class="page-render layout-botanical">
-                        <div class="svg-container">${svgs.botanical}</div>
-                        <span class="eyebrow" style="margin-bottom: 1rem;">Reason ${numStr}</span>
-                        <h2 class="serif">${reason.title}</h2>
-                        <p class="serif">${reason.text}</p>
-                    </div>`;
-            } else if (reason.layout === 'letter') {
-                return `
-                    <div class="page-render layout-letter">
-                        <span class="eyebrow" style="position:absolute; top:3rem; left:3rem;">Chapter ${numStr}</span>
-                        <h2 style="margin-top: 2rem;">${reason.title}</h2>
-                        <p>${reason.text}</p>
-                    </div>`;
-            } else if (reason.layout === 'cinematic') {
-                return `
-                    <div class="page-render layout-cinematic">
-                        <span class="eyebrow">Exhibit ${numStr}</span>
-                        <h2 class="serif">${reason.title}</h2>
-                        <div style="width:1px; height: 50px; background:var(--accent); margin: 0 auto 2rem;"></div>
-                        <p class="serif">"${reason.text}"</p>
-                    </div>`;
-            } else if (reason.layout === 'scrapbook') {
-                return `
-                    <div class="page-render layout-scrapbook">
-                        <div class="scrapbook-frame">
-                            <div class="tape"></div>
-                            <span class="eyebrow" style="display:block; margin-bottom: 1rem; text-align:center;">Fragment ${numStr}</span>
-                            <h2 class="serif">${reason.title}</h2>
-                            <p>${reason.text}</p>
-                        </div>
-                    </div>`;
-            }
+        <!-- Cute Interactive "Send a Smile Back" Counter -->
+        <div class="mt-5 flex flex-col items-center">
+          <button
+            id="smile-btn"
+            type="button"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-paper hover:bg-blush/70 active:scale-95 border border-terracotta/30 text-xs font-semibold text-espresso shadow-xs transition-all cursor-pointer"
+          >
+            <span id="smile-emoji" class="text-base">😊</span>
+            <span>Send a Smile Back</span>
+            <span id="smile-count-badge" class="hidden px-2 py-0.5 rounded-full bg-terracotta text-paper text-[11px]">
+              0
+            </span>
+          </button>
+          <p id="smile-feedback" class="font-hand text-lg text-terracotta mt-1.5 h-6">
+            <!-- Soft response text appears on tap -->
+          </p>
+        </div>
+      </div>
+
+      <footer class="text-center mt-8 space-y-1">
+        <p class="font-hand text-xl text-espressoLight">
+          Made with genuine care, sirf tere liye 🤍
+        </p>
+      </footer>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       EASY CUSTOMIZATION CONFIG & VANILLA INTERACTION LOGIC
+       ======================================================================== -->
+  <script>
+    /**
+     * =========================================================================
+     * 1. CONFIG — YAHAN SE APNE MESSAGES, DATES YA PHOTOS EASILY EDIT KARO
+     * =========================================================================
+     */
+    const CONFIG = {
+      nickname: "Ruchi",
+      fullName: "Ruchismita",
+
+      // Intro screen headline
+      introHeadline: "Ek chhota sa surprise, sirf tere liye Ruchi ✨",
+
+      // Live Hinglish Chat Bubbles (ek-ek karke typing animation ke saath aayenge)
+      chatMessages: [
+        "Hey Ruchi... 🌸",
+        "Bas aise hi kuch kehna tha...",
+        "Koi lambi speech nahi, bas ek chhoti si baat.",
+        "Situation chahe jaisi bhi ho, tu meri life mein hamesha special rahegi.",
+        "Main tujhe kabhi force nahi karunga, aur na hi tujhse koi expectation rakhunga.",
+        "Bas tera khayal rakhna, aur tujhe hamesha khush dekhna chahta hoon. 🤍"
+      ],
+
+      // 3 Real Memories (Optional: photoUrl mein image link daal sakte ho, warna cute illustrated card dikhega)
+      memories: [
+        {
+          date: "3 September 2023",
+          title: 'First "Hi" ✉️',
+          preview: "Ek chhote se 'Hi' se shuru hui kahani, jo kabhi bhooli nahi ja sakti.",
+          hiddenNote:
+            "Us din ka woh simple sa 'Hi' aaj bhi yaad hai. Pata nahi tha ki ek chhoti si baat itni pyaari yaadein ban jayegi.",
+          tag: "Where it all began",
+          icon: "paper-plane",
+          photoUrl: ""
+        },
+        {
+          date: "14 June 2024",
+          title: "Esplanade Mall ☕",
+          preview: "Pehli mulaqat, thodi si nervousness, aur woh cute si smile.",
+          hiddenNote:
+            "Esplanade Mall mein tujhe pehli baar saamne dekhna, thodi si ghabrahat aur teri woh pyari si muskurahat — sach mein best feeling thi.",
+          tag: "First real-life hello",
+          icon: "coffee",
+          photoUrl: ""
+        },
+        {
+          date: "8 July 2024",
+          title: "The Special Day 🌸",
+          preview: "Jab tune apne dil ki baat kahi thi — ek yaad jo hamesha special rahegi.",
+          hiddenNote:
+            "8 July — jab tune itni himmat aur sacchai se apne dil ki baat kahi thi. Zindagi mein cheezein chahe jaisi bhi rahein, is pal ki izzat aur yaad hamesha dil mein rahegi.",
+          tag: "Always cherished",
+          icon: "flower",
+          photoUrl: ""
+        }
+      ],
+
+      // "Tap for a Smile" Pocket Vouchers / Promises
+     vouchers: [
+  {
+    tag: "Pocket Hug #1 🫂",
+    text: "Jab kabhi meri yaad aaye, ye ek virtual hug samajh lena. Door hoon, par teri khushi ki dua hamesha rahegi."
+  },
+  {
+    tag: "Midnight Call #2 🌙",
+    text: "Kabhi raat ko mann udaas ho ya kisi se baat karne ka mann kare, message kar dena. Agar free hua toh zaroor baat karenge."
+  },
+  {
+    tag: "Distance Doesn't Matter #3 ✨",
+    text: "Chahe kitni bhi doori ho, tere special days par wish karna aur teri khushiyon mein khush hona nahi bhoolunga."
+  },
+  {
+    tag: "One Little Reminder #4 🤍",
+    text: "Apna khayal rakhna, time se khana khana aur zyada overthinking mat karna. Teri smile achhi lagti hai."
+  }
+]
+    };
+
+    /**
+     * =========================================================================
+     * 2. SOFT OPTIONAL WEB AUDIO CHIME (Zero External Audio Files)
+     * =========================================================================
+     */
+    const ChimeAudio = {
+      enabled: true,
+      ctx: null,
+      play(notes = [523.25], duration = 0.35, volume = 0.025) {
+        if (!this.enabled) return;
+        try {
+          if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) this.ctx = new AudioCtx();
+          }
+          if (!this.ctx) return;
+          if (this.ctx.state === "suspended") this.ctx.resume();
+
+          const now = this.ctx.currentTime;
+          notes.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+
+            gain.gain.setValueAtTime(0.0001, now + idx * 0.06);
+            gain.gain.exponentialRampToValueAtTime(volume, now + idx * 0.06 + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.06 + duration);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + idx * 0.06);
+            osc.stop(now + idx * 0.06 + duration + 0.04);
+          });
+        } catch (e) {
+          // Ignore if browser blocks audio
+        }
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 3. 60FPS FLOATING PETALS & CONFETTI BURST CANVAS
+     * =========================================================================
+     */
+    const canvas = document.getElementById("petal-canvas");
+    const ctx = canvas.getContext("2d");
+    let ambientPetals = [];
+    let burstConfetti = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function initPetals() {
+      const palette = [
+        "rgba(200, 109, 88, 0.22)",
+        "rgba(251, 234, 229, 0.65)",
+        "rgba(122, 139, 116, 0.22)",
+        "rgba(231, 201, 155, 0.35)"
+      ];
+      ambientPetals = Array.from({ length: 16 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 4 + 2.5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: Math.random() * 0.35 + 0.15,
+        angle: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.02,
+        color: palette[Math.floor(Math.random() * palette.length)]
+      }));
+    }
+    initPetals();
+
+    function triggerBurst(x, y, count = 28) {
+      const colors = ["#C86D58", "#FBEAE5", "#7A8B74", "#E7C99B", "#E69A88"];
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.3;
+        const speed = Math.random() * 4.5 + 2;
+        burstConfetti.push({
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 1.5,
+          size: Math.random() * 5.5 + 3,
+          rot: Math.random() * Math.PI * 2,
+          vRot: (Math.random() - 0.5) * 0.15,
+          alpha: 1,
+          decay: Math.random() * 0.018 + 0.012,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+    }
+
+    function animateCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ambientPetals.forEach((p) => {
+        p.x += p.vx + Math.sin(p.angle) * 0.2;
+        p.y += p.vy;
+        p.angle += p.spin;
+
+        if (p.y > canvas.height + 12) {
+          p.y = -12;
+          p.x = Math.random() * canvas.width;
+        }
+        if (p.x > canvas.width + 12) p.x = -12;
+        if (p.x < -12) p.x = canvas.width + 12;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.r, p.r * 0.55, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      for (let i = burstConfetti.length - 1; i >= 0; i--) {
+        const c = burstConfetti[i];
+        c.x += c.vx;
+        c.y += c.vy;
+        c.vy += 0.11;
+        c.vx *= 0.98;
+        c.rot += c.vRot;
+        c.alpha -= c.decay;
+
+        if (c.alpha <= 0) {
+          burstConfetti.splice(i, 1);
+          continue;
         }
 
-        function updateView() {
-            // Re-render HTML to re-trigger CSS animations
-            pageStage.innerHTML = generateHTML(reasons[currentIndex], currentIndex);
-            
-            counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / 10`;
-            progressFill.style.width = `${((currentIndex + 1) / 10) * 100}%`;
-            
-            prevBtn.disabled = currentIndex === 0;
-            
-            // Update Next button icon for the last slide
-            if (currentIndex === 9) {
-                nextBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>`;
-            } else {
-                nextBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>`;
+        ctx.save();
+        ctx.translate(c.x, c.y);
+        ctx.rotate(c.rot);
+        ctx.globalAlpha = c.alpha;
+        ctx.fillStyle = c.color;
+        ctx.beginPath();
+        ctx.roundRect(-c.size / 2, -c.size / 3, c.size, c.size * 0.65, 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      requestAnimationFrame(animateCanvas);
+    }
+    animateCanvas();
+
+    /**
+     * =========================================================================
+     * 4. RENDER MEMORIES & ILLUSTRATED ICONS
+     * =========================================================================
+     */
+    function getMemoryIllustration(type) {
+      if (type === "paper-plane") {
+        return `
+          <svg viewBox="0 0 48 48" class="w-11 h-11" fill="none">
+            <rect width="48" height="48" rx="14" fill="#FBEAE5"/>
+            <path d="M12 24L35 14L27 34L22 26L12 24Z" fill="#FFFDF9" stroke="#C86D58" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M35 14L22 26" stroke="#7A8B74" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>`;
+      }
+      if (type === "coffee") {
+        return `
+          <svg viewBox="0 0 48 48" class="w-11 h-11" fill="none">
+            <rect width="48" height="48" rx="14" fill="#EBF0E8"/>
+            <rect x="14" y="21" width="10" height="12" rx="2.5" fill="#FFFDF9" stroke="#362C28" stroke-width="1.6"/>
+            <rect x="25" y="19" width="10" height="14" rx="2.5" fill="#FBEAE5" stroke="#362C28" stroke-width="1.6"/>
+            <path d="M19 17C19 15.5 20 15.5 20 14M30 15C30 13.5 31 13.5 31 12" stroke="#C86D58" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>`;
+      }
+      return `
+        <svg viewBox="0 0 48 48" class="w-11 h-11" fill="none">
+          <rect width="48" height="48" rx="14" fill="#FBEAE5"/>
+          <path d="M24 35V22" stroke="#7A8B74" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="24" cy="18" r="3.2" fill="#E7C99B"/>
+          <circle cx="24" cy="12.5" r="3" fill="#FFFDF9" stroke="#C86D58" stroke-width="1.4"/>
+          <circle cx="29" cy="16.5" r="3" fill="#FFFDF9" stroke="#C86D58" stroke-width="1.4"/>
+          <circle cx="27.5" cy="22" r="3" fill="#FFFDF9" stroke="#C86D58" stroke-width="1.4"/>
+          <circle cx="20.5" cy="22" r="3" fill="#FFFDF9" stroke="#C86D58" stroke-width="1.4"/>
+          <circle cx="19" cy="16.5" r="3" fill="#FFFDF9" stroke="#C86D58" stroke-width="1.4"/>
+        </svg>`;
+    }
+
+    function renderMemories() {
+      document.getElementById("intro-headline").textContent = CONFIG.introHeadline;
+      const grid = document.getElementById("memories-grid");
+      grid.innerHTML = "";
+
+      CONFIG.memories.forEach((mem) => {
+        const card = document.createElement("article");
+        card.className =
+          "memory-card bg-paper rounded-[22px] p-4.5 shadow-card cursor-pointer select-none";
+
+        const photoHTML = mem.photoUrl
+          ? `<div class="mt-3 rounded-xl overflow-hidden border border-blush aspect-[16/10] bg-cream">
+               <img src="${mem.photoUrl}" alt="${mem.title}" class="w-full h-full object-cover" loading="lazy" />
+             </div>`
+          : "";
+
+        card.innerHTML = `
+          <div class="flex items-start gap-3.5">
+            <div class="shrink-0">${getMemoryIllustration(mem.icon)}</div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-terracotta tracking-wide">
+                  ${mem.date}
+                </span>
+                <span class="toggle-plus text-xs font-semibold text-espressoLight bg-cream px-2 py-0.5 rounded-full">
+                  Tap +
+                </span>
+              </div>
+              <h3 class="text-[15px] font-bold text-espresso mt-0.5">
+                ${mem.title}
+              </h3>
+              <p class="text-xs text-espressoLight leading-relaxed mt-1">
+                ${mem.preview}
+              </p>
+            </div>
+          </div>
+
+          <div class="memory-drawer">
+            <div class="memory-drawer-inner">
+              <div class="mt-3.5 pt-3.5 border-t border-dashed border-terracotta/25">
+                <p class="font-hindiHand text-base text-espresso leading-relaxed">
+                  “${mem.hiddenNote}”
+                </p>
+                ${photoHTML}
+                <p class="font-hand text-lg text-sage text-right mt-2">
+                  — ${mem.tag} 🤍
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener("click", () => {
+          const opened = card.classList.toggle("is-open");
+          card.querySelector(".toggle-plus").textContent = opened ? "Close −" : "Tap +";
+          ChimeAudio.play(opened ? [523.25, 659.25] : [440], 0.25, 0.02);
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    /**
+     * =========================================================================
+     * 5. LIVE HINGLISH TEXTING ENGINE
+     * =========================================================================
+     */
+    let activeTimers = [];
+
+    function clearChatTimers() {
+      activeTimers.forEach((id) => clearTimeout(id));
+      activeTimers = [];
+    }
+
+    function runHinglishChat(onDone) {
+      clearChatTimers();
+      const container = document.getElementById("chat-container");
+      const status = document.getElementById("typing-status");
+      const nextHint = document.getElementById("chat-next-hint");
+      container.innerHTML = "";
+      nextHint.classList.add("hidden");
+      status.textContent = "typing...";
+
+      let delay = 300;
+
+      CONFIG.chatMessages.forEach((text, index) => {
+        // 1. Show typing indicator dots
+        const t1 = setTimeout(() => {
+          status.textContent = "typing...";
+          const dots = document.createElement("div");
+          dots.id = "live-typing-dots";
+          dots.className =
+            "self-start inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl rounded-bl-xs bg-cream border border-blush";
+          dots.innerHTML = `
+            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-terracotta"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-terracotta"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-terracotta"></span>
+          `;
+          container.appendChild(dots);
+        }, delay);
+        activeTimers.push(t1);
+
+        const typingTime = Math.min(1350, 680 + text.length * 14);
+        delay += typingTime;
+
+        // 2. Replace dots with Hinglish bubble
+        const t2 = setTimeout(() => {
+          const dotsEl = document.getElementById("live-typing-dots");
+          if (dotsEl) dotsEl.remove();
+
+          const isLast = index === CONFIG.chatMessages.length - 1;
+          const isCoreMessage = index >= 3;
+
+          const bubble = document.createElement("div");
+          bubble.className = isCoreMessage
+            ? "chat-pop self-start max-w-[92%] px-4 py-2.5 rounded-2xl rounded-bl-xs bg-blush/85 border border-terracotta/25 text-espresso text-[13.5px] sm:text-sm font-medium leading-relaxed"
+            : "chat-pop self-start max-w-[88%] px-4 py-2.5 rounded-2xl rounded-bl-xs bg-cream border border-terracotta/15 text-espresso text-[13.5px] sm:text-sm leading-relaxed";
+
+          bubble.textContent = text;
+          container.appendChild(bubble);
+          ChimeAudio.play([587.33], 0.2, 0.015);
+
+          if (isLast) {
+            status.textContent = "sent from the heart • just now";
+            nextHint.classList.remove("hidden");
+            if (typeof onDone === "function") {
+              const t3 = setTimeout(onDone, 400);
+              activeTimers.push(t3);
             }
-        }
+          }
+        }, delay);
+        activeTimers.push(t2);
 
-        function showSection(id) {
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        delay += 320;
+      });
+    }
 
-        // Event Listeners
-        const envelopeContainer = document.getElementById('openEnvelope');
-        const startBtn = document.getElementById('startBtn');
+    /**
+     * =========================================================================
+     * 6. INTRO ENVELOPE OPENING & SECTION REVEALS
+     * =========================================================================
+     */
+    const introScreen = document.getElementById("intro-screen");
+    const envelopeWrapper = document.getElementById("envelope-wrapper");
+    const openBtn = document.getElementById("open-btn");
 
-        function openBook() {
-            envelopeContainer.classList.add('open');
+    function handleOpenSurprise() {
+      ChimeAudio.play([523.25, 659.25, 783.99], 0.5, 0.028);
+      const rect = envelopeWrapper.getBoundingClientRect();
+      triggerBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 32);
+
+      envelopeWrapper.classList.add("is-opening");
+
+      setTimeout(() => {
+        introScreen.classList.add("is-hidden");
+        document.getElementById("sec-chat").classList.add("is-visible");
+
+        runHinglishChat(() => {
+          ["sec-memories", "sec-surprise", "sec-closing"].forEach((id, i) => {
             setTimeout(() => {
-                showSection('book');
-                updateView();
-            }, 800);
-        }
-
-        envelopeContainer.addEventListener('click', openBook);
-        startBtn.addEventListener('click', openBook);
-
-        nextBtn.addEventListener('click', () => {
-            if (currentIndex < 9) {
-                currentIndex++;
-                updateView();
-            } else {
-                showSection('finale');
-                progressFill.style.width = '100%';
-            }
+              document.getElementById(id).classList.add("is-visible");
+            }, i * 280);
+          });
         });
+      }, 520);
+    }
 
-        prevBtn.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateView();
-            }
-        });
+    openBtn.addEventListener("click", handleOpenSurprise);
+    envelopeWrapper.addEventListener("click", handleOpenSurprise);
+    envelopeWrapper.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") handleOpenSurprise();
+    });
 
-        document.getElementById('restartBtn').addEventListener('click', () => {
-            currentIndex = 0;
-            showSection('book');
-            updateView();
-        });
+    // Replay Chat
+    document.getElementById("replay-btn").addEventListener("click", () => {
+      ChimeAudio.play([440, 554.37], 0.25, 0.018);
+      runHinglishChat();
+    });
 
-        // Keyboard & Swipe Support
-        document.addEventListener('keydown', (e) => {
-            if (!document.getElementById('book').classList.contains('active')) return;
-            if (e.key === 'ArrowRight') nextBtn.click();
-            if (e.key === 'ArrowLeft') prevBtn.click();
-        });
+    // Chime Sound Toggle
+    const soundToggle = document.getElementById("sound-toggle");
+    const soundDot = document.getElementById("sound-dot");
+    const soundLabel = document.getElementById("sound-label");
 
-        let touchStartX = 0;
-        document.getElementById('book').addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, {passive: true});
-        
-        document.getElementById('book').addEventListener('touchend', e => {
-            let touchEndX = e.changedTouches[0].screenX;
-            if (touchStartX - touchEndX > 50) nextBtn.click();
-            if (touchEndX - touchStartX > 50) prevBtn.click();
-        }, {passive: true});
+    soundToggle.addEventListener("click", () => {
+      ChimeAudio.enabled = !ChimeAudio.enabled;
+      soundDot.className = ChimeAudio.enabled
+        ? "w-1.5 h-1.5 rounded-full bg-terracotta"
+        : "w-1.5 h-1.5 rounded-full bg-espressoLight/40";
+      soundLabel.textContent = ChimeAudio.enabled ? "Chime: On" : "Chime: Off";
+      if (ChimeAudio.enabled) ChimeAudio.play([659.25], 0.22, 0.02);
+    });
 
-    </script>
+    /**
+     * =========================================================================
+     * 7. "TAP FOR A SMILE" SURPRISE BOX & VOUCHER CYCLER
+     * =========================================================================
+     */
+    const giftBtn = document.getElementById("gift-btn");
+    const giftBtnLabel = document.getElementById("gift-btn-label");
+    const voucherBox = document.getElementById("voucher-box");
+    const voucherCard = document.getElementById("voucher-card");
+    const voucherTag = document.getElementById("voucher-tag");
+    const voucherText = document.getElementById("voucher-text");
+    const nextVoucherBtn = document.getElementById("next-voucher-btn");
+
+    let currentVoucherIdx = -1;
+
+    function showNextVoucher(triggerEl) {
+      currentVoucherIdx = (currentVoucherIdx + 1) % CONFIG.vouchers.length;
+      const item = CONFIG.vouchers[currentVoucherIdx];
+
+      ChimeAudio.play([587.33, 783.99], 0.35, 0.024);
+      if (triggerEl) {
+        const rect = triggerEl.getBoundingClientRect();
+        triggerBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 24);
+      }
+
+      voucherTag.textContent = item.tag;
+      voucherText.textContent = item.text;
+      giftBtnLabel.textContent = "Ek aur surprise? Tap kar 🎁";
+
+      voucherBox.classList.remove("hidden");
+      voucherCard.classList.remove("voucher-pop");
+      void voucherCard.offsetWidth; // trigger reflow for pop animation
+      voucherCard.classList.add("voucher-pop");
+    }
+
+    giftBtn.addEventListener("click", () => showNextVoucher(giftBtn));
+    nextVoucherBtn.addEventListener("click", () => showNextVoucher(nextVoucherBtn));
+
+    /**
+     * =========================================================================
+     * 8. CLOSING "SEND A SMILE BACK" INTERACTIVE COUNTER
+     * =========================================================================
+     */
+    const smileBtn = document.getElementById("smile-btn");
+    const smileEmoji = document.getElementById("smile-emoji");
+    const smileBadge = document.getElementById("smile-count-badge");
+    const smileFeedback = document.getElementById("smile-feedback");
+
+    let smileCount = 0;
+    const smileNotes = [
+      "Teri smile sabse pyaari hai ✨",
+      "Bas aise hi muskurati rehna 🌸",
+      "Ek aur smile mil gayi! 🤍",
+      "Hamesha khush reh, Ruchi 🌿"
+    ];
+
+    smileBtn.addEventListener("click", () => {
+      smileCount += 1;
+      ChimeAudio.play([659.25, 880], 0.3, 0.022);
+
+      const rect = smileBtn.getBoundingClientRect();
+      triggerBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 16);
+
+      smileBadge.classList.remove("hidden");
+      smileBadge.textContent = smileCount;
+      smileEmoji.textContent = smileCount % 2 === 0 ? "🌸" : "😊";
+      smileFeedback.textContent = smileNotes[(smileCount - 1) % smileNotes.length];
+    });
+
+    // Boot
+    window.addEventListener("DOMContentLoaded", renderMemories);
+  </script>
 </body>
 </html>
