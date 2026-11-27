@@ -852,45 +852,71 @@ label {
   margin-top: -10px;
 }
 
-/* Video Player Stage */
+/* Video Player Stage — Full-Screen Vertical Cinema Mode */
+body.is-video-active .chapter-header {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+body.is-video-active .cinema-stage {
+  padding: max(10px, env(safe-area-inset-top)) 10px max(12px, env(safe-area-inset-bottom));
+}
+
+body.is-video-active #scene3 {
+  max-width: 100%;
+}
+
 .video-stage {
   width: 100%;
-  max-width: 740px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  gap: 10px;
 }
 
 .video-tag {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 7px 16px;
+  padding: 6px 15px;
   border-radius: var(--radius-pill);
-  background: rgba(255, 253, 250, 0.72);
+  background: rgba(255, 253, 250, 0.78);
   border: 1px solid rgba(244, 143, 177, 0.42);
   color: var(--rose-600);
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-weight: 600;
 }
 
 .video-frame-outer {
   position: relative;
-  width: 100%;
-  padding: 5px;
+  height: min(84dvh, 820px);
+  width: min(94vw, calc(min(84dvh, 820px) * var(--video-ratio-num, 0.5625)));
+  min-width: min(88vw, 300px);
+  padding: 4px;
   border-radius: 26px;
   background: linear-gradient(135deg, #ff9ec2, #e1bee7, #ffd6e6, #f06292);
   box-shadow: 0 24px 64px rgba(196, 56, 108, 0.28), 0 0 38px rgba(244, 143, 177, 0.42);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-frame-outer.is-landscape {
+  height: auto;
+  width: min(94vw, 820px);
 }
 
 .video-frame-inner {
   position: relative;
   width: 100%;
+  height: 100%;
   border-radius: 22px;
   overflow: hidden;
   background: #1b0d15;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: var(--video-ratio, 9 / 16);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -899,8 +925,7 @@ label {
 .ruchi-video {
   width: 100%;
   height: 100%;
-  max-height: 70dvh;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
   background: #160a11;
 }
@@ -1143,11 +1168,13 @@ label {
 
   .video-frame-outer {
     border-radius: 20px;
-    padding: 4px;
+    padding: 3px;
+    height: min(86dvh, 92vh);
+    width: min(96vw, calc(86dvh * var(--video-ratio-num, 0.5625)));
   }
 
   .video-frame-inner {
-    border-radius: 16px;
+    border-radius: 17px;
   }
 
   .floating-flower {
