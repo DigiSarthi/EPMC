@@ -84,9 +84,27 @@
       isMissingSource = true;
     }
 
+    const syncVideoAspectRatio = () => {
+      const vw = videoEl.videoWidth;
+      const vh = videoEl.videoHeight;
+      if (!vw || !vh) return;
+      const frameOuter = document.getElementById('videoFrameOuter');
+      const frameInner = frameOuter ? frameOuter.querySelector('.video-frame-inner') : null;
+      if (frameOuter) {
+        frameOuter.style.setProperty('--video-ratio-num', (vw / vh).toFixed(4));
+        frameOuter.classList.toggle('is-landscape', vw > vh);
+      }
+      if (frameInner) {
+        frameInner.style.setProperty('--video-ratio', `${vw} / ${vh}`);
+      }
+    };
+
+    videoEl.addEventListener('loadedmetadata', syncVideoAspectRatio);
+
     videoEl.addEventListener('loadeddata', () => {
       isMissingSource = false;
       hideOverlay(missingNotice);
+      syncVideoAspectRatio();
     });
 
     videoEl.addEventListener('playing', () => {
@@ -99,6 +117,9 @@
     videoEl.addEventListener('ended', () => {
       if (hasEnded) return;
       hasEnded = true;
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
       if (onEndedCallback) onEndedCallback();
     });
 

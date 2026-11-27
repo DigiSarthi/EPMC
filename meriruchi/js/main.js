@@ -123,6 +123,7 @@
     window.RuchiVideo.startFromUserGesture();
 
     window.RuchiAnimations.animateEnvelopeOpen(() => {
+      document.body.classList.add('is-video-active');
       if (envelopeStage) envelopeStage.classList.add('is-hidden');
       if (videoStage) {
         videoStage.style.position = 'relative';
@@ -166,6 +167,7 @@
 
     if (replayBtn) {
       replayBtn.addEventListener('click', () => {
+        document.body.classList.remove('is-video-active');
         surpriseOpened = false;
         window.RuchiVideo.reset();
         window.RuchiAnimations.resetEnvelopeVisuals();
@@ -205,6 +207,7 @@
 
     window.RuchiVideo.init({
       onEnded: () => {
+        document.body.classList.remove('is-video-active');
         goToScene(4, () => {
           window.RuchiAnimations.playScene4Finale();
         });
