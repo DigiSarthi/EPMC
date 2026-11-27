@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#fce4ec" />
+  <meta name="description" content="A Little Appreciation For You — A romantic interactive experience for Ruchi." />
+  <title>A Little Appreciation For You ❤️</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Dancing+Script:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Font Awesome Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+
+  <!-- Project Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loadingScreen" class="loading-screen" role="status" aria-live="polite">
+    <div class="loading-inner">
+      <div class="loading-heart" aria-hidden="true">
+        <i class="fa-solid fa-heart"></i>
+      </div>
+      <p class="loading-label">Preparing something special for Ruchi…</p>
+      <div class="loading-bar" aria-hidden="true">
+        <span class="loading-bar-fill"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dreamy Aurora Silk Background -->
+  <div class="romantic-backdrop" aria-hidden="true">
+    <div class="aurora-orb orb-blush"></div>
+    <div class="aurora-orb orb-lavender"></div>
+    <div class="aurora-orb orb-rose"></div>
+    <div class="aurora-orb orb-cream"></div>
+    <div class="silk-vignette"></div>
+  </div>
+
+  <!-- 60 FPS Ambient Canvas: Floating Hearts, Glowing Particles & Petals -->
+  <canvas id="ambientCanvas" class="ambient-canvas" aria-hidden="true"></canvas>
+
+  <!-- Floating Flowers & Animated Butterflies Layer -->
+  <div class="flora-layer" aria-hidden="true">
+    <!-- Floating Blossom 1 -->
+    <svg class="floating-flower flower-1" viewBox="0 0 100 100" fill="none">
+      <g opacity="0.82">
+        <ellipse cx="50" cy="24" rx="14" ry="22" fill="#F8BBD0" />
+        <ellipse cx="50" cy="76" rx="14" ry="22" fill="#F48FB1" />
+        <ellipse cx="24" cy="50" rx="22" ry="14" fill="#FCE4EC" />
+        <ellipse cx="76" cy="50" rx="22" ry="14" fill="#E1BEE7" />
+        <ellipse cx="32" cy="32" rx="13" ry="18" transform="rotate(-45 32 32)" fill="#F8BBD0" opacity="0.85" />
+        <ellipse cx="68" cy="68" rx="13" ry="18" transform="rotate(-45 68 68)" fill="#E1BEE7" opacity="0.85" />
+        <circle cx="50" cy="50" r="10" fill="#FFF8E1" />
+        <circle cx="50" cy="50" r="5" fill="#F0B97A" />
+      </g>
+    </svg>
+
+    <!-- Floating Blossom 2 -->
+    <svg class="floating-flower flower-2" viewBox="0 0 100 100" fill="none">
+      <g opacity="0.78">
+        <ellipse cx="50" cy="25" rx="13" ry="21" fill="#E1BEE7" />
+        <ellipse cx="50" cy="75" rx="13" ry="21" fill="#F8BBD0" />
+        <ellipse cx="25" cy="50" rx="21" ry="13" fill="#D1C4E9" />
+        <ellipse cx="75" cy="50" rx="21" ry="13" fill="#FCE4EC" />
+        <circle cx="50" cy="50" r="9" fill="#FFFDF9" />
+        <circle cx="50" cy="50" r="4.5" fill="#E88AA8" />
+      </g>
+    </svg>
+
+    <!-- Floating Blossom 3 -->
+    <svg class="floating-flower flower-3" viewBox="0 0 100 100" fill="none">
+      <g opacity="0.72">
+        <ellipse cx="50" cy="26" rx="12" ry="20" fill="#F48FB1" />
+        <ellipse cx="50" cy="74" rx="12" ry="20" fill="#FCE4EC" />
+        <ellipse cx="26" cy="50" rx="20" ry="12" fill="#F8BBD0" />
+        <ellipse cx="74" cy="50" rx="20" ry="12" fill="#EDE7F6" />
+        <circle cx="50" cy="50" r="8.5" fill="#FFF8E7" />
+        <circle cx="50" cy="50" r="4" fill="#F2B872" />
+      </g>
+    </svg>
+
+    <!-- Floating Blossom 4 -->
+    <svg class="floating-flower flower-4" viewBox="0 0 100 100" fill="none">
+      <g opacity="0.7">
+        <ellipse cx="50" cy="26" rx="12" ry="19" fill="#D1C4E9" />
+        <ellipse cx="50" cy="74" rx="12" ry="19" fill="#F8BBD0" />
+        <ellipse cx="26" cy="50" rx="19" ry="12" fill="#FCE4EC" />
+        <ellipse cx="74" cy="50" rx="19" ry="12" fill="#E1BEE7" />
+        <circle cx="50" cy="50" r="8" fill="#FFFDF9" />
+      </g>
+    </svg>
+
+    <!-- Animated Butterfly 1 -->
+    <div class="butterfly butterfly-1">
+      <svg viewBox="0 0 120 100" fill="none">
+        <g class="wing-left">
+          <path d="M58 48 C34 14, 4 18, 12 46 C18 64, 42 58, 58 52 Z" fill="url(#bfGrad1)" opacity="0.9" />
+          <path d="M58 53 C38 58, 22 78, 36 86 C48 92, 56 72, 58 56 Z" fill="url(#bfGrad2)" opacity="0.82" />
+          <circle cx="30" cy="40" r="3.5" fill="#FFFDF9" opacity="0.7" />
+        </g>
+        <g class="wing-right">
+          <path d="M62 48 C86 14, 116 18, 108 46 C102 64, 78 58, 62 52 Z" fill="url(#bfGrad1)" opacity="0.9" />
+          <path d="M62 53 C82 58, 98 78, 84 86 C72 92, 64 72, 62 56 Z" fill="url(#bfGrad2)" opacity="0.82" />
+          <circle cx="90" cy="40" r="3.5" fill="#FFFDF9" opacity="0.7" />
+        </g>
+        <rect x="58" y="36" width="4" height="28" rx="2" fill="#7B4B62" />
+        <path d="M59 36 C54 26, 48 24, 46 25" stroke="#7B4B62" stroke-width="1.4" stroke-linecap="round" />
+        <path d="M61 36 C66 26, 72 24, 74 25" stroke="#7B4B62" stroke-width="1.4" stroke-linecap="round" />
+        <defs>
+          <linearGradient id="bfGrad1" x1="10" y1="20" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#F48FB1" />
+            <stop offset="1" stop-color="#CE93D8" />
+          </linearGradient>
+          <linearGradient id="bfGrad2" x1="25" y1="55" x2="60" y2="88" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FCE4EC" />
+            <stop offset="1" stop-color="#F48FB1" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- Animated Butterfly 2 -->
+    <div class="butterfly butterfly-2">
+      <svg viewBox="0 0 120 100" fill="none">
+        <g class="wing-left">
+          <path d="M58 48 C34 14, 4 18, 12 46 C18 64, 42 58, 58 52 Z" fill="url(#bfGrad3)" opacity="0.88" />
+          <path d="M58 53 C38 58, 22 78, 36 86 C48 92, 56 72, 58 56 Z" fill="url(#bfGrad4)" opacity="0.8" />
+        </g>
+        <g class="wing-right">
+          <path d="M62 48 C86 14, 116 18, 108 46 C102 64, 78 58, 62 52 Z" fill="url(#bfGrad3)" opacity="0.88" />
+          <path d="M62 53 C82 58, 98 78, 84 86 C72 92, 64 72, 62 56 Z" fill="url(#bfGrad4)" opacity="0.8" />
+        </g>
+        <rect x="58" y="36" width="4" height="28" rx="2" fill="#8C5A72" />
+        <defs>
+          <linearGradient id="bfGrad3" x1="10" y1="20" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#E1BEE7" />
+            <stop offset="1" stop-color="#F8BBD0" />
+          </linearGradient>
+          <linearGradient id="bfGrad4" x1="25" y1="55" x2="60" y2="88" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFF3E0" />
+            <stop offset="1" stop-color="#F8BBD0" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Heart Explosion Overlay Container -->
+  <div id="explosionLayer" class="explosion-layer" aria-hidden="true"></div>
+
+  <!-- Subtle Chapter Indicator -->
+  <header class="chapter-header" aria-label="Story progress">
+    <div class="chapter-pill">
+      <span class="chapter-brand">For Ruchi</span>
+      <nav class="chapter-dots" aria-label="Scenes">
+        <span class="chapter-dot is-active" data-scene-dot="1" title="Act I: Introduction"></span>
+        <span class="chapter-dot" data-scene-dot="2" title="Act II: The Complaint"></span>
+        <span class="chapter-dot" data-scene-dot="3" title="Act III: The Surprise"></span>
+        <span class="chapter-dot" data-scene-dot="4" title="Act IV: Always Yours"></span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Cinema Stage -->
+  <main id="appStage" class="cinema-stage">
+    <!-- ==================== SCENE 1: MAGICAL LOVE INTRODUCTION ==================== -->
+    <section id="scene1" class="scene is-active" aria-label="Magical Love Introduction">
+      <div class="scene-content scene-intro">
+        <p class="eyebrow-tag reveal-item">A Little Appreciation For You</p>
+
+        <!-- Large 3D Sculptural Beating Heart -->
+        <button
+          type="button"
+          id="introHeartBtn"
+          class="heart-3d-stage"
+          aria-label="Tap the glowing heart for sparkles"
+          title="Tap me ❤️"
+        >
+          <span class="heart-halo halo-1" aria-hidden="true"></span>
+          <span class="heart-halo halo-2" aria-hidden="true"></span>
+          <span class="heart-orbit-sparkle spark-a" aria-hidden="true"></span>
+          <span class="heart-orbit-sparkle spark-b" aria-hidden="true"></span>
+          <span class="heart-orbit-sparkle spark-c" aria-hidden="true"></span>
+
+          <svg class="heart-3d-svg" viewBox="0 0 220 200" fill="none" aria-hidden="true">
+            <defs>
+              <radialGradient id="heart3dMain" cx="35%" cy="28%" r="72%">
+                <stop offset="0%" stop-color="#FFD1E3" />
+                <stop offset="28%" stop-color="#FF6FA5" />
+                <stop offset="68%" stop-color="#E13A75" />
+                <stop offset="100%" stop-color="#9A1B4D" />
+              </radialGradient>
+              <linearGradient id="heart3dRim" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFDF9" stop-opacity="0.85" />
+                <stop offset="50%" stop-color="#F8BBD0" stop-opacity="0.25" />
+                <stop offset="100%" stop-color="#D1C4E9" stop-opacity="0.6" />
+              </linearGradient>
+              <radialGradient id="heartGloss" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.88" />
+                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+              </radialGradient>
+              <filter id="heartDropShadow" x="-25%" y="-25%" width="150%" height="150%">
+                <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#D84B7E" flood-opacity="0.42" />
+              </filter>
+            </defs>
+            <!-- Main 3D Heart Body -->
+            <path
+              filter="url(#heartDropShadow)"
+              d="M110 178 C106 175, 24 126, 20 68 C17 34, 44 12, 74 16 C92 18, 104 30, 110 42 C116 30, 128 18, 146 16 C176 12, 203 34, 200 68 C196 126, 114 175, 110 178 Z"
+              fill="url(#heart3dMain)"
+              stroke="url(#heart3dRim)"
+              stroke-width="2.5"
+            />
+            <!-- Specular 3D Highlights -->
+            <ellipse cx="66" cy="54" rx="22" ry="13" transform="rotate(-32 66 54)" fill="url(#heartGloss)" opacity="0.85" />
+            <ellipse cx="156" cy="58" rx="12" ry="7" transform="rotate(28 156 58)" fill="url(#heartGloss)" opacity="0.45" />
+            <path
+              d="M44 86 C48 118, 86 146, 108 162"
+              stroke="#FFE4EE"
+              stroke-width="3"
+              stroke-linecap="round"
+              opacity="0.32"
+            />
+          </svg>
+        </button>
+
+        <div class="intro-copy">
+          <h1 id="introLine1" class="hero-title">Hey Ruchi... ❤️</h1>
+          <p id="introLine2" class="hero-subtitle">Ek baat bolun tumse?</p>
+        </div>
+
+        <div class="action-wrap">
+          <button type="button" id="btnToScene2" class="btn-romantic">
+            <span class="btn-glow" aria-hidden="true"></span>
+            <span class="btn-text">Continue</span>
+            <i class="fa-solid fa-heart btn-icon" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCENE 2: THE COMPLAINT ==================== -->
+    <section id="scene2" class="scene" aria-label="The Complaint" aria-hidden="true">
+      <div class="scene-content scene-dialogue">
+        <div class="glass-card dialogue-card">
+          <div class="dialogue-header">
+            <div class="dialogue-avatar" aria-hidden="true">
+              <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <div class="dialogue-meta">
+              <span class="dialogue-sender">A Special Note</span>
+              <span class="dialogue-status">
+                <span class="status-dot" aria-hidden="true"></span>
+                typing from the heart…
+              </span>
+            </div>
+            <span class="dialogue-badge" id="moodBadge" aria-hidden="true">🥺</span>
+          </div>
+
+          <div class="dialogue-stream" id="dialogueStream" aria-live="polite">
+            <div class="chat-bubble bubble-1" id="dialogueBubble1">
+              <p class="typed-text" id="typedLine1"></p>
+            </div>
+            <div class="chat-bubble bubble-2" id="dialogueBubble2">
+              <p class="typed-text" id="typedLine2"></p>
+            </div>
+            <div class="chat-bubble bubble-3" id="dialogueBubble3">
+              <p class="typed-text" id="typedLine3"></p>
+            </div>
+          </div>
+
+          <!-- Playful Interactive Reactions -->
+          <div class="reaction-zone" id="reactionZone">
+            <p class="reaction-prompt" id="reactionReply">Tap a reaction while you read ✨</p>
+            <div class="reaction-pills">
+              <button type="button" class="reaction-pill" data-emoji="🤨" data-reply="Hehe, suno toh sahi madam ji! 💕">
+                <span>Kya complaint? 🤨</span>
+              </button>
+              <button type="button" class="reaction-pill" data-emoji="😤" data-reply="Aaj saari shikayat door kar dunga! ❤️">
+                <span>Haan, nahi karte! 😤</span>
+              </button>
+              <button type="button" class="reaction-pill" data-emoji="🥺" data-reply="Bas ek second… ready ho jao! ✨">
+                <span>Dikhao phir 🥺</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="dialogue-footer">
+            <button type="button" id="btnToScene3" class="btn-romantic is-hidden">
+              <span class="btn-glow" aria-hidden="true"></span>
+              <span class="btn-text">Show Me What It Is</span>
+              <i class="fa-solid fa-sparkles btn-icon fa-wand-magic-sparkles" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCENE 3: VIDEO REVEAL ==================== -->
+    <section id="scene3" class="scene" aria-label="Video Reveal" aria-hidden="true">
+      <div class="scene-content scene-reveal">
+        <!-- Pre-reveal: Animated Love Envelope -->
+        <div id="envelopeStage" class="envelope-stage">
+          <div class="envelope-wrapper" id="envelopeWrapper">
+            <div class="envelope-glow" aria-hidden="true"></div>
+            <div class="love-envelope" id="loveEnvelope" role="button" tabindex="0" aria-label="Open love envelope">
+              <div class="envelope-back"></div>
+              <div class="envelope-letter">
+                <div class="letter-heart"><i class="fa-solid fa-film"></i></div>
+                <span class="letter-caption">Just For You, Ruchi</span>
+              </div>
+              <div class="envelope-front-left"></div>
+              <div class="envelope-front-right"></div>
+              <div class="envelope-front-bottom"></div>
+              <div class="envelope-flap" id="envelopeFlap"></div>
+              <div class="wax-seal" id="waxSeal" aria-hidden="true">
+                <i class="fa-solid fa-heart"></i>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="reveal-title">Ruko... ye dekho! ❤️</h2>
+          <p class="reveal-hint">Turn your volume up before opening</p>
+
+          <button type="button" id="btnOpenSurprise" class="btn-romantic btn-surprise">
+            <span class="btn-glow" aria-hidden="true"></span>
+            <i class="fa-solid fa-gift btn-icon-left" aria-hidden="true"></i>
+            <span class="btn-text">Open My Surprise</span>
+          </button>
+        </div>
+
+        <!-- Post-reveal: Cinematic Video Player -->
+        <div id="videoStage" class="video-stage is-hidden" aria-hidden="true">
+          <div class="video-header">
+            <span class="video-tag">
+              <i class="fa-solid fa-heart" aria-hidden="true"></i>
+              Made Just For You, Ruchi
+            </span>
+          </div>
+
+          <div class="video-frame-outer" id="videoFrameOuter">
+            <div class="video-glow-border" aria-hidden="true"></div>
+            <div class="video-frame-inner">
+              <video
+                id="ruchiVideo"
+                class="ruchi-video"
+                playsinline
+                controls
+                preload="metadata"
+              >
+                <source src="assets/video/ruchi.mp4" type="video/mp4" />
+                Your browser does not support HTML5 video playback.
+              </video>
+
+              <!-- Tap-to-play overlay only if browser blocks autoplay -->
+              <div id="videoPlayOverlay" class="video-overlay is-hidden">
+                <button type="button" id="btnManualPlay" class="overlay-play-btn" aria-label="Play video with sound">
+                  <i class="fa-solid fa-play"></i>
+                </button>
+                <p class="overlay-caption">Tap to play with original audio ❤️</p>
+              </div>
+
+              <!-- Graceful missing-file guide (ONLY appears if assets/video/ruchi.mp4 is not added yet) -->
+              <div id="videoMissingNotice" class="video-missing-notice is-hidden" role="alert">
+                <div class="missing-icon" aria-hidden="true">
+                  <i class="fa-solid fa-clapperboard"></i>
+                </div>
+                <h3>Add Your Personal Video</h3>
+                <p>
+                  Place your recorded video at <code>assets/video/ruchi.mp4</code> so Ruchi can watch it here with its original audio.
+                </p>
+                <div class="missing-actions">
+                  <label class="btn-secondary-glass" for="localVideoPicker">
+                    <i class="fa-solid fa-upload" aria-hidden="true"></i>
+                    <span>Test With a Local Video</span>
+                  </label>
+                  <input type="file" id="localVideoPicker" accept="video/*" class="sr-only" />
+                  <button type="button" id="btnPreviewEnding" class="btn-text-subtle">
+                    Preview Final Message →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="video-footnote" id="videoFootnote">
+            Watch till the very end… there's one last message waiting for you ❤️
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCENE 4: FINAL LOVE MESSAGE ==================== -->
+    <section id="scene4" class="scene" aria-label="Final Love Message" aria-hidden="true">
+      <div class="scene-content scene-finale">
+        <div class="glass-card finale-card">
+          <div class="finale-heart-wrap" id="finaleHeartWrap" aria-hidden="true">
+            <span class="finale-halo"></span>
+            <svg class="finale-heart-svg" viewBox="0 0 180 165" fill="none">
+              <defs>
+                <radialGradient id="finaleHeartGrad" cx="35%" cy="28%" r="72%">
+                  <stop offset="0%" stop-color="#FFDCE9" />
+                  <stop offset="32%" stop-color="#FF76AA" />
+                  <stop offset="72%" stop-color="#DF3B74" />
+                  <stop offset="100%" stop-color="#9B1C4E" />
+                </radialGradient>
+              </defs>
+              <path
+                d="M90 148 C87 145, 18 104, 15 56 C13 28, 36 10, 60 13 C75 15, 85 25, 90 35 C95 25, 105 15, 120 13 C144 10, 167 28, 165 56 C162 104, 93 145, 90 148 Z"
+                fill="url(#finaleHeartGrad)"
+              />
+              <ellipse cx="54" cy="45" rx="18" ry="10" transform="rotate(-30 54 45)" fill="#FFFFFF" opacity="0.52" />
+            </svg>
+          </div>
+
+          <h2 id="finaleLine1" class="finale-headline">Ab toh maan gayi na? 🥺❤️</h2>
+
+          <p id="finaleLine2" class="finale-paragraph">
+            Waise, tumhari tarif karne ke liye mere paas words hi kam pad jaate hain.
+          </p>
+
+          <p id="finaleLine3" class="finale-quote">
+            You're beautiful, Ruchi. Not just because of how you look, but because of who you are. ❤️
+          </p>
+
+          <div class="finale-signature" id="finaleSignature">
+            <span class="signature-line" aria-hidden="true"></span>
+            <span class="signature-text">Always Yours</span>
+            <span class="signature-line" aria-hidden="true"></span>
+          </div>
+
+          <div class="finale-actions" id="finaleActions">
+            <button type="button" id="btnHeartShower" class="btn-romantic">
+              <span class="btn-glow" aria-hidden="true"></span>
+              <i class="fa-solid fa-heart btn-icon-left" aria-hidden="true"></i>
+              <span class="btn-text">Send a Shower of Love</span>
+            </button>
+            <button type="button" id="btnReplay" class="btn-secondary-glass">
+              <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+              <span>Watch Again</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- GSAP 3 CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Project Scripts -->
+  <script src="js/animations.js"></script>
+  <script src="js/video.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
