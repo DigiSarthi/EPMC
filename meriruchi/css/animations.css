@@ -1,0 +1,213 @@
+/* ==========================================================================
+   A Little Appreciation For You ❤️ — Motion, Keyframes & Reduced Motion
+   ========================================================================== */
+
+/* Loading Screen Pulse & Shimmer */
+.loading-heart {
+  animation: gentleLubDub 1.4s ease-in-out infinite;
+}
+
+.loading-bar-fill {
+  animation: loadingSlide 1.3s ease-in-out infinite;
+}
+
+@keyframes loadingSlide {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(260%); }
+}
+
+/* Slow Dreamy Aurora Drift */
+.orb-blush {
+  animation: auroraDriftA 18s ease-in-out infinite alternate;
+}
+
+.orb-lavender {
+  animation: auroraDriftB 22s ease-in-out infinite alternate;
+}
+
+.orb-rose {
+  animation: auroraDriftA 20s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes auroraDriftA {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(4vw, 3vh, 0) scale(1.08); }
+}
+
+@keyframes auroraDriftB {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(-4vw, -3vh, 0) scale(1.1); }
+}
+
+/* 3D Heart Natural Double-Beat ("Lub-Dub") & Aura Rings */
+.heart-3d-svg {
+  animation: gentleLubDub 1.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.finale-heart-svg {
+  animation: gentleLubDub 1.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+@keyframes gentleLubDub {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.09); }
+  28% { transform: scale(1.01); }
+  42% { transform: scale(1.06); }
+  62% { transform: scale(1); }
+}
+
+.halo-1,
+.finale-halo {
+  animation: haloPulse 2.4s ease-in-out infinite;
+}
+
+.halo-2 {
+  animation: haloRingExpand 3.2s ease-out infinite;
+}
+
+@keyframes haloPulse {
+  0%, 100% { transform: scale(0.95); opacity: 0.65; }
+  50% { transform: scale(1.14); opacity: 0.95; }
+}
+
+@keyframes haloRingExpand {
+  0% { transform: scale(0.88); opacity: 0.65; }
+  100% { transform: scale(1.36); opacity: 0; }
+}
+
+/* Orbiting Sparkles Around the 3D Heart */
+.spark-a { animation: sparkleTwinkle 2.4s ease-in-out infinite; }
+.spark-b { animation: sparkleTwinkle 3.1s ease-in-out 0.6s infinite; }
+.spark-c { animation: sparkleTwinkle 2.8s ease-in-out 1.2s infinite; }
+
+@keyframes sparkleTwinkle {
+  0%, 100% { transform: scale(0.65) translateY(0); opacity: 0.4; }
+  50% { transform: scale(1.3) translateY(-6px); opacity: 1; }
+}
+
+/* Floating Flowers */
+.flower-1 { animation: flowerFloatA 9s ease-in-out infinite; }
+.flower-2 { animation: flowerFloatB 11s ease-in-out infinite; }
+.flower-3 { animation: flowerFloatB 10s ease-in-out 1s infinite; }
+.flower-4 { animation: flowerFloatA 12s ease-in-out 0.5s infinite; }
+
+@keyframes flowerFloatA {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); }
+  50% { transform: translate3d(10px, -16px, 0) rotate(8deg); }
+}
+
+@keyframes flowerFloatB {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(5deg); }
+  50% { transform: translate3d(-12px, -14px, 0) rotate(-7deg); }
+}
+
+/* Animated Butterflies: Wing Flutter + Organic Flight */
+.wing-left {
+  transform-origin: 59px 50px;
+  animation: wingFlutterLeft 0.42s ease-in-out infinite alternate;
+}
+
+.wing-right {
+  transform-origin: 61px 50px;
+  animation: wingFlutterRight 0.42s ease-in-out infinite alternate;
+}
+
+@keyframes wingFlutterLeft {
+  0% { transform: scaleX(1) rotate(0deg); }
+  100% { transform: scaleX(0.35) rotate(-8deg); }
+}
+
+@keyframes wingFlutterRight {
+  0% { transform: scaleX(1) rotate(0deg); }
+  100% { transform: scaleX(0.35) rotate(8deg); }
+}
+
+.butterfly-1 {
+  animation: butterflyFlightA 19s ease-in-out infinite;
+}
+
+.butterfly-2 {
+  animation: butterflyFlightB 23s ease-in-out infinite;
+}
+
+@keyframes butterflyFlightA {
+  0%   { transform: translate3d(0, 0, 0) rotate(6deg); }
+  33%  { transform: translate3d(14vw, -6vh, 0) rotate(14deg); }
+  66%  { transform: translate3d(8vw, 6vh, 0) rotate(-8deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(6deg); }
+}
+
+@keyframes butterflyFlightB {
+  0%   { transform: translate3d(0, 0, 0) rotate(-8deg); }
+  33%  { transform: translate3d(-12vw, -7vh, 0) rotate(-14deg); }
+  66%  { transform: translate3d(-6vw, 5vh, 0) rotate(8deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(-8deg); }
+}
+
+/* Button Sheen Sweep */
+.btn-romantic .btn-glow {
+  animation: buttonSheen 3.6s ease-in-out infinite;
+}
+
+@keyframes buttonSheen {
+  0%, 60% { transform: translateX(-130%); }
+  100% { transform: translateX(130%); }
+}
+
+/* Dialogue Status & Typing Cursor */
+.status-dot {
+  animation: statusBlink 1.4s ease-in-out infinite;
+}
+
+.typing-cursor {
+  animation: cursorBlink 0.75s steps(1) infinite;
+}
+
+@keyframes statusBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.8); }
+}
+
+@keyframes cursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Envelope Gentle Hover Float & Glowing Video Border */
+.envelope-wrapper {
+  animation: envelopeFloat 4s ease-in-out infinite;
+}
+
+@keyframes envelopeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.video-frame-outer {
+  background-size: 220% 220%;
+  animation: borderShimmer 6s ease infinite;
+}
+
+@keyframes borderShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion Support
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.15s !important;
+    scroll-behavior: auto !important;
+  }
+
+  .butterfly,
+  .floating-flower {
+    transform: none !important;
+  }
+}
